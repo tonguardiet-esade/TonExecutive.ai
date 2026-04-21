@@ -11,7 +11,8 @@ export const translations = {
       openTool: 'Agendar Demo',
       logout: 'Salir',
       bookDemo: 'Agendar Reunión',
-      login: 'Acceder'
+      login: 'Acceder',
+      news: 'Casos de Éxito'
     },
     
     about: {
@@ -20,9 +21,15 @@ export const translations = {
       profile: "Perfil Profesional",
       intro: "Liderando en la intersección entre Negocio, Producto e Inteligencia Artificial.",
       content: [
-        "Soy experto en Producto y Crecimiento, especializado en la aplicación de IA Generativa. Durante los últimos 6 años, he diseñado e impulsado estrategias de tecnología y operaciones en startups B2B, logrando crecimientos anuales (ARR) superiores al 400%.",
-        "Mi enfoque como Fractional Chief AI Officer asegura que la adopción de Inteligencia Artificial en tu empresa no sea un mero experimento, sino un motor de eficiencia, escalabilidad y resultados medibles."
+        "Ph.D. cum laude especializado en plataformas de aceleración digital y transformación de modelos de negocio. Como fundador y CEO de Acceleralia, dirijo la implementación de sistemas de IA Agéntica que no solo automatizan, sino que escalan la capacidad operativa de empresas B2B.",
+        "Mi enfoque se basa en valores fundamentales: Perseverancia, Entusiasmo y Gratitud. Acompaño a directivos y fundadores a navegar el cambio tecnológico con una visión pragmática centrada en el ROI y el crecimiento sostenible."
       ],
+      linkedin: {
+        passions: "Me apasiona la aceleración empresarial, el crecimiento, la intraemprededuría corporativa, la metodología para conseguir los hitos planteados en las fechas establecidas. El coolhunting (lo que está por venir), el business hunting (captación de oportunidades de otros mercados), las nuevas tecnologías y la velocidad del mercado son conceptos que me mueven a estar siempre actualizado a los nuevos océanos azules.",
+        cv: "Licenciado por la UAB. Postgrado en gestión y administración de empresas, Postgrado en Finanzas e Inversiones por la Ambai University (EE.UU). Master Executive MBA por ESADE y PhD CUM LAUDE sobre plataformas digitales de aceleración. 4 idiomas. Experiencia profesional de más de 20 años en los negocios. Además soy profesor en varias escuelas de negocio (ESADE, UOC, GSM). >7000 contactos y más de 40 recomendaciones en LinkedIn.",
+        lookingFor: "Participar en medianas y grandes empresas para acelerar su crecimiento, generar cultura intraemprendedora, innovación y crecimiento corporativo (Corporate Venturing) explorando nuevos mercados rentables.",
+        values: "Perseverancia, entusiasmo y agradecimiento de haber podido trabajar al lado de profesionales excelentes en mi trayectoria."
+      },
       experienceTitle: "Trayectoria Destacada",
       experiences: [
         {
@@ -47,7 +54,16 @@ export const translations = {
       skillsGroup1: "Producto & Estrategia IA",
       skills1: ["AI Roadmaps", "Data Strategy", "Product-Led Growth (PLG)", "OKR Alignment", "Change Management"],
       skillsGroup2: "Tecnología & Operaciones B2B",
-      skills2: ["SaaS & ERP", "Fintech (PSD2/KYB)", "Workflow Automation", "ROI Tracking", "API Integrations"]
+      skills2: ["SaaS & ERP", "Fintech (PSD2/KYB)", "Workflow Automation", "ROI Tracking", "API Integrations"],
+      inspiringEntities: {
+        title: "Entidades que me inspiran",
+        subtitle: "Comunidades y organizaciones que sigo de cerca por su impacto e innovación.",
+        list: [
+          "Eoniq.fund", "Fundswin", "active I.T", "TAURUS Project", "AI Evolution", "Global Venture Network", 
+          "MWC Barcelona", "Monlau Motorsport", "GESEM Digital & SoftSkills", "Waalaxy International", 
+          "Bloomberg News", "OpenAI", "AGBAR", "GenAI Works", "WorkTech Hub", "IEB"
+        ]
+      }
     },
     home: {
       badge: 'Your Fractional Chief AI Officer',
@@ -190,6 +206,71 @@ export const translations = {
           rateLimit: 'Espera un poco antes del próximo análisis.',
           error: 'Error de envío.'
         }
+      }
+    },
+    newsPage: {
+      hero: {
+        title: "Casos de Éxito y Tendencias",
+        subtitle: "Historias reales de impacto con IA y visión de futuro sobre el mercado laboral."
+      },
+      successStories: {
+        caioTitle: "Chief AI Officer (CAIO)",
+        caioSubtitle: "Empresas que han integrado liderazgo estratégico en IA.",
+        fractionalTitle: "Fractional C-Level",
+        fractionalSubtitle: "Directivos a tiempo parcial para un crecimiento ágil.",
+        stories: [
+          {
+            type: "caio",
+            company: "Empresa Sector Industrial",
+            date: "Marzo 2025",
+            image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1000",
+            title: "Implementación de Agentes Autónomos",
+            desc: "Optimización de la cadena de suministro mediante sistemas agénticos que reducen errores de stock en un 35%."
+          },
+          {
+            type: "caio",
+            company: "Scale-up Tech B2B",
+            date: "Febrero 2025",
+            image: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=1000",
+            title: "Roadmap IA 2025",
+            desc: "Definición del plan estratégico para la transición de un modelo tradicional a una infraestructura AI-first."
+          },
+          {
+            type: "fractional",
+            company: "Grupo Logístico Internacional",
+            role: "Fractional COO",
+            date: "Enero 2025",
+            image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&q=80&w=1000",
+            title: "Reestructuración Operativa AI-Driven",
+            desc: "Liderazgo parcial para la integración de herramientas de IA en el core de operaciones, mejorando el margen en un 12%."
+          }
+        ]
+      },
+      trends: {
+        title: "Tendencias y Mercado Laboral",
+        subtitle: "Análisis de los cambios disruptivos que están redefiniendo el mundo profesional.",
+        items: [
+          {
+            title: "Taller C3N-IA: Ayudas Públicas usando Inteligencia Artificial",
+            summary: "Sesión especial sobre cómo acceder a subvenciones con IA, simplificando radicalmente el acceso a financiación pública y optimizando los prompts estratégicos.",
+            date: "Marzo 2026",
+            tag: "Webinar / Evento",
+            link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+          },
+          {
+            title: "GrantsWin Investor Day: IA para transformar fondos públicos",
+            summary: "Evento exclusivo compartiendo la evolución rápida de nuestra plataforma SaaS basada en agentes personalizados. Ya contamos con más del 50% de la ronda de inversión cerrada.",
+            date: "Noviembre 2025",
+            tag: "Corporate Venturing"
+          },
+          {
+            title: "Menos Burocracia, Más Innovación (El Periódico)",
+            summary: "Un artículo exponiendo nuestro trabajo para facilitar el acceso a subvenciones, eliminando el infierno burocrático de pedir subvenciones gracias a la IA.",
+            date: "Reciente",
+            tag: "Prensa / PR",
+            link: "https://www.elperiodico.com/"
+          }
+        ]
       }
     },
     methodology: {
@@ -490,7 +571,7 @@ export const translations = {
       error: 'Hubo un error al enviar el mensaje.',
       wait: 'Espera {seconds} segundos...',
       address: 'Barcelona',
-      phoneValue: '',
+      phoneValue: '+34 660 688 501',
       emailValue: 'hola@tonexecutive.ai',
       requestDemo: 'Solicitar Sesión'
     },
