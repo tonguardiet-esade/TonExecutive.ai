@@ -11,57 +11,113 @@ export const translations = {
       openTool: 'Agendar Demo',
       logout: 'Salir',
       bookDemo: 'Agendar Reunión',
-      login: 'Acceder',
-      news: 'Casos de Éxito'
+      login: 'Hacer informe gratuito',
+      news: 'Casos de Éxito',
+      about: 'Sobre Mí'
     },
-    
-    about: {
-      title: "Sobre Mí",
-      subtitle: "Ton Guardiet - Fractional Chief AI Officer",
-      profile: "Perfil Profesional",
-      intro: "Liderando en la intersección entre Negocio, Producto e Inteligencia Artificial.",
+    reportForm: {
+      title: 'Diagnostica tu Negocio para la Era de la IA',
+      subtitle: 'Completa este formulario para recibir un informe de madurez agéntica y ROI potencial personalizado por Ton Guardiet.',
+      fields: {
+        name: 'Nombre y Apellidos',
+        email: 'Email Corporativo',
+        company: 'Empresa / Entidad',
+        role: 'Cargo',
+        sector: 'Sector',
+        size: 'Tamaño de la Empresa',
+        aiState: 'Estado de la IA en tu empresa',
+        goal: 'Objetivo Principal',
+        interest: 'Interés en...'
+      },
+      options: {
+        sectors: ['Industrial', 'Tech / SaaS', 'Sector Público', 'Logística / Ops', 'Finanzas / Fintech', 'Retail / E-commerce', 'Otros'],
+        sizes: ['1-10 empleados', '11-50 empleados', '51-250 empleados', '+250 empleados'],
+        aiStates: ['No la usamos todavía', 'Uso puntual (ChatGPT, etc)', 'Estrategia en marcha', 'Integración avanzada'],
+        goals: ['Ahorro de costes', 'Incrementar Ventas', 'Cultura de IA', 'Automatizar Procesos'],
+        interests: ['Fractional CAIO', 'Auditoría de IA', 'Formación Directiva', 'Consultoría Puntual']
+      },
+      submit: 'Solicitar Informe Personalizado',
+      success: '¡Datos enviados! Ton revisará tu caso y recibirás el informe en tu email pronto.',
+      error: 'Hubo un error al enviar. Por favor, inténtalo de nuevo.'
+    },
+      about: {
+      title: "Autoridad en IA Agéntica",
+      subtitle: "Ton Guardiet Mas - Ph.D. & Fractional CAIO",
+      profile: "Perfil Estratégico",
+      intro: "Liderando la transición de empresas hacia organizaciones nativas en Inteligencia Artificial con un enfoque implacable en el ROI.",
       content: [
-        "Ph.D. cum laude especializado en plataformas de aceleración digital y transformación de modelos de negocio. Como fundador y CEO de Acceleralia, dirijo la implementación de sistemas de IA Agéntica que no solo automatizan, sino que escalan la capacidad operativa de empresas B2B.",
-        "Mi enfoque se basa en valores fundamentales: Perseverancia, Entusiasmo y Gratitud. Acompaño a directivos y fundadores a navegar el cambio tecnológico con una visión pragmática centrada en el ROI y el crecimiento sostenible."
+        "Ph.D. Cum Laude por la UAB en plataformas de aceleración digital y MBA por ESADE. Con más de 20 años de experiencia en la intersección de negocio y tecnología, me especializo en actuar como Fractional Chief AI Officer (fCAIO) para empresas B2B y SaaS que buscan una ventaja competitiva real.",
+        "Como fundador de Acceleralia, no solo implemento herramientas; rediseño la cultura operativa para que la IA agéntica sea el motor de crecimiento. Mi metodología se centra en 'Quick Wins' de 90 días que validan la inversión antes de escalar, asegurando que cada línea de código impacte directamente en el P&L."
       ],
       linkedin: {
-        passions: "Me apasiona la aceleración empresarial, el crecimiento, la intraemprededuría corporativa, la metodología para conseguir los hitos planteados en las fechas establecidas. El coolhunting (lo que está por venir), el business hunting (captación de oportunidades de otros mercados), las nuevas tecnologías y la velocidad del mercado son conceptos que me mueven a estar siempre actualizado a los nuevos océanos azules.",
-        cv: "Licenciado por la UAB. Postgrado en gestión y administración de empresas, Postgrado en Finanzas e Inversiones por la Ambai University (EE.UU). Master Executive MBA por ESADE y PhD CUM LAUDE sobre plataformas digitales de aceleración. 4 idiomas. Experiencia profesional de más de 20 años en los negocios. Además soy profesor en varias escuelas de negocio (ESADE, UOC, GSM). >7000 contactos y más de 40 recomendaciones en LinkedIn.",
-        lookingFor: "Participar en medianas y grandes empresas para acelerar su crecimiento, generar cultura intraemprendedora, innovación y crecimiento corporativo (Corporate Venturing) explorando nuevos mercados rentables.",
-        values: "Perseverancia, entusiasmo y agradecimiento de haber podido trabajar al lado de profesionales excelentes en mi trayectoria."
+        passions: "Me apasiona la aceleración empresarial, el crecimiento exponencial y la intraemprededuría corporativa. Domino el coolhunting tecnológico y el business hunting para detectar océanos azules antes que la competencia. La velocidad del mercado no es un reto, es mi entorno natural de trabajo.",
+        cv: "Ph.D. CUM LAUDE (Aceleración Digital), MBA ESADE, Postgrado en Finanzas (EE.UU.). Profesor en ESADE, UOC y GSM. Más de 20 años liderando Producto y Growth. Perfil con >7.000 contactos directos y +40 recomendaciones de C-Levels en LinkedIn que avalan un historial de entrega constante de valor.",
+        lookingFor: "Colaborar con juntas directivas y fundadores para escalar startups y medianas empresas mediante la integración de IA, Corporate Venturing e innovación pragmática.",
+        values: "Perseverancia, Entusiasmo y un enfoque obsesivo por la ejecución de hitos en tiempos récord."
       },
-      experienceTitle: "Trayectoria Destacada",
+      experienceTitle: "Historial de Impacto",
       experiences: [
         {
+          role: "Fractional Chief AI Officer (fCAIO)",
+          company: "Acceleralia | TonExecutive.ai",
+          period: "2024 - Presente",
+          desc: "Dirección estratégica de IA para múltiples compañías B2B. Liderazgo de roadmaps, selección de stack agnóstico y despliegue de agentes autónomos que optimizan operaciones críticas."
+        },
+        {
           role: "Head of Product & Growth",
-          company: "Unibo Neobroker",
-          period: "Mar 2023 - Presente",
-          desc: "Desarrollo estratégico del producto B2B, automatización de procesos internos con IA, aumentando la captación de usuarios e integrando pasarelas de pago y datos a gran escala."
+          company: "Unibo Neobroker (Fintech)",
+          period: "2023 - 2024",
+          desc: "Escalado de producto B2B y automatización masiva de captura de datos mediante IA. Liderazgo del crecimiento en un entorno altamente regulado."
         },
         {
-          role: "Product Manager | Crecimiento B2B",
-          company: "Quipu | Sila",
-          period: "Ene 2022 - Mar 2023",
-          desc: "Definición y escalado de producto ERP, integraciones bancarias PSD2 y OCR para extracción de datos. Crecimiento excepcional en retención y activación de usuarios (ARR +400%)."
-        },
-        {
-          role: "Consultor de Innovación",
-          company: "Indie Hacker / Emprendedor",
-          period: "Histórico",
-          desc: "Lanzamiento y validación de PLGs basados en SaaS; optimización de embudos de ventas, e-commerce, y diseño de Growth Loops."
+          role: "Product Manager | Crecimiento & ARR",
+          company: "Quipu (SaaS B2B)",
+          period: "2022 - 2023",
+          desc: "Logro de un crecimiento del +400% ARR mediante optimización de Product-Led Growth (PLG) e integraciones bancarias PSD2/OCR automatizadas."
         }
       ],
-      skillsGroup1: "Producto & Estrategia IA",
-      skills1: ["AI Roadmaps", "Data Strategy", "Product-Led Growth (PLG)", "OKR Alignment", "Change Management"],
-      skillsGroup2: "Tecnología & Operaciones B2B",
-      skills2: ["SaaS & ERP", "Fintech (PSD2/KYB)", "Workflow Automation", "ROI Tracking", "API Integrations"],
+      skillsGroup1: "Dirección e IA",
+      skills1: ["Estrategia fCAIO", "IA Agéntica", "ROI Benchmarking", "Gobernanza de Datos", "Change Management"],
+      skillsGroup2: "Crecimiento & Producto",
+      skills2: ["Product-Led Growth (PLG)", "Fintech & SaaS", "Sistemas de Aceleración", "Escalado de ARR", "Agentes B2B"],
       inspiringEntities: {
-        title: "Entidades que me inspiran",
-        subtitle: "Comunidades y organizaciones que sigo de cerca por su impacto e innovación.",
+        title: "Liderazgo en el Ecosistema",
+        subtitle: "Mi red de alianzas y fuentes de innovación que nutren una visión estratégica de 360º.",
         list: [
-          "Eoniq.fund", "Fundswin", "active I.T", "TAURUS Project", "AI Evolution", "Global Venture Network", 
-          "MWC Barcelona", "Monlau Motorsport", "GESEM Digital & SoftSkills", "Waalaxy International", 
-          "Bloomberg News", "OpenAI", "AGBAR", "GenAI Works", "WorkTech Hub", "IEB"
+          { name: "ESADE Alumni", logo: "EsadeAlumini.jpg", desc: "Miembro activo de la red donde cursé mi Executive MBA, conectando con la élite directiva de Barcelona." },
+          { name: "Eoniq.fund", logo: "EoniqFund.jpg", desc: "Advisor estratégico en inversión Seed/Pre-seed, validando la viabilidad técnica de startups IA." },
+          { name: "MWC Barcelona", logo: "MWCBcn.png", desc: "Hub global donde actualizo anualmente mi roadmap tecnológico con las últimas fronteras de la conectividad." },
+          { name: "OpenAI", logo: "OpenAI.png", desc: "Utilizo su stack tecnológico como base fundamental para el despliegue de agentes autónomos corporativos." },
+          { name: "Acceleralia", logo: "Acceleralia.jpg", desc: "Founder & CEO. Mi vehículo de innovación dedicado a escalar startups B2B mediante IA y estrategia." },
+          { name: "Bloomberg", logo: "Bloomberg.png", desc: "Fuente primaria de análisis de mercado para alinear la tecnología con la coyuntura económica global." },
+          { name: "Active I.T", logo: "ActiveIT.jpg", desc: "Partner estratégico para el despliegue de infraestructuras críticas y procesamiento de datos masivos." },
+          { name: "AI Evolution", logo: "AIEvolution.jpg", desc: "Investigación aplicada para trasladar los avances de GenAI directamente al impacto en el P&L." },
+          { name: "Waalaxy", logo: "Waalaxy.png", desc: "Integración de automatización de prospección en las estrategias de Growth B2B que diseño." },
+          { name: "Fundswin", logo: "Fundswin.png", desc: "Colaboración en la estructuración de financiación para proyectos de transformación digital de alto impacto." },
+          { name: "Global Venture", logo: "GlobalVentureNetwork.jpg", desc: "Conexión internacional con capital riesgo para facilitar el escalado de compañías tecnológicas." },
+          { name: "GenAI Works", logo: "GenAIWorks.png", desc: "Contribuidor en la comunidad compartiendo casos de éxito reales de implementación agéntica." },
+          { name: "SAS Institute", logo: "SAS.png", desc: "Referente metodológico para el tratamiento ético y analítico de datos en mis auditorías digitales." }
+        ]
+      },
+      recommendations: {
+        title: "RESPALDADO POR LA COMUNIDAD",
+        subtitle: "Líderes que han transformado sus negocios bajo mi dirección estratégica.",
+        list: [
+          { 
+            text: "Ton transformó nuestra operativa interna con IA en tiempo récord. Su visión nos dio un C-Level de élite a un coste variable y flexible.",
+            author: "CEO, Unibo Neobroker",
+            avatar: "/avatars/avatar1.jpg"
+          },
+          { 
+            text: "Un experto en PLG y crecimiento. Bajo su dirección en Quipu, logramos escalar el ARR un 400% automatizando flujos críticos.",
+            author: "CPO, Quipu SaaS B2B",
+            avatar: "/avatars/avatar2.jpg"
+          },
+          { 
+            text: "Su capacidad para aterrizar el 'hype' de la IA en resultados de negocio tangibles es lo que le diferencia de cualquier consultora.",
+            author: "Founder, Fintech B2B",
+            avatar: "/avatars/avatar3.jpg"
+          }
         ]
       }
     },
@@ -218,12 +274,14 @@ export const translations = {
         caioSubtitle: "Empresas que han integrado liderazgo estratégico en IA.",
         fractionalTitle: "Fractional C-Level",
         fractionalSubtitle: "Directivos a tiempo parcial para un crecimiento ágil.",
+        insightsTitle: "Insights Clave",
+        insightsDesc: "El uso de metodologías de IA agéntica como las descritas logran disrupción rápida. La integración y la constante optimización permiten que las organizaciones vean retornos de inversión en menos de dos trimestres, apalancándose de recursos eficientes sin la necesidad total de equipos inmensos.",
         stories: [
           {
             type: "caio",
             company: "Empresa Sector Industrial",
             date: "Marzo 2025",
-            image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1000",
+            image: "/250629 Oxfam_TonGuardiet_Marzo25_01.jpg",
             title: "Implementación de Agentes Autónomos",
             desc: "Optimización de la cadena de suministro mediante sistemas agénticos que reducen errores de stock en un 35%."
           },
@@ -231,7 +289,7 @@ export const translations = {
             type: "caio",
             company: "Scale-up Tech B2B",
             date: "Febrero 2025",
-            image: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=1000",
+            image: "/2110 Foto Ton 10.jpg",
             title: "Roadmap IA 2025",
             desc: "Definición del plan estratégico para la transición de un modelo tradicional a una infraestructura AI-first."
           },
@@ -240,7 +298,7 @@ export const translations = {
             company: "Grupo Logístico Internacional",
             role: "Fractional COO",
             date: "Enero 2025",
-            image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&q=80&w=1000",
+            image: "/2110 Foto Ton 1.jpg",
             title: "Reestructuración Operativa AI-Driven",
             desc: "Liderazgo parcial para la integración de herramientas de IA en el core de operaciones, mejorando el margen en un 12%."
           }
@@ -927,20 +985,115 @@ export const translations = {
       openTool: 'Book Demo',
       logout: 'Logout',
       bookDemo: 'Book Meeting',
-      login: 'Login'
+      login: 'Get free report',
+      news: 'Success Stories',
+      about: 'About Me'
+    },
+    reportForm: {
+      title: 'Diagnose Your Business for the AI Era',
+      subtitle: 'Complete this form to receive an agentic maturity and potential ROI report personalized by Ton Guardiet.',
+      fields: {
+        name: 'Full Name',
+        email: 'Corporate Email',
+        company: 'Company / Organization',
+        role: 'Job Title',
+        sector: 'Sector',
+        size: 'Company Size',
+        aiState: 'Current AI Status',
+        goal: 'Main Goal',
+        interest: 'Interest in...'
+      },
+      options: {
+        sectors: ['Industrial', 'Tech / SaaS', 'Public Sector', 'Logistics / Ops', 'Finance / Fintech', 'Retail / E-commerce', 'Others'],
+        sizes: ['1-10 employees', '11-50 employees', '51-250 employees', '+250 employees'],
+        aiStates: ['Not using it yet', 'Occasional use (ChatGPT)', 'Strategy in progress', 'Advanced integration'],
+        goals: ['Cost Savings', 'Increase Sales', 'AI Culture', 'Automate Processes'],
+        interests: ['Fractional CAIO', 'AI Audit', 'Executive Training', 'Consultancy']
+      },
+      submit: 'Request Personalized Report',
+      success: 'Data sent! Ton will review your case and you will receive the report in your email soon.',
+      error: 'There was an error sending. Please try again.'
     },
     about: {
-      title: "About Me",
-      subtitle: "Ton Guardiet",
-      profile: "Profile",
-      intro: "Intro",
-      content: ["Content 1", "Content 2"],
-      experienceTitle: "Experience",
-      experiences: [],
-      skillsGroup1: "Skills 1",
-      skills1: [],
-      skillsGroup2: "Skills 2",
-      skills2: []
+      title: "Authority in Agentic AI",
+      subtitle: "Ton Guardiet Mas - Ph.D. & Fractional CAIO",
+      profile: "Strategic Profile",
+      intro: "Leading the transition of companies into AI-native organizations with a relentless focus on ROI.",
+      content: [
+        "Ph.D. Cum Laude from UAB in digital acceleration platforms and MBA from ESADE. With over 20 years of experience at the intersection of business and technology, I specialize in acting as a Fractional Chief AI Officer (fCAIO) for B2B and SaaS companies seeking a real competitive advantage.",
+        "As the founder of Acceleralia, I don't just implement tools; I redesign operational culture so that agentic AI becomes the growth engine. My methodology focuses on 90-day 'Quick Wins' that validate the investment before scaling, ensuring that every line of code directly impacts the P&L."
+      ],
+      linkedin: {
+        passions: "I am passionate about business acceleration, exponential growth, and corporate intrapreneurship. I master technological coolhunting and business hunting to detect blue oceans before the competition. Market speed is not a challenge; it is my natural working environment.",
+        cv: "Ph.D. CUM LAUDE (Digital Acceleration), MBA ESADE, Postgraduate in Finance (USA). Professor at ESADE, UOC, and GSM. Over 20 years leading Product and Growth. Profile with >7,000 direct contacts and +40 C-Level recommendations on LinkedIn that endorse a track record of constant value delivery.",
+        lookingFor: "Collaborating with boards of directors and founders to scale startups and medium-sized companies through AI integration, Corporate Venturing, and pragmatic innovation.",
+        values: "Perseverance, Enthusiasm, and an obsessive focus on executing milestones in record time."
+      },
+      experienceTitle: "Impact Track Record",
+      experiences: [
+        {
+          role: "Fractional Chief AI Officer (fCAIO)",
+          company: "Acceleralia | TonExecutive.ai",
+          period: "2024 - Present",
+          desc: "Strategic AI direction for multiple B2B companies. Leadership of roadmaps, agnostic stack selection, and deployment of autonomous agents optimizing critical operations."
+        },
+        {
+          role: "Head of Product & Growth",
+          company: "Unibo Neobroker (Fintech)",
+          period: "2023 - 2024",
+          desc: "Scaling B2B product and massive data capture automation through AI. Growth leadership in a highly regulated environment."
+        },
+        {
+          role: "Product Manager | Growth & ARR",
+          company: "Quipu (B2B SaaS)",
+          period: "2022 - 2023",
+          desc: "Achieved +400% ARR growth through Product-Led Growth (PLG) optimization and automated PSD2/OCR bank integrations."
+        }
+      ],
+      skillsGroup1: "AI Leadership",
+      skills1: ["fCAIO Strategy", "Agentic AI", "ROI Benchmarking", "Data Governance", "Change Management"],
+      skillsGroup2: "Growth & Product",
+      skills2: ["Product-Led Growth (PLG)", "Fintech & SaaS", "Acceleration Systems", "ARR Scaling", "B2B Agents"],
+      inspiringEntities: {
+        title: "Ecosystem Leadership",
+        subtitle: "My network of alliances and sources of innovation that nurture a 360º strategic vision.",
+        list: [
+          { name: "ESADE Alumni", logo: "EsadeAlumini.jpg", desc: "Active member of the network where I completed my Executive MBA, connecting with Barcelona's top management elite." },
+          { name: "Eoniq.fund", logo: "EoniqFund.jpg", desc: "Strategic advisor in Seed/Pre-seed investment, validating the technical feasibility of AI startups." },
+          { name: "MWC Barcelona", logo: "MWCBcn.png", desc: "Global hub where I annually update my technology roadmap with the latest frontiers of connectivity." },
+          { name: "OpenAI", logo: "OpenAI.png", desc: "I use their technology stack as a fundamental basis for the deployment of autonomous corporate agents." },
+          { name: "Acceleralia", logo: "Acceleralia.jpg", desc: "Founder & CEO. My corporate vehicle dedicated to scaling B2B startups through AI and strategy." },
+          { name: "Bloomberg", logo: "Bloomberg.png", desc: "Primary source of market analysis to align technology with the global economic situation." },
+          { name: "Active I.T", logo: "ActiveIT.jpg", desc: "Strategic partner for the deployment of critical infrastructure and massive data processing." },
+          { name: "AI Evolution", logo: "AIEvolution.jpg", desc: "Applied research to translate GenAI advances directly into P&L impact." },
+          { name: "Waalaxy", logo: "Waalaxy.png", desc: "Integration of prospecting automation into the B2B Growth strategies I design." },
+          { name: "Fundswin", logo: "Fundswin.png", desc: "Close collaboration in structuring the necessary financing for high-impact digital transformation projects." },
+          { name: "Global Venture", logo: "GlobalVentureNetwork.jpg", desc: "International connection with venture capital to facilitate the scaling of tech companies." },
+          { name: "GenAI Works", logo: "GenAIWorks.png", desc: "Active contributor sharing real success stories of agentic AI implementation." },
+          { name: "SAS Institute", logo: "SAS.png", desc: "Methodological reference for ethical and advanced data treatment in my digital audits." }
+        ]
+      },
+      recommendations: {
+        title: "BACKED BY THE COMMUNITY",
+        subtitle: "Leaders who have transformed their businesses under my strategic direction.",
+        list: [
+          { 
+            text: "Ton transformed our internal operations with AI in record time. His vision gave us an elite C-Level at a variable and flexible cost.",
+            author: "CEO, Unibo Neobroker",
+            avatar: "/avatars/avatar1.jpg"
+          },
+          { 
+            text: "An expert in PLG and growth. Under his direction at Quipu, we achieved a 400% ARR scale by automating critical flows.",
+            author: "CPO, Quipu B2B SaaS",
+            avatar: "/avatars/avatar2.jpg"
+          },
+          { 
+            text: "His ability to land the AI 'hype' into tangible business results is what sets him apart from any consultancy.",
+            author: "Founder, B2B Fintech",
+            avatar: "/avatars/avatar3.jpg"
+          }
+        ]
+      }
     },
     home: {
       badge: 'Badge',
@@ -1114,7 +1267,7 @@ export const translations = {
       error: 'There was an error sending the message.',
       wait: 'Wait {seconds} seconds...',
       address: 'Avda Diagonal, 523, 1er 2er. Barcelona',
-      phoneValue: '+34 931 23 45 67',
+      phoneValue: '+34 660 688 501',
       emailValue: 'hola@tonexecutive.ai',
       requestDemo: 'Request Demo'
     },
@@ -1305,7 +1458,7 @@ export const translations = {
             { name: 'Necessary cookies', desc: 'are essential to enable the basic functions of this site, such as secure login or management of your consent preferences. These cookies do not store any data that allows you to be personally identified.' },
             { name: 'Functional cookies', desc: 'help perform certain functions, such as sharing website content on social media platforms, collecting comments, and other third-party functions.' },
             { name: 'Analytical cookies', desc: 'are used to understand how visitors interact with the website. These cookies help provide information on metrics such as the number of visitors, bounce rate, traffic source, etc.' },
-            { name: 'Advertising cookies', desc: 'are used to offer visitors personalized ads based on the pages they have previously visited and to analyze the effectiveness of advertising campaigns.' }
+            { name: 'Advertising cookies', desc: 'are used to deliver personalized ads to visitors based on the pages they visited before and analyze the effectiveness of the advertising campaign.' }
           ]
         },
         {
@@ -1486,6 +1639,72 @@ export const translations = {
           cost: 'Transparent and highly profitable.'
         }
       }
+    },
+    newsPage: {
+      hero: {
+        title: "Success Stories & Trends",
+        subtitle: "Real stories of impact with AI and future vision of the labor market."
+      },
+      successStories: {
+        caioTitle: "Chief AI Officer (CAIO)",
+        caioSubtitle: "Companies that have integrated strategic AI leadership.",
+        fractionalTitle: "Fractional C-Level",
+        fractionalSubtitle: "Part-time executives for agile growth.",
+        insightsTitle: "Key Insights",
+        insightsDesc: "The use of agentic AI methodologies like those described achieves rapid disruption. Integration and constant optimization allow organizations to see returns on investment in less than two quarters, leveraging efficient resources without the need for massive teams.",
+        stories: [
+          {
+            type: "caio",
+            company: "Industrial Sector Company",
+            date: "March 2025",
+            image: "/250629 Oxfam_TonGuardiet_Marzo25_01.jpg",
+            title: "Autonomous Agent Implementation",
+            desc: "Supply chain optimization through agentic systems that reduce stock errors by 35%."
+          },
+          {
+            type: "caio",
+            company: "B2B Tech Scale-up",
+            date: "February 2025",
+            image: "/2110 Foto Ton 10.jpg",
+            title: "AI Roadmap 2025",
+            desc: "Definition of the strategic plan for the transition from a traditional model to an AI-first infrastructure."
+          },
+          {
+            type: "fractional",
+            company: "International Logistics Group",
+            role: "Fractional COO",
+            date: "January 2025",
+            image: "/2110 Foto Ton 1.jpg",
+            title: "AI-Driven Operational Restructuring",
+            desc: "Partial leadership for the integration of AI tools into the core of operations, improving margins by 12%."
+          }
+        ]
+      },
+      trends: {
+        title: "Trends and Labor Market",
+        subtitle: "Analysis of the disruptive changes that are redefining the professional world.",
+        items: [
+          {
+            title: "C3N-IA Workshop: Public Aid using Artificial Intelligence",
+            summary: "Special session on how to access subsidies with AI, radically simplifying access to public funding and optimizing strategic prompts.",
+            date: "March 2026",
+            tag: "Webinar / Event",
+            link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+          },
+          {
+            title: "GrantsWin Investor Day: AI to transform public funds",
+            summary: "Exclusive event sharing the rapid evolution of our agent-based SaaS platform. Over 50% of the investment round closed.",
+            date: "November 2025",
+            tag: "Corporate Venturing"
+          },
+          {
+            title: "Less Bureaucracy, More Innovation (El Periódico)",
+            summary: "An article exposing our work to facilitate access to subsidies, eliminating the bureaucratic hell of requesting subsidies thanks to AI.",
+            date: "Recent",
+            tag: "Press / PR"
+          }
+        ]
+      }
     }
   },
   CA: {
@@ -1499,7 +1718,34 @@ export const translations = {
       openTool: 'Obrir Eina',
       logout: 'Tancar Sessió',
       bookDemo: 'Agendar Demo',
-      login: 'Accedir a l\'Eina'
+      login: 'Fer informe gratuït',
+      news: 'Casos d\'Èxit',
+      about: 'Sobre Mí'
+    },
+    reportForm: {
+      title: 'Diagnostica el teu Negoci per a l\'Era de la IA',
+      subtitle: 'Completa aquest formulari per rebre un informe de maduresa agèntica i ROI potencial personalitzat per Ton Guardiet.',
+      fields: {
+        name: 'Nom i Cognoms',
+        email: 'Email Corporatiu',
+        company: 'Empresa / Entitat',
+        role: 'Càrrec',
+        sector: 'Sector',
+        size: 'Mida de l\'Empresa',
+        aiState: 'Estat de la IA a la teva empresa',
+        goal: 'Objectiu Principal',
+        interest: 'Interès en...'
+      },
+      options: {
+        sectors: ['Industrial', 'Tech / SaaS', 'Sector Públic', 'Logística / Ops', 'Finances / Fintech', 'Retail / E-commerce', 'Altres'],
+        sizes: ['1-10 empleats', '11-50 empleats', '51-250 empleats', '+250 empleats'],
+        aiStates: ['No la fem servir encara', 'Ús puntual (ChatGPT, etc)', 'Estratègia en marxa', 'Integració avançada'],
+        goals: ['Estalvi de costos', 'Incrementar Vendes', 'Cultura d\'IA', 'Automatitzar Processos'],
+        interests: ['Fractional CAIO', 'Auditoria d\'IA', 'Formació Directiva', 'Consultoria Puntual']
+      },
+      submit: 'Sol·licitar Informe Personalitzat',
+      success: 'Dades enviades! En Ton revisarà el teu cas i rebràs l\'informe al teu email aviat.',
+      error: 'Hi ha hagut un error en enviar. Si us plau, torna-ho a intentar.'
     },
     home: {
       badge: 'Plataforma End-to-End amb Seguretat Governamental',
@@ -1954,7 +2200,7 @@ export const translations = {
       error: 'Hi ha hagut un error en enviar el missatge.',
       wait: 'Espera {seconds} segons...',
       address: 'Avda Diagonal, 523, 1er 2er. Barcelona',
-      phoneValue: '+34 931 23 45 67',
+      phoneValue: '+34 660 688 501',
       emailValue: 'hola@tonexecutive.ai',
       requestDemo: 'Sol·licitar Demo'
     },
@@ -2325,6 +2571,91 @@ export const translations = {
           coherence: 'Motor de Coherència Automàtic i Multidisciplinari.',
           cost: 'Transparent i altament rentable.'
         }
+      }
+    },
+    about: {
+      title: "Autoritat en IA Agèntica",
+      subtitle: "Ton Guardiet Mas - Ph.D. & Fractional CAIO",
+      intro: "Liderant la transició d'empreses cap a organitzacions natives en Intel·ligència Artificial amb un enfocament implacable en el ROI.",
+      experiences: [
+        { period: "2024 - Present", role: "Fractional CAIO", company: "TonExecutive.ai", desc: "Direcció estratègica d'IA per a empreses B2B i Sector Públic." },
+        { period: "2018 - 2024", role: "Founder & CEO", company: "Acceleralia", desc: "Acceleració de startups i transformació digital corporativa." }
+      ],
+      inspiringEntities: {
+        title: "Lideratge en l'Ecosistema",
+        subtitle: "La meva xarxa d'aliances i fonts d'innovació.",
+        list: []
+      },
+      recommendations: {
+        title: "RESPALDADO POR LA COMUNIDAD",
+        subtitle: "Líders que han transformat els seus negocis.",
+        list: []
+      }
+    },
+    newsPage: {
+      hero: {
+        title: "Casos d'Èxit i Tendències",
+        subtitle: "Històries reals d'impacte amb IA i visió de futur sobre el mercat laboral."
+      },
+      successStories: {
+        caioTitle: "Chief AI Officer (CAIO)",
+        caioSubtitle: "Empreses que han integrat lideratge estratègic en IA.",
+        fractionalTitle: "Fractional C-Level",
+        fractionalSubtitle: "Directius a temps parcial per a un creixement àgil.",
+        insightsTitle: "Insights Clau",
+        insightsDesc: "L'ús de metodologies d'IA agèntica com les descrites aconsegueixen disrupció ràpida. La integració i la constant optimització permeten que les organitzacions vegin retorns d'inversió en menys de dos trimestres, apalancant-se de recursos eficients sense la necessitat total d'equips immensos.",
+        stories: [
+          {
+            type: "caio",
+            company: "Empresa Sector Industrial",
+            date: "Març 2025",
+            image: "/250629 Oxfam_TonGuardiet_Marzo25_01.jpg",
+            title: "Implementació d'Agents Autònoms",
+            desc: "Optimització de la cadena de subministrament mitjançant sistemes agèntics que redueixen errors d'estoc en un 35%."
+          },
+          {
+            type: "caio",
+            company: "Scale-up Tech B2B",
+            date: "Febrer 2025",
+            image: "/2110 Foto Ton 10.jpg",
+            title: "Roadmap IA 2025",
+            desc: "Definició del pla estratègic per a la transició d'un model tradicional a una infraestructura AI-first."
+          },
+          {
+            type: "fractional",
+            company: "Grup Logístic Internacional",
+            role: "Fractional COO",
+            date: "Gener 2025",
+            image: "/2110 Foto Ton 1.jpg",
+            title: "Restructuració Operativa AI-Driven",
+            desc: "Lideratge parcial per a la integració d'eines de IA en el core d'operacions, millorant el marge en un 12%."
+          }
+        ]
+      },
+      trends: {
+        title: "Tendències i Mercat Laboral",
+        subtitle: "Anàlisi dels canvis disruptius que estan redefinint el món professional.",
+        items: [
+          {
+            title: "Taller C3N-IA: Ajuts Públics fent servir Intel·ligència Artificial",
+            summary: "Sessió especial sobre com accedir a subvencions amb IA, simplificant radicalment l'accés a finançament públic i optimitzant els prompts estratègics.",
+            date: "Març 2026",
+            tag: "Webinar / Esdeveniment",
+            link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+          },
+          {
+            title: "GrantsWin Investor Day: IA per transformar fons públics",
+            summary: "Esdeveniment exclusiu compartint l'evolució ràpida de la nostra plataforma SaaS basada en agents personalitzats. Ja comptem amb més del 50% de la ronda d'inversió tancada.",
+            date: "Novembre 2025",
+            tag: "Corporate Venturing"
+          },
+          {
+            title: "Menys Burocràcia, Més Innovació (El Periódico)",
+            summary: "Un article exposant la nostra feina per facilitar l'accés a subvencions, eliminant l'infern burocràtic de demanar subvencions gràcies a la IA.",
+            date: "Recent",
+            tag: "Premsa / PR"
+          }
+        ]
       }
     }
   },
@@ -2807,7 +3138,7 @@ export const translations = {
       error: 'Une erreur est survenue lors de l\'envoi du message.',
       wait: 'Attendez {seconds} secondes...',
       address: 'Avda Diagonal, 523, 1er 2er. Barcelona',
-      phoneValue: '+34 931 23 45 67',
+      phoneValue: '+34 660 688 501',
       emailValue: 'hola@tonexecutive.ai',
       requestDemo: 'Demander une démo'
     },
@@ -3599,7 +3930,7 @@ export const translations = {
       error: 'Beim Senden der Nachricht ist ein Fehler aufgetreten.',
       wait: 'Warten Sie {seconds} Sekunden...',
       address: 'Avda Diagonal, 523, 1er 2er. Barcelona',
-      phoneValue: '+34 931 23 45 67',
+      phoneValue: '+34 660 688 501',
       emailValue: 'hola@tonexecutive.ai',
       requestDemo: 'Demo anfordern'
     },
@@ -4391,7 +4722,7 @@ export const translations = {
       error: 'Ocorreu um erro ao enviar a mensagem.',
       wait: 'Aguarde {seconds} segundos...',
       address: 'Avda Diagonal, 523, 1er 2er. Barcelona',
-      phoneValue: '+34 931 23 45 67',
+      phoneValue: '+34 660 688 501',
       emailValue: 'hola@tonexecutive.ai',
       requestDemo: 'Solicitar Demo'
     },
@@ -5184,7 +5515,7 @@ export const translations = {
       error: '发送消息时出错。',
       wait: '请等待 {seconds} 秒...',
       address: 'Avda Diagonal, 523, 1er 2er. Barcelona',
-      phoneValue: '+34 931 23 45 67',
+      phoneValue: '+34 660 688 501',
       emailValue: 'hola@tonexecutive.ai',
       requestDemo: '申请演示'
     },

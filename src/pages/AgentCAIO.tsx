@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { BrainCircuit, Mic, MicOff, Send, Download, Calendar, Loader2, Volume2, Sparkles, Plus, Search, ArrowRight, X, BarChart3 } from 'lucide-react';
+import { BrainCircuit, Mic, MicOff, Send, Download, Calendar, Loader2, Volume2, Sparkles, Plus, Search, ArrowRight, X, ChartBar } from 'lucide-react';
 import Markdown from 'react-markdown';
 
 export default function AgentCAIO() {
   const [messages, setMessages] = useState<{ role: 'user' | 'agent'; content: string }[]>([
     {
       role: 'agent',
-      content: 'Hola. Soy el Agente fCAIO de Ton Guardiet. Estoy aquí para realizarte un diagnóstico estratégico preliminar. ¿Cuál es el mayor reto operativo que enfrenta tu negocio hoy?'
+      content: 'Hola. Soy el Agente fCAIO de Ton Executive. Estoy aquí para realizarte un diagnóstico estratégico preliminar. ¿Cuál es el mayor reto operativo que enfrenta tu negocio hoy?'
     }
   ]);
   const [input, setInput] = useState('');
@@ -74,6 +74,8 @@ export default function AgentCAIO() {
       });
       const data = await res.json();
       setMessages((prev) => [...prev, { role: 'agent', content: data.reply }]);
+      // Hablar automáticamente al recibir respuesta
+      speakText(data.reply);
     } catch (error) {
       console.error(error);
       setMessages((prev) => [...prev, { role: 'agent', content: 'Lo siento, ha ocurrido un error al procesar tu solicitud.' }]);
@@ -83,14 +85,41 @@ export default function AgentCAIO() {
   };
 
   const speakText = (text: string) => {
+    // SOPORTE PARA ELEVENLABS (Opcional - Requiere API Key)
+    /*
+    const ELEVEN_LABS_API_KEY = 'TU_API_KEY_AQUI';
+    const VOICE_ID = 'VOICE_ID_DE_TON';
+    
+    if (ELEVEN_LABS_API_KEY && ELEVEN_LABS_API_KEY !== 'TU_API_KEY_AQUI') {
+      setIsSynthesizing(true);
+      fetch(`https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'xi-api-key': ELEVEN_LABS_API_KEY },
+        body: JSON.stringify({ text, model_id: 'eleven_multilingual_v2' })
+      })
+      .then(res => res.blob())
+      .then(blob => {
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        audio.onended = () => setIsSynthesizing(false);
+        audio.play();
+      })
+      .catch(() => setIsSynthesizing(false));
+      return;
+    }
+    */
+
     if ('speechSynthesis' in window) {
-      // Cancelar cualquier voz que esté hablando
       window.speechSynthesis.cancel();
       
       const utterance = new SpeechSynthesisUtterance(text.replace(/[*#]/g, ''));
       utterance.lang = 'es-ES';
       utterance.rate = 1.0;
-      utterance.pitch = 0.9; // Un tono un poco más grave/ejecutivo
+      utterance.pitch = 0.9;
+      
+      utterance.onstart = () => setIsSynthesizing(true);
+      utterance.onend = () => setIsSynthesizing(false);
+      utterance.onerror = () => setIsSynthesizing(false);
       
       window.speechSynthesis.speak(utterance);
     }
@@ -155,34 +184,97 @@ export default function AgentCAIO() {
 
   return (
     <div className="min-h-screen bg-zinc-950 pt-24 pb-12 overflow-hidden selection:bg-emerald-500/30">
-      {/* Background Orbs */}
+      {/* Background Orbs & Video Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-1/4 -left-20 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] animate-pulse"></div>
         <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+        
+        {/* Subtle Video Background Overlay */}
+        <div className="absolute inset-0 opacity-10 mix-blend-overlay">
+          <video 
+            src="/250328 Video sentado.mp4" 
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            className="w-full h-full object-cover"
+          />
+        </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row items-center justify-between mb-12 gap-8">
           <div className="flex items-center gap-8 group">
-             {/* Animated Brain Icon */}
-             <div className="relative">
-                <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+             {/* AI Avatar with Lip-Sync Placeholder */}
+              <div className="relative">
+                <div className="absolute inset-0 bg-emerald-500/30 rounded-full blur-3xl animate-pulse"></div>
                 <motion.div 
-                  animate={{ 
-                    scale: [1, 1.1, 1],
-                    rotate: [0, 5, -5, 0]
-                  }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="relative w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-2xl shadow-emerald-500/50"
+                  className="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-emerald-500 overflow-hidden shadow-2xl shadow-emerald-500/40"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.5 }}
                 >
-                  <BrainCircuit className="w-10 h-10 text-white" />
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-white rounded-full animate-ping opacity-75"></div>
+                  <video
+                    ref={(el) => {
+                      if (el) {
+                        if (isSynthesizing) el.play().catch(() => {});
+                        else {
+                          el.pause();
+                          el.currentTime = 0;
+                        }
+                      }
+                    }}
+                    src="/250328 Video sentado.mp4"
+                    muted
+                    loop
+                    playsInline
+                    className={`w-full h-full object-cover transition-opacity duration-500 ${isSynthesizing ? 'opacity-100 scale-110' : 'opacity-0 scale-100'}`}
+                  />
+                  
+                  <img 
+                    src="/2503 Imagen Ton IA.png" 
+                    alt="Agente fCAIO" 
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isSynthesizing ? 'opacity-0' : 'opacity-100'}`}
+                  />
+                  {/* Mouth and Voice Visualizer Overlay */}
+                  {isSynthesizing && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                       {/* Subtle mouth glow/pulse */}
+                       <motion.div 
+                         className="absolute top-[60%] w-8 h-4 bg-emerald-400/40 blur-md rounded-full"
+                         animate={{ scaleX: [1, 1.3, 1], scaleY: [1, 1.5, 1], opacity: [0.3, 0.6, 0.3] }}
+                         transition={{ repeat: Infinity, duration: 0.3 }}
+                       />
+                       {/* Audio Bars */}
+                       <div className="absolute bottom-4 flex items-center justify-center gap-1 px-4 py-2 bg-black/40 backdrop-blur-md rounded-full border border-emerald-500/30">
+                          {[0, 1, 2, 3, 4].map((i) => (
+                             <motion.div 
+                               key={i}
+                               animate={{ height: [8, Math.random() * 20 + 10, 8] }} 
+                               transition={{ repeat: Infinity, duration: 0.4 + i * 0.1, ease: "easeInOut" }} 
+                               className="w-1 bg-emerald-400 rounded-full" 
+                             />
+                          ))}
+                       </div>
+                    </div>
+                  )}
                 </motion.div>
-             </div>
+                
+                {/* Status Indicator */}
+                <div className="absolute -bottom-2 -right-2 bg-zinc-900 border-2 border-emerald-500 p-2 rounded-xl shadow-xl">
+                  {isGenerating ? (
+                    <Loader2 className="w-4 h-4 text-emerald-500 animate-spin" />
+                  ) : (
+                    <div className="flex items-center gap-1.5 px-1">
+                      <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                      <span className="text-[10px] font-black text-white uppercase tracking-tighter">ONLINE</span>
+                    </div>
+                  )}
+                </div>
+              </div>
              <div>
-                <h1 className="text-4xl font-black text-white tracking-tighter">
-                  AGENT <span className="text-emerald-500">CAIO</span>
+                <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter leading-none mb-2">
+                  AGENT <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">fCAIO</span>
                 </h1>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
@@ -334,7 +426,7 @@ export default function AgentCAIO() {
                           disabled={!competitorUrl || isAnalyzing}
                           className="px-8 bg-blue-500 hover:bg-blue-600 text-white rounded-2xl font-bold shadow-lg shadow-blue-500/20 transition-all flex items-center gap-2"
                         >
-                          {isAnalyzing ? <Loader2 className="w-5 h-5 animate-spin" /> : <BarChart3 className="w-5 h-5" />}
+                          {isAnalyzing ? <Loader2 className="w-5 h-5 animate-spin" /> : <ChartBar className="w-5 h-5" />}
                           Analyze
                         </button>
                        </div>

@@ -39,22 +39,28 @@ async function startServer() {
       }
 
       const systemInstruction = `
-Eres el Agente IA de TonExecutive, experto Fractional Chief AI Officer (fCAIO).
-Tu objetivo es realizar un diagnóstico inicial a directivos y CEOs sobre el estado de la Inteligencia Artificial en sus empresas.
-Comunícate de forma ejecutiva, concisa y orientada a negocio (ROI, eficiencia, transformación cultural).
-Haz preguntas para descubrir:
-1. Cuellos de botella actuales.
-2. Nivel de adopción de IA en su equipo.
-3. Principales miedos o retos (seguridad, datos, conocimiento).
+Eres el Agente IA de TonExecutive, experto Fractional Chief AI Officer (fCAIO) y especialista en IA aplicada a la Contratación Pública (TAG).
+Tu objetivo es realizar un diagnóstico estratégico a directivos y cargos públicos.
 
-Ve paso a paso. No hagas todas las preguntas de golpe. Si tienes un buen diagnóstico, avísale de que puede generar y descargar su informe arriba.
+CONOCIMIENTO EXPERTO:
+1. Sector Corporativo: Estrategia fCAIO, ROI, Roadmaps a 90/180/360 días, cambio cultural.
+2. Sector Público (TAG): Experto en LCSP (Ley de Contratos del Sector Público), PCAP, PPT, doctrina del TACRC.
+3. Servicios:
+   - AI Talk para Administraciones Públicas (500€).
+   - Creación de 1 Documento Piloto (3.000€, procesable como contrato menor Art. 118 LCSP).
+   - Pack 10 Documentos / Automatización total (14.500€).
+4. Propuesta de Valor: Eliminar el miedo a la nulidad, coherencia PCAP/PPT, reducir semanas de trabajo a minutos.
+
+REGLAS DE COMUNICACIÓN:
+- Sé ejecutivo, conciso y orientado a resultados (ROI en empresas, Seguridad Jurídica en Administraciones).
+- El mensaje de bienvenida oficial debe ser: "Hola. Soy el Agente fCAIO de Ton Executive. Estoy aquí para realizarte un diagnóstico estratégico preliminar. ¿Por dónde empezamos?"
+- Ve paso a paso. No abrumes con información.
 `;
       const formattedMessages = messages.map((m: any) => ({
         role: m.role === "user" ? "user" : "model",
         parts: [{ text: m.content }],
       }));
 
-      // Add system instruction at the beginning of the conversation if not already present
       const systemMessage = { role: 'user', parts: [{ text: `INSTRUCCIONES DE SISTEMA (Sigue estas reglas estrictamente):\n${systemInstruction}\n---\nRESPONDE AHORA AL USUARIO.` }] };
       const apiMessages = [systemMessage, ...formattedMessages];
 
@@ -137,6 +143,68 @@ Genera un informe markdown detallado identificando:
     }
   });
 
+
+  // WhatsApp Assistant API
+  app.post("/api/wa-chat", async (req, res) => {
+    try {
+      const { messages } = req.body;
+
+      if (isDemoMode) {
+        const lastUserMessage = [...messages].reverse().find(m => m.role === 'user')?.content.toLowerCase() || "";
+        let reply = "¡Hola! Soy el asistente de Ton. Como Ton está enfocado ahora mismo en liderar la estrategia de IA de varios clientes fCAIO, yo puedo ayudarte. ¿Te gustaría saber más sobre su metodología de Quick Wins en 90 días?";
+        
+        if (lastUserMessage.includes("interesado") || lastUserMessage.includes("contratar") || lastUserMessage.includes("precio")) {
+          reply = "¡Excelente! A Ton le encantará hablar contigo. Su modelo fCAIO es muy flexible. ¿Te parece si agendamos una breve sesión exploratoria usando el botón de la web?";
+        } else if (lastUserMessage.includes("quién") || lastUserMessage.includes("ton") || lastUserMessage.includes("experiencia")) {
+          reply = "Ton es Ph.D. Cum Laude, MBA por ESADE y tiene más de 20 años de experiencia escalando negocios B2B. Es fundador de Acceleralia y experto en IA Agéntica. ¿Algún área específica de su trayectoria que te interese?";
+        }
+        
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        return res.json({ reply: reply + "\n\n*(Modo Demo activo)*" });
+      }
+      
+      const tonBio = `
+        Nombre: Ton Guardiet.
+        Cargo: Fractional Chief AI Officer (fCAIO).
+        Empresa: TonExecutive.ai / Acceleralia.
+        Formación: Ph.D. cum laude en plataformas de aceleración digital. MBA por ESADE. Postgrado en Finanzas (Ambai University). Licenciado UAB.
+        Experiencia: +20 años en negocios. Profesor en ESADE, UOC y GSM. Experto en Producto y Growth B2B (Quipu, Unibo).
+        Valores: Perseverancia, Entusiasmo, Gratitud.
+        Servicios: Roadmaps de IA, Auditoría de ineficiencias, Quick Wins en 90 días, Cambio cultural IA.
+      `;
+
+      const systemInstruction = `
+Eres el Asistente Digital de Ton Guardiet (TonExecutive.ai) en WhatsApp.
+Tu misión es resolver dudas sobre los servicios de Ton, su metodología fCAIO y su trayectoria profesional.
+Información clave de Ton: \${tonBio}
+
+REGLAS DE COMPORTAMIENTO:
+1. Sé extremadamente servicial, profesional y cercano (como un asistente ejecutivo).
+2. Usa un tono de WhatsApp: directo, amable, con algún emoji pertinente (pero sin exagerar).
+3. Si te preguntan por precios, menciona que el modelo fCAIO es flexible y se adapta al tamaño de la empresa, sugiriendo agendar una sesión exploratoria.
+4. Si el usuario muestra interés real, anímale a usar el botón de "Agendar Sesión" de la web.
+5. Mantén las respuestas cortas y fáciles de leer en móvil.
+`;
+
+      const formattedMessages = messages.map((m: any) => ({
+        role: m.role === "user" ? "user" : "model",
+        parts: [{ text: m.content }],
+      }));
+
+      const systemMessage = { role: 'user', parts: [{ text: `INSTRUCCIONES DE SISTEMA:\n${systemInstruction}\n---\nRESPONDE AL USUARIO.` }] };
+      const apiMessages = [systemMessage, ...formattedMessages];
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-1.5-flash',
+        contents: apiMessages,
+      });
+
+      res.json({ reply: response.text });
+    } catch (error: any) {
+      console.error("Error in /api/wa-chat:", error);
+      res.status(500).json({ error: error.message || "Error en el asistente" });
+    }
+  });
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {

@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import WhatsAppChat from './components/WhatsAppChat';
+import AgentCAIO from './pages/AgentCAIO';
 import { 
   ArrowRight, 
-  CheckCircle2, 
+  CircleCheck as CheckCircle2, 
   ShieldCheck, 
   Building2, 
   Landmark, 
@@ -16,7 +18,7 @@ import {
   Sun,
   ChevronDown,
   Calendar,
-  FileEdit,
+  FilePen as FileEdit,
   Megaphone,
   Gavel,
   FileCheck,
@@ -37,6 +39,10 @@ import {
   X,
   Target,
   Sparkles,
+  GraduationCap,
+  LayoutGrid,
+  Quote,
+  Star,
   List,
   ChevronUp,
   Compass,
@@ -47,11 +53,14 @@ import {
   ClipboardCheck,
   Zap,
   Shield,
-  CheckCircle,
+  CircleCheck as CheckCircle,
   RefreshCw,
   Award,
   Settings,
   Files,
+  BrainCircuit,
+  Search,
+  Menu,
   Calculator,
   Filter,
   ListChecks,
@@ -63,15 +72,13 @@ import {
   AlertTriangle,
   Cpu,
   BookOpen,
-  Fingerprint,
-  BrainCircuit
+  Fingerprint
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 import { translations } from './translations';
 import { TecnicoContratacion } from './pages/TecnicoContratacion';
 import { PricingServices } from './pages/PricingServices';
-import AgentCAIO from './pages/AgentCAIO';
 import EfficiencyCalculator from './components/EfficiencyCalculator';
 import { supabase } from './lib/supabase';
 
@@ -92,11 +99,18 @@ function AppContent() {
     if (path === '/legal') return 'legal';
     if (path === '/privacy') return 'privacy';
     if (path === '/cookies') return 'cookies';
-    if (path === '/casos-de-exito') return 'noticias';
     return 'home';
   });
+  const [activeQuote, setActiveQuote] = useState<string | null>(null);
   const [expandedMod, setExpandedMod] = useState<number | null>(null);
   const [selectedStory, setSelectedStory] = useState<any>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (currentPage === 'home' && videoRef.current) {
+      videoRef.current.play().catch(err => console.log("Video auto-play blocked or error:", err));
+    }
+  }, [currentPage]);
 
   // Update document title
   useEffect(() => {
@@ -385,84 +399,31 @@ function AppContent() {
   const renderHome = () => (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="pb-24">
       {/* HERO SECTION (Double Funnel) */}
-      <section className="relative pt-20 pb-24 lg:pt-32 lg:pb-32 overflow-hidden">
-        {/* Background Video */}
-        <div className="absolute inset-0 -z-20 overflow-hidden bg-black pointer-events-none select-none">
-          <iframe 
-            src="https://www.youtube.com/embed/FWgH0hXZKrE?autoplay=1&mute=1&controls=0&loop=1&playlist=FWgH0hXZKrE&showinfo=0&modestbranding=1" 
-            className="absolute top-1/2 left-1/2 min-w-[150vw] min-h-[150vh] w-auto h-auto -translate-x-1/2 -translate-y-1/2 opacity-[0.25] pointer-events-none mix-blend-screen"
-            allow="autoplay; encrypted-media" 
-            frameBorder="0"
-            title="Background Cover"
-          ></iframe>
-        </div>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/95 via-white/80 to-emerald-50/90 dark:from-zinc-950/90 dark:via-zinc-950/90 dark:to-emerald-900/40 -z-10 transition-colors backdrop-blur-[1px]"></div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 text-sm font-bold mb-4 shadow-sm"
+      <section className="relative pt-20 pb-24 lg:pt-32 lg:pb-48 overflow-hidden min-h-[80vh] flex items-center">
+        {/* 1. Capa de Video (Base) */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          <video
+            ref={videoRef}
+            key="ton-home-video-v3"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            onEnded={(e) => {
+              e.currentTarget.currentTime = 0;
+              e.currentTarget.play();
+            }}
+            className="w-full h-full object-cover object-[center_75%] scale-[1.2] opacity-95"
           >
-            <ShieldCheck className="w-4 h-4 text-green-500" />
-            {t.home.badge}
-          </motion.div>
+            <source src="/video_domino_ton.mp4" type="video/mp4" />
+          </video>
+          {/* Overlay muy sutil para mantener calidad */}
+          <div className="absolute inset-0 bg-white/5 dark:bg-zinc-950/20"></div>
+        </div>
 
-          <div className="flex justify-center w-full mb-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.05 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-50 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-sm font-medium"
-            >
-              <BrainCircuit className="w-4 h-4" />
-              {t.home.platformBadge}
-            </motion.div>
-          </div>
-          
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-zinc-900 dark:text-white max-w-5xl mx-auto leading-[1.1]"
-          >
-            {t.home.title1}<span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-green-500 dark:from-emerald-400 dark:to-green-400">{t.home.title2}</span>
-          </motion.h1>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-6 text-lg md:text-xl text-zinc-600 dark:text-zinc-400 max-w-3xl mx-auto leading-relaxed"
-          >
-            {t.home.subtitle}
-          </motion.p>
-          
-          {/* DOUBLE FUNNEL -> SINGLE FUNNEL FOR ADMINISTRATION */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="mt-16 max-w-2xl mx-auto"
-          >
-            {/* B2G Card */}
-            <div className="group relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-8 text-left hover:shadow-2xl hover:shadow-green-500/10 dark:hover:shadow-green-500/5 transition-all overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-green-50 dark:bg-green-900/20 rounded-bl-full -z-10 transition-colors"></div>
-              <div className="w-14 h-14 bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-400 rounded-2xl flex items-center justify-center mb-6">
-                <Landmark className="w-7 h-7" />
-              </div>
-              <h3 className="text-2xl font-bold text-zinc-900 dark:text-white mb-3">{t.home.b2gTitle}</h3>
-              <p className="text-zinc-600 dark:text-zinc-400 mb-8 min-h-[48px]">
-                {t.home.b2gDesc}
-              </p>
-              <button onClick={() => setCurrentPage('contacto')} className="w-full bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-xl font-bold transition-colors flex items-center justify-center gap-2">
-                {t.home.b2gBtn}
-                <ArrowRight className="w-5 h-5 group-hover:tranzinc-x-1 transition-transform" />
-              </button>
-            </div>
-          </motion.div>
-        </div>
+        {/* 2. Capa de Contenido (Superior) - Vaciada a petición del usuario */}
+        <div className="relative z-10 w-full h-full"></div>
       </section>
 
       {/* SOCIAL PROOF / TRUST BAR */}
@@ -1155,228 +1116,298 @@ function AppContent() {
   const renderAbout = () => {
     const ab = (t as any).about;
 
+    const stats = [
+      { label: 'Experiencia', value: '+20 Años', icon: <Briefcase className="w-5 h-5" />, color: 'bg-blue-600' },
+      { label: 'Impacto', value: '+400% ARR', sub: 'Crecimiento', icon: <Rocket className="w-5 h-5" />, color: 'bg-emerald-600' },
+      { label: 'Autoridad', value: '+40', sub: 'Recomendaciones', icon: <Star className="w-5 h-5 fill-current" />, color: 'bg-amber-500' },
+      { label: 'Red', value: '+7.000', sub: 'Contactos', icon: <Linkedin className="w-5 h-5" />, color: 'bg-[#0A66C2]' }
+    ];
+
     return (
-      <div className="py-20 bg-zinc-50 dark:bg-zinc-900 min-h-screen">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header Section */}
-          <div className="flex flex-col md:flex-row items-center gap-12 mb-16">
-            <div className="w-48 h-48 md:w-64 md:h-64 flex-shrink-0 relative rounded-full overflow-hidden border-4 border-emerald-500 shadow-2xl glass z-10">
-              <img 
-                src="/ton-guardiet.png"
-                alt="Ton Guardiet"
-                className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            <div className="flex-1 text-center md:text-left">
-              <h1 className="text-4xl md:text-5xl font-extrabold text-zinc-900 dark:text-white mb-4 tracking-tight">
-                {ab.title}
-              </h1>
-              <h2 className="text-xl md:text-2xl font-medium text-emerald-600 dark:text-emerald-400 mb-2">
-                {ab.subtitle}
-              </h2>
-              <p className="text-lg font-semibold text-zinc-500 dark:text-zinc-400 mb-6 flex items-center gap-2 justify-center md:justify-start">
-                <Phone className="w-4 h-4" /> Tel. +34660688501
-              </p>
-              <p className="text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed font-light">
-                {ab.intro}
-              </p>
-              <div className="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
-                 <a href="https://www.linkedin.com/in/tonguardiet/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-[#0A66C2] text-white px-6 py-3 rounded-xl hover:bg-[#004182] transition-colors shadow-lg font-medium">
-                    <Linkedin className="w-5 h-5" /> LinkedIn
-                 </a>
-                 <a href={`tel:${t.contact.phoneValue.replace(/\s+/g, '')}`} className="flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl hover:bg-emerald-700 transition-colors shadow-lg font-medium">
-                    <Phone className="w-5 h-5" /> {t.contact.phoneValue}
-                 </a>
-                 <button onClick={() => { setCurrentPage('contacto'); window.scrollTo(0,0); }} className="flex items-center gap-2 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-6 py-3 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors shadow-lg font-medium">
-                    <Mail className="w-5 h-5" /> Contactar
-                 </button>
-              </div>
-            </div>
-          </div>
+      <div className="py-20 bg-zinc-50 dark:bg-zinc-950 min-h-screen overflow-hidden selection:bg-emerald-500/30">
+        {/* Decorative Background Elements */}
+        <div className="fixed inset-0 pointer-events-none">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[120px] animate-pulse"></div>
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {/* Left Column: BIO and Skills */}
-            <div className="md:col-span-1 space-y-10">
-              <div className="bg-white dark:bg-zinc-800 rounded-3xl p-8 border border-zinc-200 dark:border-zinc-700 shadow-sm relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-10">
-                  <User className="w-24 h-24" />
-                </div>
-                <h3 className="text-xl font-bold mb-6 text-zinc-900 dark:text-white flex items-center gap-2">
-                  <Target className="w-5 h-5 text-emerald-500" />
-                  {ab.profile}
-                </h3>
-                <div className="space-y-4 text-zinc-600 dark:text-zinc-300 relative z-10">
-                  {ab.content.map((p, i) => (
-                    <p key={i} className="leading-relaxed text-sm">{p}</p>
-                  ))}
-                </div>
-              </div>
-
-              {/* Skills */}
-              <div className="space-y-6">
-                <div>
-                  <h4 className="text-sm font-semibold uppercase tracking-wider text-zinc-500 mb-3">{ab.skillsGroup1}</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {ab.skills1.map((skill, i) => (
-                      <span key={i} className="bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 px-3 py-1.5 rounded-lg text-xs font-medium border border-emerald-200 dark:border-emerald-800">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <h4 className="text-sm font-semibold uppercase tracking-wider text-zinc-500 mb-3">{ab.skillsGroup2}</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {ab.skills2.map((skill, i) => (
-                      <span key={i} className="bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 px-3 py-1.5 rounded-lg text-xs font-medium border border-zinc-200 dark:border-zinc-700">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Experience */}
-            <div className="md:col-span-2">
-              <h3 className="text-2xl font-bold mb-8 text-zinc-900 dark:text-white flex items-center gap-3">
-                <Briefcase className="w-6 h-6 text-emerald-500" />
-                {ab.experienceTitle}
-              </h3>
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          
+          {/* Main Hero Bento Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-20 items-stretch">
+            
+            {/* Main Bio Card (Ph.D + Intro) */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="lg:col-span-8 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[3rem] p-10 md:p-14 shadow-2xl relative overflow-hidden flex flex-col justify-center ring-1 ring-zinc-200/50 dark:ring-white/5"
+            >
+              <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full -mr-20 -mt-20 blur-3xl"></div>
               
-              <div className="space-y-6">
-                {ab.experiences.map((exp: any, i: number) => (
-                  <div key={i} className="bg-white dark:bg-zinc-800 p-8 rounded-3xl border border-zinc-200 dark:border-zinc-700 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
-                    <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-                      <div>
-                        <h4 className="text-lg font-bold text-zinc-900 dark:text-white">{exp.role}</h4>
-                        <div className="text-emerald-600 dark:text-emerald-400 font-medium">{exp.company}</div>
+              <div className="relative z-10">
+                <div className="flex flex-wrap items-center gap-3 mb-8">
+                  <span className="px-5 py-2 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-black uppercase tracking-widest border border-emerald-500/20">
+                    Ph.D. CUM LAUDE
+                  </span>
+                  <span className="px-5 py-2 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-xs font-black uppercase tracking-widest border border-blue-500/20">
+                    MBA ESADE
+                  </span>
+                  <span className="px-5 py-2 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 text-xs font-black uppercase tracking-widest border border-zinc-200 dark:border-zinc-700">
+                    FRACTIONAL CAIO
+                  </span>
+                </div>
+
+                <h1 className="text-4xl md:text-7xl font-black text-zinc-950 dark:text-white mb-8 tracking-tighter leading-[0.9]">
+                  LIDERANDO LA <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1D4ED8] to-emerald-600">TRANSFORMACIÓN</span> DE LA IA AGÉNTICA.
+                </h1>
+                
+                <p className="text-xl text-zinc-500 dark:text-zinc-400 font-light leading-relaxed mb-10 max-w-2xl">
+                  {ab.intro}
+                </p>
+
+                <div className="flex flex-wrap gap-4">
+                  <a href="https://www.linkedin.com/in/tonguardiet/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-[#0A66C2] text-white px-8 py-4 rounded-2xl hover:scale-105 transition-all shadow-xl shadow-blue-500/20 font-bold group">
+                    <Linkedin className="w-6 h-6 group-hover:rotate-12 transition-transform" /> 
+                    Conectar
+                  </a>
+                  <a href={`tel:${(t as any).contact.phoneValue}`} className="flex items-center gap-3 bg-emerald-600 text-white px-8 py-4 rounded-2xl hover:scale-105 transition-all shadow-xl shadow-emerald-500/20 font-bold group">
+                    <Phone className="w-6 h-6 group-hover:rotate-12 transition-transform" />
+                    {(t as any).contact.phoneValue}
+                  </a>
+                  <button onClick={() => setCurrentPage('contacto')} className="flex items-center gap-3 bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 px-8 py-4 rounded-2xl hover:scale-105 transition-all shadow-xl font-bold group">
+                    <Mail className="w-6 h-6 group-hover:-rotate-12 transition-transform" />
+                    Iniciar Diagnóstico
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Profile Image Card */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="lg:col-span-4 rounded-[3rem] overflow-hidden shadow-2xl relative group bg-zinc-200 dark:bg-zinc-800 border-4 border-white dark:border-zinc-800"
+            >
+              <img 
+                src="/2503 Imagen Ton IA.png"
+                alt="Ton Guardiet IA"
+                className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-60"></div>
+              <div className="absolute bottom-8 left-8 right-8">
+                <p className="text-white font-black text-2xl uppercase tracking-tighter">Ton Guardiet</p>
+                <p className="text-emerald-400 font-bold text-sm uppercase tracking-widest">Founder & CEO Acceleralia</p>
+              </div>
+            </motion.div>
+
+          </div>
+
+          {/* Gallery / Professional Visuals Section */}
+          <div className="mb-32">
+            <div className="flex items-center gap-4 mb-12">
+              <div className="h-px flex-1 bg-zinc-200 dark:bg-zinc-800"></div>
+              <h3 className="text-xl font-bold text-zinc-400 uppercase tracking-widest px-4">Portfolio Visual Profesional</h3>
+              <div className="h-px flex-1 bg-zinc-200 dark:bg-zinc-800"></div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { src: "/2110 Foto Ton 6.jpg", alt: "Ton Guardiet - Speaker" },
+                { src: "/2110 Foto Ton 3.jpg", alt: "Ton Guardiet - Executive Strategy" },
+                { src: "/250629 Oxfam_TonGuardiet_Marzo25_02.jpg", alt: "Ton Guardiet - Professional Session" }
+              ].map((photo, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="rounded-[2.5rem] overflow-hidden aspect-[4/3] relative group shadow-xl border-4 border-white dark:border-zinc-900"
+                >
+                  <img 
+                    src={photo.src} 
+                    alt={photo.alt} 
+                    className="w-full h-full object-cover object-[center_20%] transition-transform duration-700 group-hover:scale-110" 
+                  />
+                  <div 
+                    onClick={() => setActiveQuote(i === 0 ? "IA Agéntica: Menos hype, más ROI." : i === 1 ? "De semanas a minutos: mi misión es tu eficiencia operativa." : "No implemento herramientas, rediseño culturas ganadoras.")}
+                    className="absolute inset-0 bg-emerald-600/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+                  >
+                    <div className="p-3 bg-white/20 backdrop-blur-md rounded-full transform group-hover:scale-110 transition-transform">
+                      <Search className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Key Stats Bento Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-24">
+            {stats.map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ y: -5 }}
+                className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-8 rounded-[2.5rem] shadow-xl text-center group"
+              >
+                <div className={`w-12 h-12 ${stat.color} rounded-2xl flex items-center justify-center text-white mb-6 mx-auto shadow-lg group-hover:rotate-12 transition-transform`}>
+                  {stat.icon}
+                </div>
+                <h4 className="text-3xl font-black text-zinc-950 dark:text-white mb-1 tracking-tighter">{stat.value}</h4>
+                <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">{stat.label}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Deep Content Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-32 items-start">
+            
+            {/* Academic & Strategic Pillar */}
+            <div className="lg:col-span-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+               <div className="bg-emerald-500/5 border border-emerald-500/20 p-10 rounded-[3rem] shadow-inner">
+                  <GraduationCap className="w-10 h-10 text-emerald-500 mb-6" />
+                  <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-4 uppercase tracking-wider">Educación de Élite</h3>
+                  <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed text-[15px]">
+                    PhD Cum Laude especializado en plataformas de aceleración y MBA por ESADE. Una base académica sólida para liderar la transformación digital compleja.
+                  </p>
+               </div>
+               <div className="bg-blue-500/5 border border-blue-500/20 p-10 rounded-[3rem] shadow-inner">
+                  <LayoutGrid className="w-10 h-10 text-blue-500 mb-6" />
+                  <h3 className="text-xl font-bold text-zinc-900 dark:text-white mb-4 uppercase tracking-wider">Visión 360º</h3>
+                  <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed text-[15px]">
+                    Experiencia en Producto, Growth y Estrategia B2B en compañías como Quipu y Unibo. Entiendo el negocio desde adentro.
+                  </p>
+               </div>
+               <div className="bg-zinc-950 border border-zinc-800 p-10 rounded-[3rem] shadow-2xl">
+                  <Quote className="w-10 h-10 text-emerald-500 mb-6" />
+                  <p className="text-zinc-300 italic leading-relaxed text-lg mb-6">
+                    "Mi pasión es la aceleración empresarial y la intraemprededuría corporativa. No implementamos solo tecnología, creamos cultura de crecimiento."
+                  </p>
+               </div>
+            </div>
+
+          </div>
+
+          {/* Timeline Experience Section */}
+          <div className="mb-32 relative">
+            <h3 className="text-4xl font-black text-zinc-950 dark:text-white mb-16 text-center tracking-tighter">TRAYECTORIA DE <span className="text-emerald-500">ALTO IMPACTO</span></h3>
+            
+            <div className="space-y-12">
+              {ab.experiences.map((exp: any, i: number) => (
+                <motion.div 
+                  key={i}
+                  initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  className="flex flex-col md:flex-row gap-8 items-start group"
+                >
+                  <div className="md:w-1/4 pt-2">
+                    <span className="px-4 py-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-full text-xs font-black text-zinc-500 uppercase tracking-widest border border-zinc-200 dark:border-zinc-700">
+                      {exp.period}
+                    </span>
+                  </div>
+                  <div className="md:w-3/4 bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 p-10 rounded-[2.5rem] shadow-xl group-hover:border-emerald-500/30 transition-all relative">
+                    <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-500/5 rounded-full -mr-10 -mt-10 blur-xl"></div>
+                    <div className="relative z-10">
+                      <h4 className="text-2xl font-black text-zinc-950 dark:text-white mb-2 tracking-tight">{exp.role}</h4>
+                      <p className="text-emerald-600 dark:text-emerald-400 font-bold mb-6 text-sm uppercase tracking-widest">{exp.company}</p>
+                      <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed text-[15px]">
+                        {exp.desc}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Social Proof / LinkedIn Recommendations Badge */}
+          <div className="bg-gradient-to-br from-zinc-900 to-black p-10 md:p-20 rounded-[4rem] text-center shadow-3xl relative overflow-hidden mb-32 border border-zinc-800">
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
+            <div className="relative z-10">
+              <h3 className="text-4xl font-black text-white mb-8 tracking-tighter uppercase">{ab.recommendations.title}</h3>
+              <p className="text-zinc-400 text-lg mb-16 max-w-2xl mx-auto">
+                {ab.recommendations.subtitle}
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                {ab.recommendations.list.map((rec: any, idx: number) => (
+                  <motion.div 
+                    key={idx}
+                    whileHover={{ y: -10 }}
+                    className="bg-zinc-800/30 border border-zinc-700/50 p-8 rounded-[2rem] relative group"
+                  >
+                    <Quote className="absolute top-6 right-6 w-8 h-8 text-emerald-500/20 group-hover:text-emerald-500/40 transition-colors" />
+                    <p className="text-zinc-300 italic mb-8 relative z-10 leading-relaxed">
+                      "{rec.text}"
+                    </p>
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center border border-emerald-500/30">
+                         <User className="w-6 h-6 text-emerald-500" />
                       </div>
-                      <div className="bg-zinc-100 dark:bg-zinc-900 px-3 py-1 rounded-full text-xs font-medium text-zinc-500 whitespace-nowrap">
-                        {exp.period}
+                      <div>
+                        <p className="text-white font-bold text-sm tracking-tight">{rec.author}</p>
+                        <div className="flex gap-0.5 mt-1">
+                          {[1,2,3,4,5].map(s => <Star key={s} className="w-3 h-3 text-emerald-500 fill-current" />)}
+                        </div>
                       </div>
                     </div>
-                    <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">
-                      {exp.desc}
-                    </p>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* New Section: Professional Gallery */}
-          {ab.gallery && ab.gallery.length > 0 && (
-            <div className="mt-24">
-              <h3 className="text-3xl font-bold text-center text-zinc-900 dark:text-white mb-12 flex items-center justify-center gap-3">
-                <Sparkles className="w-8 h-8 text-emerald-500" />
-                {ab.galleryTitle || 'Galería Profesional'}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {ab.gallery.map((item: any, i: number) => (
-                  <motion.div 
-                    key={i}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className="relative rounded-3xl overflow-hidden shadow-lg border border-zinc-200 dark:border-zinc-800 group"
-                  >
-                    <div className="aspect-video w-full bg-zinc-100 dark:bg-zinc-800">
-                      {item.type === 'video' ? (
-                        <video 
-                          src={item.src} 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                          controls 
-                          playsInline
-                        />
-                      ) : (
-                        <img 
-                          src={item.src} 
-                          alt={item.title} 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                        />
-                      )}
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/80 via-zinc-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none flex items-end">
-                      <div className="p-6 w-full">
-                        <p className="text-white font-bold text-lg">{item.title}</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* New Section: Inspiring Entities */}
-          {ab.entities && ab.entities.length > 0 && (
-            <div className="mt-24 pb-12">
-              <h3 className="text-2xl md:text-3xl font-bold text-center text-zinc-900 dark:text-white mb-12 flex items-center justify-center gap-3">
-                <Globe className="w-8 h-8 text-blue-500" />
-                {ab.entitiesTitle || 'Entidades que me inspiran'}
-              </h3>
-              <div className="flex flex-wrap justify-center gap-6">
-                {ab.entities.map((entity: any, i: number) => (
-                  <motion.div 
-                    key={i}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.05 }}
-                    className="bg-white dark:bg-zinc-800 px-6 py-4 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-700 hover:border-emerald-500/50 hover:shadow-md transition-all group flex items-center gap-4"
-                  >
-                    <div className="w-2 h-2 rounded-full bg-emerald-500 group-hover:scale-150 transition-transform"></div>
-                    <div>
-                      <h4 className="font-bold text-zinc-900 dark:text-white text-sm md:text-base">{entity.name}</h4>
-                      {entity.desc && (
-                        <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">{entity.desc}</p>
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Entidades que me inspiran */}
+          {/* Inspiring Entities */}
           {ab.inspiringEntities && (
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="mt-32 pt-20 border-t border-zinc-200 dark:border-zinc-800"
+              className="mt-32 pb-40 overflow-hidden"
             >
               <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-zinc-900 dark:text-white mb-4">
-                  {ab.inspiringEntities.title}
+                <h2 className="text-3xl md:text-5xl font-black text-zinc-950 dark:text-white mb-4 tracking-tighter uppercase">
+                  Entidades que Inspiran el Ecosistema
                 </h2>
-                <p className="text-lg text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto">
-                  {ab.inspiringEntities.subtitle}
-                </p>
+                <div className="w-24 h-1.5 bg-emerald-500 mx-auto rounded-full mb-8"></div>
               </div>
               
-              <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-                {ab.inspiringEntities.list.map((entity: string, idx: number) => (
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 max-w-6xl mx-auto">
+                {ab.inspiringEntities.list.map((entity: any, idx: number) => (
                   <motion.div
                     key={idx}
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: idx * 0.05 }}
-                    className="px-6 py-4 rounded-2xl bg-white dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-700 shadow-sm hover:shadow-md hover:border-emerald-500/30 transition-all cursor-default"
+                    className="p-8 rounded-[2rem] bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 shadow-lg hover:shadow-2xl hover:border-emerald-500/40 transition-all cursor-default group relative overflow-hidden flex flex-col items-center justify-center text-center aspect-square"
                   >
-                    <span className="text-zinc-800 dark:text-zinc-200 font-bold text-sm md:text-base">
-                      {entity}
-                    </span>
+                    <img 
+                      src={`/entidades/${entity.logo}`} 
+                      alt={entity.name}
+                      className="w-20 h-20 object-contain grayscale group-hover:grayscale-0 transition-all duration-500 mb-2"
+                    />
+                    
+                    {/* Hover Info */}
+                    <div className="absolute inset-0 bg-emerald-600/95 p-6 flex flex-col items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+                      <p className="text-white font-black text-xs uppercase tracking-widest mb-2 border-b border-white/20 pb-2 w-full">{entity.name}</p>
+                      <p className="text-white/90 text-[10px] leading-tight font-medium">
+                        {entity.desc}
+                      </p>
+                    </div>
                   </motion.div>
                 ))}
               </div>
             </motion.div>
           )}
+
         </div>
       </div>
     );
@@ -1696,6 +1727,126 @@ function AppContent() {
           {renderSecuritySection()}
         </div>
       </motion.div>
+    );
+  };
+
+  const renderReportForm = () => {
+    const rf = (t as any).reportForm || translations.ES.reportForm;
+    if (!rf) return <div className="py-20 text-center">Loading form...</div>;
+    const [status, setStatus] = useState('idle');
+
+    const handleSubmit = async (e: any) => {
+      e.preventDefault();
+      setStatus('loading');
+      // Simulate API call
+      setTimeout(() => setStatus('success'), 1500);
+    };
+
+    return (
+      <div className="py-20 bg-zinc-50 dark:bg-zinc-950 min-h-screen">
+        {!rf ? (
+          <div className="text-center text-zinc-500">Loading translations...</div>
+        ) : (
+          <div className="max-w-4xl mx-auto px-6">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white dark:bg-zinc-900 rounded-[3rem] p-8 md:p-16 shadow-2xl border border-zinc-200 dark:border-zinc-800 relative overflow-hidden"
+            >
+              {/* Contenido del formulario... */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+              
+              <div className="relative z-10 text-center mb-12">
+                <h1 className="text-4xl md:text-5xl font-black text-zinc-950 dark:text-white mb-6 tracking-tighter">
+                  {rf.title}
+                </h1>
+                <p className="text-lg text-zinc-500 dark:text-zinc-400">
+                  {rf.subtitle}
+                </p>
+              </div>
+
+              {status === 'success' ? (
+                <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-12">
+                  <div className="w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl shadow-emerald-500/20">
+                    <CheckCheck className="w-10 h-10 text-white" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-4">{rf.success}</h2>
+                  <button onClick={() => setCurrentPage('home')} className="text-emerald-600 font-bold hover:underline">Volver al inicio</button>
+                </motion.div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2 px-2">{rf.fields.name}</label>
+                      <input type="text" required className="w-full px-6 py-4 rounded-2xl bg-zinc-100 dark:bg-zinc-800 border-none focus:ring-2 focus:ring-emerald-500 transition-all text-zinc-900 dark:text-white" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2 px-2">{rf.fields.email}</label>
+                      <input type="email" required className="w-full px-6 py-4 rounded-2xl bg-zinc-100 dark:bg-zinc-800 border-none focus:ring-2 focus:ring-emerald-500 transition-all text-zinc-900 dark:text-white" />
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2 px-2">{rf.fields.company}</label>
+                      <input type="text" required className="w-full px-6 py-4 rounded-2xl bg-zinc-100 dark:bg-zinc-800 border-none focus:ring-2 focus:ring-emerald-500 transition-all text-zinc-900 dark:text-white" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2 px-2">{rf.fields.role}</label>
+                      <input type="text" required className="w-full px-6 py-4 rounded-2xl bg-zinc-100 dark:bg-zinc-800 border-none focus:ring-2 focus:ring-emerald-500 transition-all text-zinc-900 dark:text-white" />
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2 px-2">{rf.fields.sector}</label>
+                      <select className="w-full px-6 py-4 rounded-2xl bg-zinc-100 dark:bg-zinc-800 border-none focus:ring-2 focus:ring-emerald-500 transition-all appearance-none cursor-pointer text-zinc-900 dark:text-white">
+                        {rf.options.sectors.map((o: string) => <option key={o} value={o}>{o}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2 px-2">{rf.fields.size}</label>
+                      <select className="w-full px-6 py-4 rounded-2xl bg-zinc-100 dark:bg-zinc-800 border-none focus:ring-2 focus:ring-emerald-500 transition-all appearance-none cursor-pointer text-zinc-900 dark:text-white">
+                        {rf.options.sizes.map((o: string) => <option key={o} value={o}>{o}</option>)}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2 px-2">{rf.fields.aiState}</label>
+                    <select className="w-full px-6 py-4 rounded-2xl bg-zinc-100 dark:bg-zinc-800 border-none focus:ring-2 focus:ring-emerald-500 transition-all appearance-none cursor-pointer text-zinc-900 dark:text-white">
+                      {rf.options.aiStates.map((o: string) => <option key={o} value={o}>{o}</option>)}
+                    </select>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2 px-2">{rf.fields.goal}</label>
+                      <select className="w-full px-6 py-4 rounded-2xl bg-zinc-100 dark:bg-zinc-800 border-none focus:ring-2 focus:ring-emerald-500 transition-all appearance-none cursor-pointer text-zinc-900 dark:text-white">
+                        {rf.options.goals.map((o: string) => <option key={o} value={o}>{o}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-black text-zinc-400 uppercase tracking-widest mb-2 px-2">{rf.fields.interest}</label>
+                      <select className="w-full px-6 py-4 rounded-2xl bg-zinc-100 dark:bg-zinc-800 border-none focus:ring-2 focus:ring-emerald-500 transition-all appearance-none cursor-pointer text-zinc-900 dark:text-white">
+                        {rf.options.interests.map((o: string) => <option key={o} value={o}>{o}</option>)}
+                      </select>
+                    </div>
+                  </div>
+
+                  <button 
+                    type="submit" 
+                    disabled={status === 'loading'}
+                    className="w-full py-6 mt-8 bg-zinc-950 dark:bg-white text-white dark:text-zinc-950 rounded-2xl font-black uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-2xl disabled:opacity-50"
+                  >
+                    {status === 'loading' ? '...' : rf.submit}
+                  </button>
+                </form>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </div>
     );
   };
 
@@ -2373,7 +2524,7 @@ function AppContent() {
                     <img 
                       src={story.image} 
                       alt={story.company} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                      className="w-full h-full object-cover object-[center_20%] group-hover:scale-105 transition-transform duration-500" 
                     />
                     <div className="absolute top-4 right-4 bg-white/90 dark:bg-zinc-900/90 backdrop-blur text-zinc-900 dark:text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-sm">
                       {story.type === 'caio' ? 'CAIO' : 'Fractional'}
@@ -2491,14 +2642,14 @@ function AppContent() {
               </h2>
               {selectedStory.image && (
                 <div className="w-full h-80 rounded-2xl overflow-hidden mb-8 shadow-inner bg-zinc-100 dark:bg-zinc-800">
-                  <img src={selectedStory.image} alt={selectedStory.title} className="w-full h-full object-cover" />
+                  <img src={selectedStory.image} alt={selectedStory.title} className="w-full h-full object-cover object-[center_25%]" />
                 </div>
               )}
               <div className="prose prose-lg dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-300">
                 <p className="text-xl leading-relaxed mb-8">{selectedStory.desc || selectedStory.summary}</p>
                 <div className="bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800 rounded-2xl p-6 mb-8 text-emerald-800 dark:text-emerald-200 text-sm md:text-base leading-relaxed">
-                  <span className="font-bold block mb-2 opacity-80">Insights Clave:</span>
-                  El uso de metodologías de IA agéntica como las descritas logran disrupción rápida. La integración y la constante optimización permiten que las organizaciones vean retornos de inversión en menos de dos trimestres, apalancándose de recursos eficientes sin la necesidad total de equipos inmensos.
+                  <span className="font-bold block mb-2 opacity-80">{(t as any).newsPage.successStories.insightsTitle}:</span>
+                  {(t as any).newsPage.successStories.insightsDesc}
                 </div>
                 {selectedStory.link && (
                    <a href={selectedStory.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#1D4ED8] hover:bg-blue-800 text-white px-6 py-3 rounded-full font-bold transition-all shadow-md mt-4">
@@ -2606,7 +2757,7 @@ function AppContent() {
             </button>
 
             <button 
-              onClick={() => window.location.href = '#'} 
+              onClick={() => { setCurrentPage('informe'); window.scrollTo(0,0); }} 
               className="bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-5 py-2.5 rounded-full font-semibold text-sm transition-all shadow-lg hover:shadow-xl active:scale-95"
             >
               {t.nav.login || 'Acceder'}
@@ -2632,12 +2783,14 @@ function AppContent() {
         {currentPage === 'legal' && renderLegal()}
         {currentPage === 'privacy' && renderPrivacy()}
         {currentPage === 'cookies' && renderCookies()}
+        {currentPage === 'informe' && renderReportForm()}
         {currentPage === 'tecnico-contratacion' && (
           <TecnicoContratacion 
             t={t} 
             onBookDemo={() => setShowDemoModal(true)} 
           />
         )}
+        {currentPage === 'agente' && <AgentCAIO />}
       </main>
 
       {/* FOOTER */}
@@ -2704,13 +2857,33 @@ function AppContent() {
       {renderDemoModal()}
       {renderStoryModal()}
       
-      {/* Floating WhatsApp Button */}
-      <a href={`https://wa.me/${t.contact.phoneValue.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-all duration-300 group flex items-center justify-center">
-        <span className="absolute right-full mr-4 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white px-3 py-1.5 rounded-lg text-sm font-bold shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap hidden md:block">WhatsApp con IA</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
-          <path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.34 6.34 0 0 1-3.23-.881l-.231-.137-2.399.629.639-2.34-.151-.24A6.33 6.33 0 0 1 1.622 7.926c.004-3.504 2.858-6.36 6.375-6.36 1.696 0 3.29.66 4.488 1.858a6.35 6.35 0 0 1 1.862 4.494c-.004 3.507-2.858 6.362-6.353 6.362zm3.479-4.757c-.191-.096-1.127-.556-1.302-.619-.175-.064-.303-.096-.431.096-.128.192-.493.619-.604.747-.111.128-.223.144-.414.048-.191-.096-.804-.297-1.531-.947-.566-.505-.948-1.129-1.06-1.32-.111-.192-.012-.296.084-.391.086-.086.191-.223.287-.334.096-.111.128-.192.191-.32.064-.128.032-.24-.015-.336-.048-.096-.431-1.04-.59-1.424-.155-.373-.312-.323-.431-.329-.111-.005-.24-.007-.367-.007s-.335.048-.511.24c-.175.192-.671.656-.671 1.599s.688 1.856.783 1.984c.096.128 1.353 2.068 3.275 2.898.458.198.815.316 1.093.404.46.146.879.125 1.21.076.374-.055 1.127-.46 1.286-.905.159-.445.159-.828.111-.905-.048-.077-.175-.122-.367-.218z"/>
-        </svg>
-      </a>
+      {/* Quote Overlay */}
+      <AnimatePresence>
+        {activeQuote && (
+          <div 
+            className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-black/40 backdrop-blur-sm"
+            onClick={() => setActiveQuote(null)}
+          >
+            <motion.div 
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="bg-white dark:bg-zinc-900 p-12 rounded-[3rem] shadow-2xl border border-emerald-500/20 max-w-2xl text-center relative"
+            >
+              <button className="absolute top-6 right-6 text-zinc-400 hover:text-zinc-600"><X className="w-6 h-6" /></button>
+              <Quote className="w-12 h-12 text-emerald-500/20 mx-auto mb-6" />
+              <p className="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-white leading-tight italic tracking-tight">
+                "{activeQuote}"
+              </p>
+              <div className="mt-8 flex items-center justify-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold">T</div>
+                <span className="font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest text-xs">Ton Guardiet</span>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+      <WhatsAppChat />
     </div>
   );
 }
