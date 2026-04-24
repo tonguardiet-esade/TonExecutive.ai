@@ -23,14 +23,14 @@ async function startServer() {
         // Encontrar la última pregunta del usuario para dar una respuesta coherente
         const lastUserMessage = [...messages].reverse().find(m => m.role === 'user')?.content.toLowerCase() || "";
         
-        let reply = "Como tu fCAIO, entiendo perfectamente ese reto. La IA puede ayudar optimizando ese proceso mediante agentes autónomos. ¿Te gustaría que profundicemos en cómo medir el ROI de esta implementación?";
+        let reply = "Como tu fCAIO y mentor de IA, entiendo perfectamente ese reto. Lo podemos convertir en un plan claro con impacto real en negocio. ¿Quieres que empecemos por un quick win medible en 90 días?";
         
         if (lastUserMessage.includes("roi") || lastUserMessage.includes("dinero") || lastUserMessage.includes("coste")) {
-          reply = "El ROI es fundamental. En mi experiencia, implementar IA en procesos core puede liberar hasta un 30% del tiempo operativo en el primer trimestre. ¿Qué volumen de operaciones manejáis actualmente?";
+          reply = "El ROI es la conversación correcta. En muchos equipos, una primera ola de IA bien diseñada libera entre un 15% y 30% del tiempo operativo en el primer trimestre. ¿Qué proceso te duele más hoy: ventas, operaciones o soporte?";
         } else if (lastUserMessage.includes("equipo") || lastUserMessage.includes("personal") || lastUserMessage.includes("miedo")) {
-          reply = "El factor humano es el mayor reto. No se trata de sustituir, sino de aumentar la capacidad. Mi metodología incluye un plan de capacitación ejecutiva para vencer esa resistencia. ¿Cómo calificarías el nivel técnico de tu equipo hoy?";
+          reply = "El factor humano suele ser el cuello de botella. No va de sustituir personas, va de elevar su capacidad. Te ayudo a diseñar adopción por capas para evitar rechazo interno. ¿Cómo está hoy tu equipo en madurez digital del 1 al 10?";
         } else if (lastUserMessage.includes("hola") || lastUserMessage.includes("buenos días")) {
-          reply = "¡Hola! Soy el Agente fCAIO de Ton Guardiet. Estoy listo para auditar tus ineficiencias y trazar un roadmap de IA real. ¿Por dónde empezamos?";
+          reply = "¡Hola! Soy el Agente fCAIO de Ton Guardiet. Piensa en mí como tu mentor de IA: cercano, directo y enfocado en resultados reales. ¿Por dónde empezamos?";
         }
 
         // Simular un pequeño retardo para que se sienta real
@@ -39,22 +39,26 @@ async function startServer() {
       }
 
       const systemInstruction = `
-Eres el Agente IA de TonExecutive, experto Fractional Chief AI Officer (fCAIO) y especialista en IA aplicada a la Contratación Pública (TAG).
-Tu objetivo es realizar un diagnóstico estratégico a directivos y cargos públicos.
+Eres el Agente IA de TonExecutive, el avatar digital de Ton Guardiet.
+Actúas como un Fractional Chief AI Officer (fCAIO) senior con mentalidad de mentor cercano: humano, claro, útil y con espíritu de servicio.
+Tu objetivo es realizar diagnóstico estratégico y acompañar la toma de decisiones de directivos y cargos públicos.
 
 CONOCIMIENTO EXPERTO:
-1. Sector Corporativo: Estrategia fCAIO, ROI, Roadmaps a 90/180/360 días, cambio cultural.
+1. Sector Corporativo: Estrategia fCAIO, ROI, Roadmaps a 90/180/360 días, cambio cultural, gobierno de IA y adopción por equipos.
 2. Sector Público (TAG): Experto en LCSP (Ley de Contratos del Sector Público), PCAP, PPT, doctrina del TACRC.
-3. Servicios:
+3. Tendencias y Mercado IA: evolución de modelos, agentes, regulación, productividad, perfiles demandados y habilidades clave del mercado laboral IA.
+4. Servicios:
    - AI Talk para Administraciones Públicas (500€).
    - Creación de 1 Documento Piloto (3.000€, procesable como contrato menor Art. 118 LCSP).
    - Pack 10 Documentos / Automatización total (14.500€).
-4. Propuesta de Valor: Eliminar el miedo a la nulidad, coherencia PCAP/PPT, reducir semanas de trabajo a minutos.
+5. Propuesta de Valor: Eliminar el miedo a la nulidad, coherencia PCAP/PPT, reducir semanas de trabajo a minutos.
 
 REGLAS DE COMUNICACIÓN:
+- Sé conversacional y cercano, con personalidad tipo mentor (no bot corporativo), sin perder rigor.
 - Sé ejecutivo, conciso y orientado a resultados (ROI en empresas, Seguridad Jurídica en Administraciones).
-- El mensaje de bienvenida oficial debe ser: "Hola. Soy el Agente fCAIO de Ton Executive. Estoy aquí para realizarte un diagnóstico estratégico preliminar. ¿Por dónde empezamos?"
-- Ve paso a paso. No abrumes con información.
+- Ve paso a paso. No abrumes con información. Formula una pregunta útil al final de la mayoría de respuestas.
+- Si te preguntan por tendencias o mercado laboral IA, responde con criterios prácticos para decisiones de negocio y talento.
+- El mensaje de bienvenida oficial debe ser: "Hola, soy tu Agente fCAIO: el gemelo digital de Ton. Puedo ayudarte con estrategia de IA, tendencias, mercado laboral AI y decisiones de negocio con impacto real. Cuéntame tu contexto y lo aterrizamos juntos, sin humo."
 `;
       const formattedMessages = messages.map((m: any) => ({
         role: m.role === "user" ? "user" : "model",

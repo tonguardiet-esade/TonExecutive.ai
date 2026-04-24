@@ -7,7 +7,7 @@ export default function AgentCAIO() {
   const [messages, setMessages] = useState<{ role: 'user' | 'agent'; content: string }[]>([
     {
       role: 'agent',
-      content: 'Hola. Soy el Agente fCAIO de Ton Executive. Estoy aquí para realizarte un diagnóstico estratégico preliminar. ¿Cuál es el mayor reto operativo que enfrenta tu negocio hoy?'
+      content: 'Hola, soy tu Agente fCAIO: el gemelo digital de Ton. Puedo ayudarte con estrategia de IA, tendencias, mercado laboral AI y decisiones de negocio con impacto real. Cuéntame tu contexto y lo aterrizamos juntos, sin humo.'
     }
   ]);
   const [input, setInput] = useState('');
@@ -25,7 +25,8 @@ export default function AgentCAIO() {
   const suggestions = [
     "¿Cómo calculo el ROI de la IA?",
     "¿Qué es un Quick Win de 90 días?",
-    "Retos de seguridad en modelos RAG",
+    "Tendencias IA 2026 que sí importan",
+    "Mercado laboral IA: perfiles clave",
     "Metodología fCAIO vs Consultoría"
   ];
 
@@ -232,9 +233,9 @@ export default function AgentCAIO() {
                   />
                   
                   <img 
-                    src="/2503 Imagen Ton IA.png" 
+                    src="/Foto Ton alta.jpg" 
                     alt="Agente fCAIO" 
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isSynthesizing ? 'opacity-0' : 'opacity-100'}`}
+                    className={`absolute inset-0 w-full h-full object-cover object-[center_20%] transition-opacity duration-500 ${isSynthesizing ? 'opacity-0' : 'opacity-100'}`}
                   />
                   {/* Mouth and Voice Visualizer Overlay */}
                   {isSynthesizing && (
@@ -278,8 +279,11 @@ export default function AgentCAIO() {
                 </h1>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                  <p className="text-zinc-500 font-medium text-sm tracking-widest uppercase">Digital Governance Twin</p>
+                  <p className="text-zinc-500 font-medium text-sm tracking-widest uppercase">Mentor Digital de IA</p>
                 </div>
+                <p className="text-zinc-300/90 text-sm md:text-base mt-3 max-w-xl">
+                  Preguntame sobre IA, tendencias, estrategia... se mas que el real 😄
+                </p>
              </div>
           </div>
 
@@ -385,7 +389,7 @@ export default function AgentCAIO() {
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                      placeholder="Discuss strategy with your fCAIO..."
+                      placeholder="Preguntame sobre IA, estrategia, talento o tendencias..."
                       className="flex-1 bg-transparent border-none outline-none text-white placeholder-zinc-600 px-2 font-medium text-[15px]"
                     />
                     <button

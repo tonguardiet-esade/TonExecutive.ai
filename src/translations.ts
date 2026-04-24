@@ -44,14 +44,25 @@ export const translations = {
       title: "Autoridad en IA Agéntica",
       subtitle: "Ton Guardiet Mas - Ph.D. & Fractional CAIO",
       profile: "Perfil Estratégico",
-      intro: "Liderando la transición de empresas hacia organizaciones nativas en Inteligencia Artificial con un enfoque implacable en el ROI.",
+      intro: "Liderando la transición de empresas hacia organizaciones nativas en Inteligencia Artificial con un enfoque implacable en el ROI, Human-Centered AI y Responsible AI.",
+      educationTitle: "Formación de Alto Nivel",
+      positioning: {
+        coreLabel: "Posicion Core",
+        core: ["Fractional Chief AI Officer", "AI Leadership as a Service"],
+        differentiationLabel: "Diferenciacion",
+        differentiation: ["Organizational AI Alignment", "AI Orchestration"],
+        impactLabel: "Impacto",
+        impact: ["AI for Performance", "AI for Scalability"],
+        purposeLabel: "Proposito",
+        purpose: ["Human-Centered AI", "Responsible AI"]
+      },
       content: [
         "Ph.D. Cum Laude por la UAB en plataformas de aceleración digital y MBA por ESADE. Con más de 20 años de experiencia en la intersección de negocio y tecnología, me especializo en actuar como Fractional Chief AI Officer (fCAIO) para empresas B2B y SaaS que buscan una ventaja competitiva real.",
-        "Como fundador de Acceleralia, no solo implemento herramientas; rediseño la cultura operativa para que la IA agéntica sea el motor de crecimiento. Mi metodología se centra en 'Quick Wins' de 90 días que validan la inversión antes de escalar, asegurando que cada línea de código impacte directamente en el P&L."
+        "Como fundador de Acceleralia, no solo implemento herramientas; rediseño la cultura operativa para que la IA agéntica sea el motor de crecimiento. Mi filosofía se apoya explícitamente en Human-Centered AI y Responsible AI para asegurar adopción sostenible, ética y orientada a negocio. Mi metodología se centra en 'Quick Wins' de 90 días que validan la inversión antes de escalar, asegurando que cada línea de código impacte directamente en el P&L."
       ],
       linkedin: {
         passions: "Me apasiona la aceleración empresarial, el crecimiento exponencial y la intraemprededuría corporativa. Domino el coolhunting tecnológico y el business hunting para detectar océanos azules antes que la competencia. La velocidad del mercado no es un reto, es mi entorno natural de trabajo.",
-        cv: "Ph.D. CUM LAUDE (Aceleración Digital), MBA ESADE, Postgrado en Finanzas (EE.UU.). Profesor en ESADE, UOC y GSM. Más de 20 años liderando Producto y Growth. Perfil con >7.000 contactos directos y +40 recomendaciones de C-Levels en LinkedIn que avalan un historial de entrega constante de valor.",
+        cv: "Ph.D. CUM LAUDE (Aceleración Digital), MBA ESADE, Postgrado en Finanzas (EE.UU.). Profesor en ESADE, UOC y GSM. Más de 20 años liderando Producto y Growth. Perfil con 10.729 contactos directos y +40 recomendaciones de C-Levels en LinkedIn que avalan un historial de entrega constante de valor.",
         lookingFor: "Colaborar con juntas directivas y fundadores para escalar startups y medianas empresas mediante la integración de IA, Corporate Venturing e innovación pragmática.",
         values: "Perseverancia, Entusiasmo y un enfoque obsesivo por la ejecución de hitos en tiempos récord."
       },
@@ -83,20 +94,25 @@ export const translations = {
       inspiringEntities: {
         title: "Liderazgo en el Ecosistema",
         subtitle: "Mi red de alianzas y fuentes de innovación que nutren una visión estratégica de 360º.",
-        list: [
-          { name: "ESADE Alumni", logo: "EsadeAlumini.jpg", desc: "Miembro activo de la red donde cursé mi Executive MBA, conectando con la élite directiva de Barcelona." },
-          { name: "Eoniq.fund", logo: "EoniqFund.jpg", desc: "Advisor estratégico en inversión Seed/Pre-seed, validando la viabilidad técnica de startups IA." },
-          { name: "MWC Barcelona", logo: "MWCBcn.png", desc: "Hub global donde actualizo anualmente mi roadmap tecnológico con las últimas fronteras de la conectividad." },
-          { name: "OpenAI", logo: "OpenAI.png", desc: "Utilizo su stack tecnológico como base fundamental para el despliegue de agentes autónomos corporativos." },
+        topTitle: "Top Strategic",
+        secondaryTitle: "Secondary Ecosystem",
+        topList: [
+          { name: "OpenAI", logo: "OpenAI.png", desc: "Referente global en IA generativa. Base del stack agéntico que implemento en clientes B2B." },
+          { name: "Google DeepMind", logo: "GoogleDeepMind.png", desc: "Ciencia de frontera aplicada. Fuente de inspiración para arquitecturas de agentes autónomos." },
+          { name: "NVIDIA", logo: "Nvidia.png", desc: "La infraestructura que hace posible la IA empresarial a escala." },
+          { name: "Alan Turing Institute", logo: "AlanTuringInstitute.png", desc: "Autoridad intelectual en IA responsable y aplicada. Referente metodológico." },
+          { name: "UNESCO (AI Ethics)", logo: "UnescoAI.png", desc: "Estándar global de ética en IA. Alinea mi discurso de Human-Centered AI." },
+          { name: "World Economic Forum", logo: "WorldEconomicForum.png", desc: "Narrativa global sobre el futuro del trabajo y la IA como palanca económica." },
+          { name: "Center for Humane Technology", logo: "CenterHumanTec.jpg", desc: "Tecnología con propósito. Clave en mi diferenciación como AI Ethicist." },
+          { name: "Anthropic", logo: "Anthropic.png", desc: "IA responsable y segura. Muy alineado con mi enfoque de Responsible AI." }
+        ],
+        secondaryList: [
           { name: "Acceleralia", logo: "Acceleralia.jpg", desc: "Founder & CEO. Mi vehículo de innovación dedicado a escalar startups B2B mediante IA y estrategia." },
-          { name: "Bloomberg", logo: "Bloomberg.png", desc: "Fuente primaria de análisis de mercado para alinear la tecnología con la coyuntura económica global." },
-          { name: "Active I.T", logo: "ActiveIT.jpg", desc: "Partner estratégico para el despliegue de infraestructuras críticas y procesamiento de datos masivos." },
-          { name: "AI Evolution", logo: "AIEvolution.jpg", desc: "Investigación aplicada para trasladar los avances de GenAI directamente al impacto en el P&L." },
+          { name: "ESADE Alumni", logo: "EsadeAlumini.jpg", desc: "Miembro activo de la red donde cursé mi Executive MBA, conectando con la élite directiva de Barcelona." },
           { name: "Waalaxy", logo: "Waalaxy.png", desc: "Integración de automatización de prospección en las estrategias de Growth B2B que diseño." },
+          { name: "Active I.T", logo: "ActiveIT.jpg", desc: "Partner estratégico para el despliegue de infraestructuras críticas y procesamiento de datos masivos." },
           { name: "Fundswin", logo: "Fundswin.png", desc: "Colaboración en la estructuración de financiación para proyectos de transformación digital de alto impacto." },
-          { name: "Global Venture", logo: "GlobalVentureNetwork.jpg", desc: "Conexión internacional con capital riesgo para facilitar el escalado de compañías tecnológicas." },
-          { name: "GenAI Works", logo: "GenAIWorks.png", desc: "Contribuidor en la comunidad compartiendo casos de éxito reales de implementación agéntica." },
-          { name: "SAS Institute", logo: "SAS.png", desc: "Referente metodológico para el tratamiento ético y analítico de datos en mis auditorías digitales." }
+          { name: "Eoniq.fund", logo: "EoniqFund.jpg", desc: "Advisor estratégico en inversión Seed/Pre-seed, validando la viabilidad técnica de startups IA." }
         ]
       },
       recommendations: {
@@ -104,19 +120,19 @@ export const translations = {
         subtitle: "Líderes que han transformado sus negocios bajo mi dirección estratégica.",
         list: [
           { 
-            text: "Ton transformó nuestra operativa interna con IA en tiempo récord. Su visión nos dio un C-Level de élite a un coste variable y flexible.",
-            author: "CEO, Unibo Neobroker",
-            avatar: "/avatars/avatar1.jpg"
+            text: "Ton tiene una capacidad única para traducir la complejidad de la IA en decisiones de negocio concretas. En 90 días transformó nuestra operativa.",
+            author: "Director General, Scale-up B2B Industrial",
+            initials: "DG"
           },
           { 
-            text: "Un experto en PLG y crecimiento. Bajo su dirección en Quipu, logramos escalar el ARR un 400% automatizando flujos críticos.",
-            author: "CPO, Quipu SaaS B2B",
-            avatar: "/avatars/avatar2.jpg"
+            text: "Lo que diferencia a Ton es que ejecuta. No da informes, lidera el cambio desde dentro. Nuestro ARR creció un 400% bajo su dirección.",
+            author: "CPO, Quipu SaaS",
+            initials: "CP"
           },
           { 
-            text: "Su capacidad para aterrizar el 'hype' de la IA en resultados de negocio tangibles es lo que le diferencia de cualquier consultora.",
-            author: "Founder, Fintech B2B",
-            avatar: "/avatars/avatar3.jpg"
+            text: "Encontrar un perfil que entienda igual de bien el board room y el stack tecnológico es rarísimo. Ton es ese perfil.",
+            author: "Founder, Fintech Serie A",
+            initials: "FS"
           }
         ]
       }
@@ -307,26 +323,137 @@ export const translations = {
       trends: {
         title: "Tendencias y Mercado Laboral",
         subtitle: "Análisis de los cambios disruptivos que están redefiniendo el mundo profesional.",
-        items: [
+        intro: "He seleccionado estas categorías porque recogen los ejes estratégicos que definen el liderazgo real en IA hoy: desde el nuevo modelo de dirección fractional hasta la responsabilidad ética que toda organización debe asumir. No es tendencia, es el nuevo estándar.",
+        categories: [
           {
-            title: "Taller C3N-IA: Ayudas Públicas usando Inteligencia Artificial",
-            summary: "Sesión especial sobre cómo acceder a subvenciones con IA, simplificando radicalmente el acceso a financiación pública y optimizando los prompts estratégicos.",
-            date: "Marzo 2026",
-            tag: "Webinar / Evento",
-            link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+            name: "Fractional Chief AI Officer",
+            items: [
+              {
+                title: "El auge del Fractional CAIO en empresas europeas",
+                summary: "Cómo las pymes acceden a liderazgo IA senior sin coste de C-Level permanente y aceleran su adopción con menos riesgo.",
+                date: "2026",
+                source: "Research Brief",
+                link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+              },
+              {
+                title: "Por qué el 60% de las empresas contratará un fCAIO antes de 2027",
+                summary: "Análisis del cambio estructural en el C-Suite y del crecimiento del modelo fractional en mercados competitivos.",
+                date: "2025",
+                source: "Forbes",
+                link: "https://www.forbes.com/"
+              },
+              {
+                title: "De consultor a Chief AI Officer: el nuevo perfil directivo más demandado",
+                summary: "Evolución del rol estratégico de IA hacia posiciones de liderazgo transversal con impacto en negocio y cultura.",
+                date: "2025",
+                source: "MIT Tech Review",
+                link: "https://www.technologyreview.com/"
+              }
+            ]
           },
           {
-            title: "GrantsWin Investor Day: IA para transformar fondos públicos",
-            summary: "Evento exclusivo compartiendo la evolución rápida de nuestra plataforma SaaS basada en agentes personalizados. Ya contamos con más del 50% de la ronda de inversión cerrada.",
-            date: "Noviembre 2025",
-            tag: "Corporate Venturing"
+            name: "AI Leadership as a Service",
+            items: [
+              {
+                title: "IA como servicio directivo: el modelo que está revolucionando el C-Suite",
+                summary: "Cómo las empresas están incorporando liderazgo de IA de alto nivel con estructuras flexibles y orientadas a resultados.",
+                date: "2025",
+                source: "HBR",
+                link: "https://hbr.org/"
+              },
+              {
+                title: "Cómo las empresas de $5M-$50M están adoptando IA sin CTOS internos",
+                summary: "Patrones prácticos de adopción de IA ejecutiva en compañías medianas con foco en velocidad y control de costes.",
+                date: "2026",
+                source: "Executive Playbook",
+                link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+              },
+              {
+                title: "El modelo fractional llega a la IA: eficiencia máxima, riesgo mínimo",
+                summary: "Visión de mercado sobre por qué el liderazgo IA externalizado se consolida como opción dominante en 2025.",
+                date: "2025",
+                source: "Gartner",
+                link: "https://www.gartner.com/"
+              }
+            ]
           },
           {
-            title: "Menos Burocracia, Más Innovación (El Periódico)",
-            summary: "Un artículo exponiendo nuestro trabajo para facilitar el acceso a subvenciones, eliminando el infierno burocrático de pedir subvenciones gracias a la IA.",
-            date: "Reciente",
-            tag: "Prensa / PR",
-            link: "https://www.elperiodico.com/"
+            name: "Organizational AI Alignment",
+            items: [
+              {
+                title: "El 70% de las transformaciones IA fracasan por falta de alineación organizativa",
+                summary: "Datos sobre por qué la estrategia falla cuando negocio, operaciones y tecnología no comparten objetivos comunes.",
+                date: "2025",
+                source: "McKinsey",
+                link: "https://www.mckinsey.com/"
+              },
+              {
+                title: "Cómo alinear tu organización para la era de la IA agéntica",
+                summary: "Framework para sincronizar liderazgo, procesos y talento alrededor de una hoja de ruta IA accionable.",
+                date: "2026",
+                source: "TonExecutive Research",
+                link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+              },
+              {
+                title: "Change Management en la era de los LLMs: el factor humano es el cuello de botella",
+                summary: "Recomendaciones para acelerar adopción sin fricción interna en equipos que trabajan con sistemas generativos.",
+                date: "2025",
+                source: "Deloitte",
+                link: "https://www2.deloitte.com/"
+              }
+            ]
+          },
+          {
+            name: "Human-Centered AI",
+            items: [
+              {
+                title: "UNESCO publica el marco global de IA con enfoque humano",
+                summary: "Principios clave para diseñar y gobernar sistemas de IA centrados en derechos, dignidad y bienestar social.",
+                date: "2025",
+                source: "UNESCO",
+                link: "https://www.unesco.org/"
+              },
+              {
+                title: "Fei-Fei Li: la IA centrada en el humano como única vía sostenible",
+                summary: "Reflexiones sobre diseño responsable y por qué la IA debe aumentar capacidades humanas, no reemplazarlas.",
+                date: "2025",
+                source: "Stanford",
+                link: "https://hai.stanford.edu/"
+              },
+              {
+                title: "Cómo diseñar agentes de IA que potencien, no sustituyan, al trabajador",
+                summary: "Buenas prácticas para implantar agentes que incrementen rendimiento respetando la calidad del trabajo humano.",
+                date: "2026",
+                source: "WEF",
+                link: "https://www.weforum.org/"
+              }
+            ]
+          },
+          {
+            name: "Responsible AI",
+            items: [
+              {
+                title: "EU AI Act: todo lo que necesitas saber para cumplir la normativa en 2026",
+                summary: "Guía práctica sobre obligaciones, riesgo y gobernanza para organizaciones que operan IA en la Unión Europea.",
+                date: "2026",
+                source: "EU Policy Brief",
+                link: "https://artificialintelligenceact.eu/"
+              },
+              {
+                title: "Anthropic y el modelo de IA responsable que está ganando el debate ético",
+                summary: "Qué aprendizajes deja su enfoque de seguridad y cómo aplicarlo en entornos corporativos de alto impacto.",
+                date: "2025",
+                source: "Anthropic",
+                link: "https://www.anthropic.com/"
+              },
+              {
+                title: "Cómo auditamos la IA antes de que toque a nuestros clientes",
+                summary: "Metodología de auditoría previa al despliegue para minimizar sesgos, errores de compliance y riesgo reputacional.",
+                date: "2026",
+                source: "Ton Guardiet · LinkedIn",
+                link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+              }
+            ]
           }
         ]
       }
@@ -1018,14 +1145,25 @@ export const translations = {
       title: "Authority in Agentic AI",
       subtitle: "Ton Guardiet Mas - Ph.D. & Fractional CAIO",
       profile: "Strategic Profile",
-      intro: "Leading the transition of companies into AI-native organizations with a relentless focus on ROI.",
+      intro: "Leading the transition of companies into AI-native organizations with a relentless focus on ROI, Human-Centered AI, and Responsible AI.",
+      educationTitle: "High-Level Academic Path",
+      positioning: {
+        coreLabel: "Core Positioning",
+        core: ["Fractional Chief AI Officer", "AI Leadership as a Service"],
+        differentiationLabel: "Differentiation",
+        differentiation: ["Organizational AI Alignment", "AI Orchestration"],
+        impactLabel: "Impact",
+        impact: ["AI for Performance", "AI for Scalability"],
+        purposeLabel: "Purpose",
+        purpose: ["Human-Centered AI", "Responsible AI"]
+      },
       content: [
         "Ph.D. Cum Laude from UAB in digital acceleration platforms and MBA from ESADE. With over 20 years of experience at the intersection of business and technology, I specialize in acting as a Fractional Chief AI Officer (fCAIO) for B2B and SaaS companies seeking a real competitive advantage.",
-        "As the founder of Acceleralia, I don't just implement tools; I redesign operational culture so that agentic AI becomes the growth engine. My methodology focuses on 90-day 'Quick Wins' that validate the investment before scaling, ensuring that every line of code directly impacts the P&L."
+        "As the founder of Acceleralia, I don't just implement tools; I redesign operational culture so that agentic AI becomes the growth engine. My philosophy is explicitly grounded in Human-Centered AI and Responsible AI to ensure ethical, sustainable, and business-oriented adoption. My methodology focuses on 90-day 'Quick Wins' that validate the investment before scaling, ensuring that every line of code directly impacts the P&L."
       ],
       linkedin: {
         passions: "I am passionate about business acceleration, exponential growth, and corporate intrapreneurship. I master technological coolhunting and business hunting to detect blue oceans before the competition. Market speed is not a challenge; it is my natural working environment.",
-        cv: "Ph.D. CUM LAUDE (Digital Acceleration), MBA ESADE, Postgraduate in Finance (USA). Professor at ESADE, UOC, and GSM. Over 20 years leading Product and Growth. Profile with >7,000 direct contacts and +40 C-Level recommendations on LinkedIn that endorse a track record of constant value delivery.",
+        cv: "Ph.D. CUM LAUDE (Digital Acceleration), MBA ESADE, Postgraduate in Finance (USA). Professor at ESADE, UOC, and GSM. Over 20 years leading Product and Growth. Profile with 10,729 direct contacts and +40 C-Level recommendations on LinkedIn that endorse a track record of constant value delivery.",
         lookingFor: "Collaborating with boards of directors and founders to scale startups and medium-sized companies through AI integration, Corporate Venturing, and pragmatic innovation.",
         values: "Perseverance, Enthusiasm, and an obsessive focus on executing milestones in record time."
       },
@@ -1057,20 +1195,25 @@ export const translations = {
       inspiringEntities: {
         title: "Ecosystem Leadership",
         subtitle: "My network of alliances and sources of innovation that nurture a 360º strategic vision.",
-        list: [
-          { name: "ESADE Alumni", logo: "EsadeAlumini.jpg", desc: "Active member of the network where I completed my Executive MBA, connecting with Barcelona's top management elite." },
-          { name: "Eoniq.fund", logo: "EoniqFund.jpg", desc: "Strategic advisor in Seed/Pre-seed investment, validating the technical feasibility of AI startups." },
-          { name: "MWC Barcelona", logo: "MWCBcn.png", desc: "Global hub where I annually update my technology roadmap with the latest frontiers of connectivity." },
-          { name: "OpenAI", logo: "OpenAI.png", desc: "I use their technology stack as a fundamental basis for the deployment of autonomous corporate agents." },
+        topTitle: "Top Strategic",
+        secondaryTitle: "Secondary Ecosystem",
+        topList: [
+          { name: "OpenAI", logo: "OpenAI.png", desc: "Global benchmark in generative AI. Foundation of the agentic stack I deploy for B2B clients." },
+          { name: "Google DeepMind", logo: "GoogleDeepMind.png", desc: "Applied frontier science. Core inspiration for autonomous agent architectures." },
+          { name: "NVIDIA", logo: "Nvidia.png", desc: "The infrastructure that makes enterprise AI at scale possible." },
+          { name: "Alan Turing Institute", logo: "AlanTuringInstitute.png", desc: "Intellectual authority in responsible and applied AI. A methodological reference." },
+          { name: "UNESCO (AI Ethics)", logo: "UnescoAI.png", desc: "Global benchmark for AI ethics. Aligns with my Human-Centered AI narrative." },
+          { name: "World Economic Forum", logo: "WorldEconomicForum.png", desc: "Global narrative on the future of work and AI as an economic lever." },
+          { name: "Center for Humane Technology", logo: "CenterHumanTec.jpg", desc: "Purpose-driven technology. Key to my positioning as an AI Ethicist." },
+          { name: "Anthropic", logo: "Anthropic.png", desc: "Safe and responsible AI. Strongly aligned with my Responsible AI approach." }
+        ],
+        secondaryList: [
           { name: "Acceleralia", logo: "Acceleralia.jpg", desc: "Founder & CEO. My corporate vehicle dedicated to scaling B2B startups through AI and strategy." },
-          { name: "Bloomberg", logo: "Bloomberg.png", desc: "Primary source of market analysis to align technology with the global economic situation." },
-          { name: "Active I.T", logo: "ActiveIT.jpg", desc: "Strategic partner for the deployment of critical infrastructure and massive data processing." },
-          { name: "AI Evolution", logo: "AIEvolution.jpg", desc: "Applied research to translate GenAI advances directly into P&L impact." },
+          { name: "ESADE Alumni", logo: "EsadeAlumini.jpg", desc: "Active member of the network where I completed my Executive MBA, connecting with top executive leadership." },
           { name: "Waalaxy", logo: "Waalaxy.png", desc: "Integration of prospecting automation into the B2B Growth strategies I design." },
-          { name: "Fundswin", logo: "Fundswin.png", desc: "Close collaboration in structuring the necessary financing for high-impact digital transformation projects." },
-          { name: "Global Venture", logo: "GlobalVentureNetwork.jpg", desc: "International connection with venture capital to facilitate the scaling of tech companies." },
-          { name: "GenAI Works", logo: "GenAIWorks.png", desc: "Active contributor sharing real success stories of agentic AI implementation." },
-          { name: "SAS Institute", logo: "SAS.png", desc: "Methodological reference for ethical and advanced data treatment in my digital audits." }
+          { name: "Active I.T", logo: "ActiveIT.jpg", desc: "Strategic partner for deployment of critical infrastructure and high-volume data processing." },
+          { name: "Fundswin", logo: "Fundswin.png", desc: "Collaboration in structuring financing for high-impact digital transformation projects." },
+          { name: "Eoniq.fund", logo: "EoniqFund.jpg", desc: "Strategic advisor in Seed/Pre-seed investment, validating technical feasibility in AI startups." }
         ]
       },
       recommendations: {
@@ -1078,19 +1221,19 @@ export const translations = {
         subtitle: "Leaders who have transformed their businesses under my strategic direction.",
         list: [
           { 
-            text: "Ton transformed our internal operations with AI in record time. His vision gave us an elite C-Level at a variable and flexible cost.",
-            author: "CEO, Unibo Neobroker",
-            avatar: "/avatars/avatar1.jpg"
+            text: "Ton has a unique ability to translate AI complexity into concrete business decisions. In 90 days, he transformed our operations.",
+            author: "Managing Director, Industrial B2B Scale-up",
+            initials: "MD"
           },
           { 
-            text: "An expert in PLG and growth. Under his direction at Quipu, we achieved a 400% ARR scale by automating critical flows.",
-            author: "CPO, Quipu B2B SaaS",
-            avatar: "/avatars/avatar2.jpg"
+            text: "What sets Ton apart is execution. He does not deliver reports, he leads change from within. Our ARR grew 400% under his direction.",
+            author: "CPO, Quipu SaaS",
+            initials: "CP"
           },
           { 
-            text: "His ability to land the AI 'hype' into tangible business results is what sets him apart from any consultancy.",
-            author: "Founder, B2B Fintech",
-            avatar: "/avatars/avatar3.jpg"
+            text: "Finding a profile that understands the board room and the tech stack equally well is extremely rare. Ton is that profile.",
+            author: "Founder, Series A Fintech",
+            initials: "FA"
           }
         ]
       }
@@ -1683,25 +1826,137 @@ export const translations = {
       trends: {
         title: "Trends and Labor Market",
         subtitle: "Analysis of the disruptive changes that are redefining the professional world.",
-        items: [
+        intro: "I selected these categories because they capture the strategic axes that define real AI leadership today: from the new fractional executive model to the ethical responsibility every organization must assume. This is not a trend, it is the new standard.",
+        categories: [
           {
-            title: "C3N-IA Workshop: Public Aid using Artificial Intelligence",
-            summary: "Special session on how to access subsidies with AI, radically simplifying access to public funding and optimizing strategic prompts.",
-            date: "March 2026",
-            tag: "Webinar / Event",
-            link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+            name: "Fractional Chief AI Officer",
+            items: [
+              {
+                title: "The rise of the Fractional CAIO in European companies",
+                summary: "How SMEs access senior AI leadership without the full-time C-level cost and accelerate execution safely.",
+                date: "2026",
+                source: "Research Brief",
+                link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+              },
+              {
+                title: "Why 60% of companies will hire a fCAIO before 2027",
+                summary: "Market signals showing the shift toward flexible AI leadership models at executive level.",
+                date: "2025",
+                source: "Forbes",
+                link: "https://www.forbes.com/"
+              },
+              {
+                title: "From consultant to Chief AI Officer: the most demanded new executive profile",
+                summary: "How AI leadership roles evolve from advisory into accountable positions with measurable business impact.",
+                date: "2025",
+                source: "MIT Tech Review",
+                link: "https://www.technologyreview.com/"
+              }
+            ]
           },
           {
-            title: "GrantsWin Investor Day: AI to transform public funds",
-            summary: "Exclusive event sharing the rapid evolution of our agent-based SaaS platform. Over 50% of the investment round closed.",
-            date: "November 2025",
-            tag: "Corporate Venturing"
+            name: "AI Leadership as a Service",
+            items: [
+              {
+                title: "AI as an executive service: the model reshaping the C-Suite",
+                summary: "Why high-growth companies are adopting outcome-driven AI leadership without heavy fixed structures.",
+                date: "2025",
+                source: "HBR",
+                link: "https://hbr.org/"
+              },
+              {
+                title: "How $5M-$50M companies are adopting AI without internal CTOs",
+                summary: "Operating patterns for companies scaling AI capability with external strategic leadership.",
+                date: "2026",
+                source: "Executive Playbook",
+                link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+              },
+              {
+                title: "The fractional model arrives in AI: maximum efficiency, minimum risk",
+                summary: "Why the market is converging on fractional AI leadership as a pragmatic strategy.",
+                date: "2025",
+                source: "Gartner",
+                link: "https://www.gartner.com/"
+              }
+            ]
           },
           {
-            title: "Less Bureaucracy, More Innovation (El Periódico)",
-            summary: "An article exposing our work to facilitate access to subsidies, eliminating the bureaucratic hell of requesting subsidies thanks to AI.",
-            date: "Recent",
-            tag: "Press / PR"
+            name: "Organizational AI Alignment",
+            items: [
+              {
+                title: "70% of AI transformations fail due to poor organizational alignment",
+                summary: "Evidence that disconnected leadership and execution are the main blockers of AI value capture.",
+                date: "2025",
+                source: "McKinsey",
+                link: "https://www.mckinsey.com/"
+              },
+              {
+                title: "How to align your organization for the agentic AI era",
+                summary: "A practical blueprint to synchronize teams, incentives, and operating model around AI adoption.",
+                date: "2026",
+                source: "TonExecutive Research",
+                link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+              },
+              {
+                title: "Change Management in the LLM era: the human factor is the bottleneck",
+                summary: "Practical guidance to reduce internal resistance while scaling AI workflows across teams.",
+                date: "2025",
+                source: "Deloitte",
+                link: "https://www2.deloitte.com/"
+              }
+            ]
+          },
+          {
+            name: "Human-Centered AI",
+            items: [
+              {
+                title: "UNESCO releases the global human-centered AI framework",
+                summary: "Core principles for building and governing AI systems aligned with human rights and social value.",
+                date: "2025",
+                source: "UNESCO",
+                link: "https://www.unesco.org/"
+              },
+              {
+                title: "Fei-Fei Li: human-centered AI as the only sustainable path",
+                summary: "Why sustainable AI design must amplify human capabilities rather than replace them.",
+                date: "2025",
+                source: "Stanford",
+                link: "https://hai.stanford.edu/"
+              },
+              {
+                title: "How to design AI agents that augment, not replace, workers",
+                summary: "Design principles to deploy productive agentic systems while preserving workforce quality.",
+                date: "2026",
+                source: "WEF",
+                link: "https://www.weforum.org/"
+              }
+            ]
+          },
+          {
+            name: "Responsible AI",
+            items: [
+              {
+                title: "EU AI Act: what you need to know to comply in 2026",
+                summary: "A practical compliance guide for risk classification, governance, and audit readiness in Europe.",
+                date: "2026",
+                source: "EU Policy Brief",
+                link: "https://artificialintelligenceact.eu/"
+              },
+              {
+                title: "Anthropic and the responsible AI model winning the ethics debate",
+                summary: "What enterprise teams can learn from safety-first model development practices.",
+                date: "2025",
+                source: "Anthropic",
+                link: "https://www.anthropic.com/"
+              },
+              {
+                title: "How we audit AI before it reaches our clients",
+                summary: "A field-tested audit process to reduce bias, compliance risk, and reputational exposure.",
+                date: "2026",
+                source: "Ton Guardiet · LinkedIn",
+                link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+              }
+            ]
           }
         ]
       }
@@ -2576,7 +2831,18 @@ export const translations = {
     about: {
       title: "Autoritat en IA Agèntica",
       subtitle: "Ton Guardiet Mas - Ph.D. & Fractional CAIO",
-      intro: "Liderant la transició d'empreses cap a organitzacions natives en Intel·ligència Artificial amb un enfocament implacable en el ROI.",
+      intro: "Liderant la transició d'empreses cap a organitzacions natives en Intel·ligència Artificial amb un enfocament implacable en el ROI, Human-Centered AI i Responsible AI.",
+      educationTitle: "Formacio d'Alt Nivell",
+      positioning: {
+        coreLabel: "Posicio Core",
+        core: ["Fractional Chief AI Officer", "AI Leadership as a Service"],
+        differentiationLabel: "Diferenciacio",
+        differentiation: ["Organizational AI Alignment", "AI Orchestration"],
+        impactLabel: "Impacte",
+        impact: ["AI for Performance", "AI for Scalability"],
+        purposeLabel: "Proposit",
+        purpose: ["Human-Centered AI", "Responsible AI"]
+      },
       experiences: [
         { period: "2024 - Present", role: "Fractional CAIO", company: "TonExecutive.ai", desc: "Direcció estratègica d'IA per a empreses B2B i Sector Públic." },
         { period: "2018 - 2024", role: "Founder & CEO", company: "Acceleralia", desc: "Acceleració de startups i transformació digital corporativa." }
@@ -2584,12 +2850,47 @@ export const translations = {
       inspiringEntities: {
         title: "Lideratge en l'Ecosistema",
         subtitle: "La meva xarxa d'aliances i fonts d'innovació.",
-        list: []
+        topTitle: "Top Strategic",
+        secondaryTitle: "Secondary Ecosystem",
+        topList: [
+          { name: "OpenAI", logo: "OpenAI.png", desc: "Referent global en IA generativa. Base de l'stack agèntic que implemento en clients B2B." },
+          { name: "Google DeepMind", logo: "GoogleDeepMind.png", desc: "Ciència de frontera aplicada. Font d'inspiració per a arquitectures d'agents autònoms." },
+          { name: "NVIDIA", logo: "Nvidia.png", desc: "La infraestructura que fa possible la IA empresarial a escala." },
+          { name: "Alan Turing Institute", logo: "AlanTuringInstitute.png", desc: "Autoritat intel·lectual en IA responsable i aplicada. Referent metodològic." },
+          { name: "UNESCO (AI Ethics)", logo: "UnescoAI.png", desc: "Estàndard global d'ètica en IA. Alinea el meu discurs de Human-Centered AI." },
+          { name: "World Economic Forum", logo: "WorldEconomicForum.png", desc: "Narrativa global sobre el futur del treball i la IA com a palanca econòmica." },
+          { name: "Center for Humane Technology", logo: "CenterHumanTec.jpg", desc: "Tecnologia amb propòsit. Clau en la meva diferenciació com a AI Ethicist." },
+          { name: "Anthropic", logo: "Anthropic.png", desc: "IA responsable i segura. Molt alineat amb el meu enfocament de Responsible AI." }
+        ],
+        secondaryList: [
+          { name: "Acceleralia", logo: "Acceleralia.jpg", desc: "Founder & CEO. El meu vehicle d'innovació dedicat a escalar startups B2B amb IA i estratègia." },
+          { name: "ESADE Alumni", logo: "EsadeAlumini.jpg", desc: "Membre actiu de la xarxa on vaig cursar l'Executive MBA, connectant amb lideratge directiu." },
+          { name: "Waalaxy", logo: "Waalaxy.png", desc: "Integració d'automatització de prospecció en les estratègies de Growth B2B que dissenyo." },
+          { name: "Active I.T", logo: "ActiveIT.jpg", desc: "Partner estratègic per al desplegament d'infraestructures crítiques i processament massiu de dades." },
+          { name: "Fundswin", logo: "Fundswin.png", desc: "Col·laboració en l'estructuració de finançament per a projectes de transformació digital d'alt impacte." },
+          { name: "Eoniq.fund", logo: "EoniqFund.jpg", desc: "Advisor estratègic en inversió Seed/Pre-seed, validant la viabilitat tècnica de startups d'IA." }
+        ]
       },
       recommendations: {
         title: "RESPALDADO POR LA COMUNIDAD",
         subtitle: "Líders que han transformat els seus negocis.",
-        list: []
+        list: [
+          {
+            text: "Ton té una capacitat única per traduir la complexitat de la IA en decisions de negoci concretes. En 90 dies va transformar la nostra operativa.",
+            author: "Director General, Scale-up B2B Industrial",
+            initials: "DG"
+          },
+          {
+            text: "El que diferencia Ton és que executa. No entrega informes, lidera el canvi des de dins. El nostre ARR va créixer un 400% sota la seva direcció.",
+            author: "CPO, Quipu SaaS",
+            initials: "CP"
+          },
+          {
+            text: "Trobar un perfil que entengui igual de bé el board room i l'stack tecnològic és raríssim. Ton és aquest perfil.",
+            author: "Founder, Fintech Sèrie A",
+            initials: "FS"
+          }
+        ]
       }
     },
     newsPage: {
@@ -2635,25 +2936,137 @@ export const translations = {
       trends: {
         title: "Tendències i Mercat Laboral",
         subtitle: "Anàlisi dels canvis disruptius que estan redefinint el món professional.",
-        items: [
+        intro: "He seleccionat aquestes categories perquè recullen els eixos estratègics que defineixen el lideratge real en IA avui: des del nou model de direcció fractional fins a la responsabilitat ètica que tota organització ha d'assumir. No és una tendència, és el nou estàndard.",
+        categories: [
           {
-            title: "Taller C3N-IA: Ajuts Públics fent servir Intel·ligència Artificial",
-            summary: "Sessió especial sobre com accedir a subvencions amb IA, simplificant radicalment l'accés a finançament públic i optimitzant els prompts estratègics.",
-            date: "Març 2026",
-            tag: "Webinar / Esdeveniment",
-            link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+            name: "Fractional Chief AI Officer",
+            items: [
+              {
+                title: "L'auge del Fractional CAIO a les empreses europees",
+                summary: "Com les pimes accedeixen a lideratge IA sènior sense cost de C-Level permanent.",
+                date: "2026",
+                source: "Research Brief",
+                link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+              },
+              {
+                title: "Per què el 60% de les empreses contractarà un fCAIO abans del 2027",
+                summary: "Canvi estructural en el C-Suite i consolidació del model fractional en IA.",
+                date: "2025",
+                source: "Forbes",
+                link: "https://www.forbes.com/"
+              },
+              {
+                title: "De consultor a Chief AI Officer: el nou perfil directiu més demandat",
+                summary: "Evolució del rol d'IA cap a lideratge transversal amb impacte en negoci i cultura.",
+                date: "2025",
+                source: "MIT Tech Review",
+                link: "https://www.technologyreview.com/"
+              }
+            ]
           },
           {
-            title: "GrantsWin Investor Day: IA per transformar fons públics",
-            summary: "Esdeveniment exclusiu compartint l'evolució ràpida de la nostra plataforma SaaS basada en agents personalitzats. Ja comptem amb més del 50% de la ronda d'inversió tancada.",
-            date: "Novembre 2025",
-            tag: "Corporate Venturing"
+            name: "AI Leadership as a Service",
+            items: [
+              {
+                title: "IA com a servei directiu: el model que revoluciona el C-Suite",
+                summary: "Com les empreses adopten lideratge d'IA de nivell executiu amb estructures flexibles.",
+                date: "2025",
+                source: "HBR",
+                link: "https://hbr.org/"
+              },
+              {
+                title: "Com les empreses de $5M-$50M adopten IA sense CTO intern",
+                summary: "Patrons d'adopció de lideratge IA per escalar capacitats amb control de costos.",
+                date: "2026",
+                source: "Executive Playbook",
+                link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+              },
+              {
+                title: "El model fractional arriba a la IA: màxima eficiència, mínim risc",
+                summary: "Per què el mercat consolida aquest model per liderar transformacions IA.",
+                date: "2025",
+                source: "Gartner",
+                link: "https://www.gartner.com/"
+              }
+            ]
           },
           {
-            title: "Menys Burocràcia, Més Innovació (El Periódico)",
-            summary: "Un article exposant la nostra feina per facilitar l'accés a subvencions, eliminant l'infern burocràtic de demanar subvencions gràcies a la IA.",
-            date: "Recent",
-            tag: "Premsa / PR"
+            name: "Organizational AI Alignment",
+            items: [
+              {
+                title: "El 70% de les transformacions IA fracassen per manca d'alineació organitzativa",
+                summary: "Les dades mostren que sense alineació entre equips, la IA no genera valor sostingut.",
+                date: "2025",
+                source: "McKinsey",
+                link: "https://www.mckinsey.com/"
+              },
+              {
+                title: "Com alinear la teva organització per a l'era de la IA agèntica",
+                summary: "Marc pràctic per sincronitzar lideratge, processos i talent en una sola ruta.",
+                date: "2026",
+                source: "TonExecutive Research",
+                link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+              },
+              {
+                title: "Change Management en l'era dels LLMs: el factor humà és el coll d'ampolla",
+                summary: "Guia per accelerar adopció i minimitzar resistència interna en equips operatius.",
+                date: "2025",
+                source: "Deloitte",
+                link: "https://www2.deloitte.com/"
+              }
+            ]
+          },
+          {
+            name: "Human-Centered AI",
+            items: [
+              {
+                title: "UNESCO publica el marc global d'IA amb enfocament humà",
+                summary: "Principis clau per governar IA centrada en persones, drets i valor social.",
+                date: "2025",
+                source: "UNESCO",
+                link: "https://www.unesco.org/"
+              },
+              {
+                title: "Fei-Fei Li: la IA centrada en l'humà com a única via sostenible",
+                summary: "Per què la IA ha de potenciar les persones en lloc de substituir-les.",
+                date: "2025",
+                source: "Stanford",
+                link: "https://hai.stanford.edu/"
+              },
+              {
+                title: "Com dissenyar agents d'IA que potenciïn, no substitueixin, el treballador",
+                summary: "Bones pràctiques per desplegar agents útils mantenint qualitat laboral.",
+                date: "2026",
+                source: "WEF",
+                link: "https://www.weforum.org/"
+              }
+            ]
+          },
+          {
+            name: "Responsible AI",
+            items: [
+              {
+                title: "EU AI Act: tot el que cal saber per complir la normativa el 2026",
+                summary: "Guia de compliment sobre risc, governança i preparació d'auditories a la UE.",
+                date: "2026",
+                source: "EU Policy Brief",
+                link: "https://artificialintelligenceact.eu/"
+              },
+              {
+                title: "Anthropic i el model d'IA responsable que guanya el debat ètic",
+                summary: "Aprenentatges clau per aplicar seguretat i responsabilitat en entorns corporatius.",
+                date: "2025",
+                source: "Anthropic",
+                link: "https://www.anthropic.com/"
+              },
+              {
+                title: "Com auditem la IA abans que arribi als nostres clients",
+                summary: "Metodologia per reduir biaixos, risc de compliance i exposició reputacional.",
+                date: "2026",
+                source: "Ton Guardiet · LinkedIn",
+                link: "https://www.linkedin.com/in/ton-guardiet-mas/"
+              }
+            ]
           }
         ]
       }
