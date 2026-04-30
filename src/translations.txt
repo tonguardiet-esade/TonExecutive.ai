@@ -61,39 +61,8 @@ export const translations = {
           { title: "📝 Post del Jueves", desc: "Cada jueves analizo las noticias más relevantes de IA para directivos. Sin hype, solo estrategia accionable para empresas B2B.", cta: "Seguir en LinkedIn →", href: "https://www.linkedin.com/in/tonguardiet/" },
           { title: "🤖 CAIO Virtual 24/7", desc: "Mi avatar virtual responde tus preguntas sobre IA, tendencias y estrategia en cualquier momento. Entrenado con mi metodología y conocimiento.", cta: "Hablar con el CAIO virtual →" }
         ],
-        communitiesTitle: "Comunidades de LinkedIn",
-        communities: [
-          {
-            name: "AI Leadership Network",
-            summary: "Liderazgo IA para dirección",
-            members: "12k+ miembros",
-            activity: "Debates y tendencias ejecutivas"
-          },
-          {
-            name: "Chief AI Officers Community",
-            summary: "CAIOs y líderes de transformación",
-            members: "8k+ miembros",
-            activity: "Frameworks y governance IA"
-          },
-          {
-            name: "IA & Negocio · España",
-            summary: "IA aplicada a negocio real",
-            members: "15k+ miembros",
-            activity: "Casos B2B y decisiones ROI"
-          },
-          {
-            name: "GenAI Works Community",
-            summary: "Productividad con GenAI",
-            members: "10k+ miembros",
-            activity: "Prompts, flujos y automatización"
-          },
-          {
-            name: "CAIO as a Service · España",
-            summary: "Modelo fractional CAIO",
-            members: "4k+ miembros",
-            activity: "Roadmaps y ejecución mensual"
-          }
-        ]
+        communitiesTitle: "Comunidades donde publico",
+        communities: ["AI Leadership Network", "Chief AI Officers Community", "IA & Negocio · España", "GenAI Works Community", "CAIO as a Service · España"]
       },
       educationTitle: "Formación de Alto Nivel",
       positioning: {
@@ -182,7 +151,7 @@ export const translations = {
     },
     home: {
       hero: {
-        title: 'Your fCAIO',
+        title: 'Tu Chief AI Officer. Sin los costes de uno a tiempo completo.',
         subtitle: 'Implantamos la IA en tu negocio con impacto real en 90 días. 1 día/semana. Resultados desde el día 1.',
         cta: 'Agenda tu diagnóstico gratuito'
       },
@@ -190,7 +159,7 @@ export const translations = {
       title1: 'From AI hype to ',
       title2: 'business impact',
       weeklyContent: {
-        title: 'Últimos contenidos',
+        title: 'Contenido Semanal',
         subtitle: 'Cada lunes un video. Cada jueves un análisis. Sin noise, solo señal.',
         videoBadge: '🎬 VIDEO DEL LUNES',
         videoTitle: 'Novedades CAIO · Semana del 27 abril 2026',
@@ -204,28 +173,6 @@ export const translations = {
         postCta: 'Ver post completo →',
         sectionCta: 'Sígueme en LinkedIn para no perderte nada →'
       },
-      latestNoCommitmentTitle: 'Últimos contenidos (sin compromiso)',
-      latestNoCommitmentDesc: 'Lee o mira una pieza en 2 minutos para entender el enfoque fCAIO antes de hablar conmigo.',
-      latestNoCommitmentItems: [
-        {
-          title: 'Artículo: cómo priorizar IA sin humo',
-          cta: 'Leer artículo',
-          href: 'https://www.linkedin.com/in/tonguardiet/'
-        },
-        {
-          title: 'Post: errores típicos en roadmaps IA',
-          cta: 'Ver post',
-          href: 'https://www.linkedin.com/in/tonguardiet/recent-activity/all/'
-        }
-      ],
-      funnelTitle: 'Flujo de trabajo (5 fases)',
-      funnelSteps: [
-        'Informe gratuito',
-        'Agenda reunión (30 min)',
-        'Visita presencial',
-        'Prueba un mes',
-        'Contrato mensual'
-      ],
       diagnostic: {
         badge: '🎁 GRATUITO · Sin compromiso',
         title: '¿Dónde está tu empresa en la curva de adopción de IA?',
@@ -349,24 +296,24 @@ export const translations = {
       },
       calculator: {
         title: 'Calculadora ROI IA para empresas B2B',
-        subtitle: 'Cuantifica cómo la IA impulsa nuevos proyectos, nuevos mercados y nuevas soluciones con dirección estratégica.',
-        employeesLabel: 'Nº de personas que pueden acelerar nuevos frentes con IA',
-        employeesTooltip: 'Personas cuya capacidad puede amplificarse para lanzar iniciativas nuevas (go-to-market, operaciones, producto, atención y reporting).',
+        subtitle: 'Estima el impacto económico anual de automatizar tareas repetitivas con dirección estratégica de IA.',
+        employeesLabel: 'Nº de empleados en roles automatizables',
+        employeesTooltip: 'Empleados cuyas tareas repetitivas pueden ser optimizadas con IA (admin, reporting, atención al cliente, operaciones...)',
         salaryLabel: 'Coste medio anual por empleado (€)',
         salarySource: '(Fuente: INE, Coste salarial medio España 2025: ~34.000€/año)',
-        efficiencyLabel: '% de capacidad adicional estimada con IA',
+        efficiencyLabel: '% de eficiencia estimada con IA',
         efficiencySource: '(Fuente: McKinsey Global Institute, 2024 — "The economic potential of generative AI")',
         normalMarker: 'Normal: 20%',
         optimalMarker: 'Óptimo: 40%',
-        annualSavingsTitle: 'Capacidad anual activable',
-        annualSavingsDesc: 'Recursos que pueden financiar nuevos proyectos y mercados',
-        fteEquivalentTitle: 'Capacidad equivalente reorientable',
+        annualSavingsTitle: 'Ahorro anual estimado',
+        annualSavingsDesc: 'Presupuesto liberado para nuevos proyectos',
+        fteEquivalentTitle: 'Equivalente en FTEs liberados',
         fteEquivalentSuffix: 'empleados equivalentes',
-        fteEquivalentDesc: 'Talento que puede enfocarse en crecimiento y soluciones de mayor valor',
+        fteEquivalentDesc: 'Capacidad reasignable a tareas de alto valor',
         roiTitle: 'ROI estimado vs inversión fCAIO',
-        roiDesc: 'Retorno estimado de acelerar crecimiento con liderazgo IA fraccional',
-        cta: 'Crear informe de crecimiento con Ton',
-        footer: '* Modelo orientado a crecimiento: expansión, nuevos servicios y aumento de capacidad. No plantea recortes de personal.',
+        roiDesc: 'Retorno sobre la inversión en dirección de IA fraccional',
+        cta: 'Analizar Diagnóstico con Ton',
+        footer: '* Cálculos estimativos basados en promedios de la industria sobre adopciones de Modelos Maduros de IA (McKinsey, Gartner).',
         modal: {
           title: 'Tu informe está listo',
           desc: 'Indica tu correo corporativo para enviarte un desglose de las iniciativas estratégicas potenciales para tu tamaño de empresa.',
@@ -380,77 +327,6 @@ export const translations = {
           error: 'Error de envío.'
         }
       }
-    },
-    methodologyLanding: {
-      title: 'Metodología y Pricing fCAIO',
-      subtitle: 'Un plan de 12 meses con fases claras, entregables medibles y foco en ejecución real de negocio.',
-      phasesTitle: 'Plan de 12 meses en 6 fases',
-      phasesSubtitle: 'De diagnóstico a autonomía interna, con entregables concretos en cada etapa.',
-      phases: [
-        {
-          month: 'Mes 1',
-          title: 'Diagnóstico estratégico',
-          deliverables: 'Informe ejecutivo + mapa de oportunidades priorizadas.'
-        },
-        {
-          month: 'Mes 2',
-          title: 'Roadmap de IA',
-          deliverables: 'Plan a 12 meses + estimación de impacto por iniciativa.'
-        },
-        {
-          month: 'Mes 3-4',
-          title: 'Ejecución de pilotos',
-          deliverables: 'Lanzamiento de 2-4 casos de uso en entornos reales.'
-        },
-        {
-          month: 'Mes 5-6',
-          title: 'Escalado',
-          deliverables: 'Paso a producción de los pilotos validados + medición de ROI.'
-        },
-        {
-          month: 'Mes 7-9',
-          title: 'Industrialización',
-          deliverables: 'Modelo de gobierno IA + playbooks operativos reutilizables.'
-        },
-        {
-          month: 'Mes 10-12',
-          title: 'Transferencia',
-          deliverables: 'Formación del equipo interno + autonomía de ejecución.'
-        }
-      ],
-      pricingTitle: 'Pricing',
-      pricingSubtitle: 'Dos opciones claras según ritmo y ambición de transformación.',
-      pricingOptions: [
-        {
-          name: 'Opción 3 meses (Sprint de arranque)',
-          monthly: '4.500€ - 8.500€/mes',
-          total: 'Total: 13,5k-25,5k€'
-        },
-        {
-          name: 'Opción 6 meses (Quick Wins)',
-          monthly: '4.000€ - 8.000€/mes',
-          total: 'Total: 24k-48k€'
-        },
-        {
-          name: 'Opción 12 meses (Transformación)',
-          monthly: '3.500€ - 7.000€/mes',
-          total: 'Total: 42k-84k€'
-        }
-      ],
-      useCasesTitle: 'Casos de uso típicos',
-      useCases: [
-        'Automatización de atención al cliente',
-        'Optimización de procesos',
-        'IA en ventas',
-        'Generación de contenido',
-        'Análisis predictivo'
-      ],
-      successConditionsTitle: 'Condiciones de éxito',
-      successConditions: [
-        'Sponsor CEO / Dirección',
-        'Acceso a datos',
-        'Capacidad de ejecutar'
-      ]
     },
     newsPage: {
       readExternal: "Ver publicación externa",

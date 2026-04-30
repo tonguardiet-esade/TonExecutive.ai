@@ -90,3 +90,31 @@
   display: none;
 }
 
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes borderRotate {
+  from { --angle: 0deg; }
+  to   { --angle: 360deg; }
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-14px); }
+}
+
+@utility animate-float {
+  animation: floatY 5s ease-in-out infinite;
+}
+
+@utility bento-glow {
+  box-shadow: 0 0 40px rgba(16, 185, 129, 0.12), 0 0 80px rgba(16, 185, 129, 0.05);
+}
+
+@utility hero-text-shadow {
+  text-shadow: 0 0 80px rgba(16, 185, 129, 0.3);
+}
+

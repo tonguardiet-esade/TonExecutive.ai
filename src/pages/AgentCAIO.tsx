@@ -3,15 +3,23 @@ import { motion, AnimatePresence } from 'motion/react';
 import { BrainCircuit, Mic, MicOff, Send, Download, Calendar, Loader2, Volume2, Sparkles, Plus, Search, ArrowRight, X, ChartBar } from 'lucide-react';
 import Markdown from 'react-markdown';
 
-export default function AgentCAIO() {
+type AgentCAIOProps = {
+  onBookMeeting?: () => void;
+  onFreeDiagnosis?: () => void;
+  showCompetitorTab?: boolean;
+  disableInitialAutoScroll?: boolean;
+};
+
+export default function AgentCAIO({ onBookMeeting, onFreeDiagnosis, showCompetitorTab = true, disableInitialAutoScroll = false }: AgentCAIOProps) {
   const [messages, setMessages] = useState<{ role: 'user' | 'agent'; content: string }[]>([
     {
       role: 'agent',
-      content: 'Hola, soy tu Agente fCAIO: el gemelo digital de Ton. Puedo ayudarte con estrategia de IA, tendencias, mercado laboral AI y decisiones de negocio con impacto real. Cuéntame tu contexto y lo aterrizamos juntos, sin humo.'
+      content: 'Hola, soy tu Agente fCAIO: el gemelo digital de Ton. Puedo ayudarte con estrategia de IA, tendencias, mercado laboral AI y decisiones de negocio con impacto real. Cuéntame tu contexto y lo aterrizamos juntos, sin humo. Si quieres, después lo aterrizamos en un diagnóstico gratuito para tu empresa.'
     }
   ]);
   const [input, setInput] = useState('');
   const [isRecording, setIsRecording] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSynthesizing, setIsSynthesizing] = useState(false);
   const [activeTab, setActiveTab] = useState<'chat' | 'competitor'>('chat');
@@ -20,34 +28,27 @@ export default function AgentCAIO() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [recognition, setRecognition] = useState<any>(null);
+  const hasMountedRef = useRef(false);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+
+  const supportsMediaRecorder =
+    typeof window !== 'undefined' &&
+    typeof MediaRecorder !== 'undefined' &&
+    Boolean(navigator.mediaDevices?.getUserMedia);
 
   const suggestions = [
-    "¿Cómo calculo el ROI de la IA?",
-    "¿Qué es un Quick Win de 90 días?",
-    "Tendencias IA 2026 que sí importan",
-    "Mercado laboral IA: perfiles clave",
-    "Metodología fCAIO vs Consultoría"
+    "¿Qué es un Fractional CAIO?",
+    "¿Cómo sé si mi empresa está lista para la IA?",
+    "¿Cuáles son las tendencias IA más importantes de 2026?",
   ];
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      if (SpeechRecognition) {
-        const rec = new SpeechRecognition();
-        rec.continuous = false;
-        rec.interimResults = false;
-        rec.lang = 'es-ES';
-        rec.onresult = (event: any) => {
-          const transcript = event.results[0][0].transcript;
-          setInput((prev) => prev + (prev ? ' ' : '') + transcript);
-          setIsRecording(false);
-        };
-        rec.onerror = () => setIsRecording(false);
-        rec.onend = () => setIsRecording(false);
-        setRecognition(rec);
-      }
-    }
+    return () => {
+      mediaRecorderRef.current?.stop();
+      mediaStreamRef.current?.getTracks().forEach((t) => t.stop());
+    };
   }, []);
 
   const scrollToBottom = () => {
@@ -55,8 +56,19 @@ export default function AgentCAIO() {
   };
 
   useEffect(() => {
+    if (disableInitialAutoScroll && !hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
+    hasMountedRef.current = true;
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    if (!showCompetitorTab && activeTab === 'competitor') {
+      setActiveTab('chat');
+    }
+  }, [showCompetitorTab, activeTab]);
 
   const handleSend = async (customInput?: string) => {
     const textToSend = customInput || input;
@@ -126,12 +138,95 @@ export default function AgentCAIO() {
     }
   };
 
-  const toggleRecording = () => {
-    if (isRecording) {
-      recognition?.stop();
-    } else {
-      recognition?.start();
+  const toggleWhisperRecording = async () => {
+    if (!supportsMediaRecorder) return;
+
+    if (isRecording && mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaStreamRef.current = stream;
+      audioChunksRef.current = [];
+
+      let mimeType = '';
+      if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+        mimeType = 'audio/webm;codecs=opus';
+      } else if (MediaRecorder.isTypeSupported('audio/webm')) {
+        mimeType = 'audio/webm';
+      } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+        mimeType = 'audio/mp4';
+      }
+
+      const recorder = new MediaRecorder(
+        stream,
+        mimeType ? { mimeType } : undefined
+      );
+      mediaRecorderRef.current = recorder;
+
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) audioChunksRef.current.push(e.data);
+      };
+
+      recorder.onstop = async () => {
+        setIsRecording(false);
+        stream.getTracks().forEach((t) => t.stop());
+        mediaStreamRef.current = null;
+        mediaRecorderRef.current = null;
+
+        const type =
+          recorder.mimeType?.split(';')[0] ||
+          mimeType?.split(';')[0] ||
+          'audio/webm';
+        const blob = new Blob(audioChunksRef.current, { type });
+        audioChunksRef.current = [];
+
+        if (blob.size === 0) return;
+
+        setIsTranscribing(true);
+        try {
+          const ext = type.includes('mp4') ? 'm4a' : 'webm';
+          const fd = new FormData();
+          fd.append('file', blob, `recording.${ext}`);
+
+          const res = await fetch('/api/whisper', { method: 'POST', body: fd });
+          const data = await res.json();
+          if (!res.ok) {
+            throw new Error(data.error || 'Error al transcribir');
+          }
+          const text = (data.text as string)?.trim() || '';
+          if (text) {
+            setInput((prev) => (prev ? `${prev} ${text}` : text));
+          }
+        } catch (err) {
+          console.error(err);
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: 'agent',
+              content:
+                'No se pudo transcribir el audio. Comprueba OPENAI_API_KEY en el servidor o vuelve a intentarlo.',
+            },
+          ]);
+        } finally {
+          setIsTranscribing(false);
+        }
+      };
+
+      recorder.start();
       setIsRecording(true);
+    } catch (e) {
+      console.error(e);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'agent',
+          content:
+            'No se pudo acceder al micrófono. Revisa permisos del navegador.',
+        },
+      ]);
     }
   };
 
@@ -274,15 +369,15 @@ export default function AgentCAIO() {
                 </div>
               </div>
              <div>
-                <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter leading-none mb-2">
-                  AGENT <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">fCAIO</span>
+                <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-none mb-2">
+                  Ton Guardiet · <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">CAIO Virtual</span>
                 </h1>
                 <div className="flex items-center gap-2 mt-1">
                   <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                  <p className="text-zinc-500 font-medium text-sm tracking-widest uppercase">Mentor Digital de IA</p>
+                  <p className="text-zinc-500 font-medium text-sm tracking-widest uppercase">En línea</p>
                 </div>
                 <p className="text-zinc-300/90 text-sm md:text-base mt-3 max-w-xl">
-                  Preguntame sobre IA, tendencias, estrategia... se mas que el real 😄
+                  Pregúntame sobre IA, tendencias, estrategia... sé más que el real 😄
                 </p>
              </div>
           </div>
@@ -290,16 +385,18 @@ export default function AgentCAIO() {
           <div className="flex items-center bg-zinc-900/50 p-1.5 rounded-2xl border border-zinc-800 backdrop-blur-xl">
              <button 
                 onClick={() => setActiveTab('chat')}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 \${activeTab === 'chat' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-zinc-500 hover:text-zinc-300'}`}
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${activeTab === 'chat' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-zinc-500 hover:text-zinc-300'}`}
              >
                <Sparkles className="w-4 h-4" /> IA Diagnostic
              </button>
-             <button 
-                onClick={() => setActiveTab('competitor')}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 \${activeTab === 'competitor' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-zinc-500 hover:text-zinc-300'}`}
-             >
-               <Search className="w-4 h-4" /> Competitor Analyzer
-             </button>
+             {showCompetitorTab && (
+               <button 
+                  onClick={() => setActiveTab('competitor')}
+                  className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${activeTab === 'competitor' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-zinc-500 hover:text-zinc-300'}`}
+               >
+                 <Search className="w-4 h-4" /> Competitor Analyzer
+               </button>
+             )}
           </div>
         </div>
 
@@ -308,7 +405,7 @@ export default function AgentCAIO() {
           {/* Main App Container */}
           <div className="lg:col-span-8 flex flex-col gap-6">
             
-            {activeTab === 'chat' ? (
+            {activeTab === 'chat' || !showCompetitorTab ? (
               <div className="bg-zinc-900/30 backdrop-blur-3xl border border-zinc-800 rounded-[2.5rem] h-[650px] flex flex-col shadow-2xl relative overflow-hidden group">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent pointer-events-none"></div>
                 
@@ -319,10 +416,10 @@ export default function AgentCAIO() {
                       initial={{ opacity: 0, x: m.role === 'user' ? 20 : -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       key={i}
-                      className={`flex \${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                      className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
                     >
-                      <div className={`flex flex-col gap-2 max-w-[85%] \${m.role === 'user' ? 'items-end' : 'items-start'}`}>
-                        <div className={`px-6 py-4 rounded-3xl shadow-xl backdrop-blur-md \${
+                      <div className={`flex flex-col gap-2 max-w-[85%] ${m.role === 'user' ? 'items-end' : 'items-start'}`}>
+                        <div className={`px-6 py-4 rounded-3xl shadow-xl backdrop-blur-md ${
                           m.role === 'user' 
                             ? 'bg-emerald-500 text-white rounded-tr-sm ring-1 ring-emerald-400/50' 
                             : 'bg-zinc-800 text-zinc-100 rounded-tl-sm ring-1 ring-zinc-700/50'
@@ -375,14 +472,37 @@ export default function AgentCAIO() {
                 {/* Input Controls */}
                 <div className="p-6 bg-zinc-900/80 backdrop-blur-3xl border-t border-zinc-800/50 shadow-2xl">
                   <div className="max-w-3xl mx-auto flex items-center gap-4 bg-zinc-950/50 border border-zinc-800 rounded-2xl p-2 focus-within:border-emerald-500/50 transition-colors shadow-inner">
-                    {recognition && (
-                      <button
-                        onClick={toggleRecording}
-                        className={`p-4 rounded-xl transition-all duration-300 \${isRecording ? 'bg-red-500 text-white shadow-lg shadow-red-500/50' : 'bg-zinc-900 text-zinc-500 hover:text-emerald-400'}`}
-                      >
-                        {isRecording ? <Mic className="w-5 h-5 animate-pulse" /> : <MicOff className="w-5 h-5" />}
-                      </button>
-                    )}
+                    <button
+                      type="button"
+                      onClick={toggleWhisperRecording}
+                      disabled={
+                        !supportsMediaRecorder ||
+                        isTranscribing ||
+                        isGenerating
+                      }
+                      title={
+                        !supportsMediaRecorder
+                          ? 'Tu navegador no soporta grabación'
+                          : isRecording
+                            ? 'Parar y transcribir'
+                            : 'Grabar voz (Whisper)'
+                      }
+                      className={`p-4 rounded-xl transition-all duration-300 ${
+                        !supportsMediaRecorder
+                          ? 'cursor-not-allowed opacity-40 bg-zinc-900 text-zinc-500'
+                          : isRecording
+                            ? 'bg-red-500 text-white shadow-lg shadow-red-500/50 animate-pulse'
+                            : 'bg-zinc-900 text-zinc-500 hover:text-emerald-400'
+                      }`}
+                    >
+                      {isTranscribing ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : isRecording ? (
+                        <Mic className="w-5 h-5 animate-pulse" />
+                      ) : (
+                        <MicOff className="w-5 h-5" />
+                      )}
+                    </button>
                     
                     <input
                       type="text"
@@ -394,11 +514,36 @@ export default function AgentCAIO() {
                     />
                     <button
                       onClick={() => handleSend()}
-                      disabled={(!input.trim() && !isRecording) || isGenerating}
+                      disabled={
+                        (!input.trim() && !isRecording) ||
+                        isGenerating ||
+                        isRecording ||
+                        isTranscribing
+                      }
                       className="p-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-30"
                     >
                       <Send className="w-5 h-5" />
                     </button>
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        onClick={() => onBookMeeting?.()}
+                        className="px-4 py-2 rounded-full text-xs font-bold bg-blue-600/90 text-white hover:bg-blue-600 transition-colors"
+                      >
+                        🗓 Agendar reunión
+                      </button>
+                      <button
+                        onClick={() => onFreeDiagnosis?.()}
+                        className="px-4 py-2 rounded-full text-xs font-bold bg-emerald-600/90 text-white hover:bg-emerald-600 transition-colors"
+                      >
+                        🔍 Diagnóstico gratuito
+                      </button>
+                    </div>
+                    <p className="text-[11px] text-zinc-500">
+                      Avatar entrenado con el conocimiento y metodología de Ton Guardiet
+                    </p>
                   </div>
                 </div>
               </div>

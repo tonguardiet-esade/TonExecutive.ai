@@ -1,0 +1,191 @@
+PROMPTS FASES 3 y 4 — TonExecutive.ai
+FASE 3 — ADDONS TECNOLÓGICOS
+PROMPT F3-A — Integración Whisper (transcripción de voz)
+En src/pages/AgentCAIO.tsx, añade un botón de micrófono junto al input de chat.
+Al hacer clic:
+1. Graba audio del navegador (MediaRecorder API)
+2. Al parar, envía el blob de audio a POST /api/whisper en server.ts
+3. El endpoint recibe el audio, lo envía a OpenAI Whisper API y devuelve el texto
+4. El texto transcrito aparece automáticamente en el input de chat
+En server.ts:
+- Añade POST /api/whisper
+- Usa FormData para enviar el audio a https://api.openai.com/v1/audio/transcriptions
+- Model: "whisper-1", language: "es"
+- Requiere OPENAI_API_KEY en .env
+UI: botón rojo pulsante mientras graba, icono de micrófono (Lucide Mic / MicOff).
+Si el navegador no soporta MediaRecorder, muestra tooltip "Tu navegador no soporta grabación".
+PROMPT F3-B — Integración Google Calendar (agendar demo)
+En src/pages/AgentCAIO.tsx, añade un botón "Agenda tu demo" que abre un modal.
+El modal muestra:
+- Un selector de fecha (input type="date", mín: hoy, máx: +30 días)
+- Un selector de hora (09:00, 10:00, 11:00, 12:00, 16:00, 17:00, 18:00)
+- Campo nombre y email (si no los tiene ya del contexto)
+- Botón "Confirmar demo"
+Al confirmar, llama a POST /api/calendar con { nombre, email, fecha, hora }.
+En server.ts, el endpoint:
+1. Usa googleapis para crear un evento en Google Calendar
+2. Título del evento: "Demo fCAIO — [nombre]"
+3. Duración: 30 minutos
+4. Descripción: "Diagnóstico inicial TonExecutive.ai\nContacto: [email]"
+5. Añade al asistente: [email del cliente]
+6. Envía email de confirmación al cliente
+Variables .env necesarias: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN, GOOGLE_CALENDAR_ID.
+Añádelas a .env.example con comentarios explicativos.
+Si falla la API de Google, como fallback abre https://calendly.com/tonguardiet en nueva pestaña.
+PROMPT F3-C — Diagnóstico descargable en PDF
+En src/pages/AgentCAIO.tsx, añade un botón "Descargar mi diagnóstico" que aparece después de que el usuario lleva más de 3 mensajes en el chat.
+Al hacer clic:
+1. Llama a POST /api/diagnostic con el historial de mensajes del chat
+2. El endpoint en server.ts genera un PDF con:
+   - Logo TonExecutive.ai (texto estilizado)
+   - Título: "Diagnóstico IA — [fecha de hoy]"
+   - Sección "Tu situación actual": resumen de lo que el usuario contó
+   - Sección "Oportunidades detectadas": 3-5 puntos generados por GPT-4o
+   - Sección "Próximo paso recomendado": siempre termina con CTA a Calendly
+   - Footer: "Generado por TonExecutive.ai | Fractional Chief AI Officer"
+3. Devuelve el PDF como stream con header Content-Disposition: attachment; filename="diagnostico-fcaio.pdf"
+Usa la librería 'pdfkit' o '@react-pdf/renderer' según la que sea más fácil integrar en el backend Express.
+Instala la dependencia necesaria y actualiza package.json.
+UI: toast de éxito "¡Descargando tu diagnóstico!" con icono de descarga animado.
+PROMPT F3-D — Avatar virtual con voz (ElevenLabs)
+En src/pages/AgentCAIO.tsx, el avatar actualmente es una imagen estática. Mejora la experiencia así:
+FASE A — Síntesis de voz con ElevenLabs:
+Cuando el agente responde texto, envía ese texto a POST /api/tts en server.ts.
+El endpoint llama a ElevenLabs API con:
+- voice_id: [definido en .env como ELEVEN_VOICE_ID]
+- text: [respuesta del agente]
+- model_id: "eleven_multilingual_v2"
+Devuelve el audio como stream y el frontend lo reproduce automáticamente con Audio().
+Variables .env: ELEVEN_API_KEY, ELEVEN_VOICE_ID.
+FASE B — Animación del avatar mientras habla:
+Cuando se está reproduciendo audio, añade una clase CSS "speaking" a la imagen del avatar.
+La clase "speaking" aplica:
+- Ligero pulso en el borde (box-shadow animado en verde esmeralda)
+- Escala suave: 1.0 → 1.03 → 1.0 en loop
+Cuando para el audio, quita la clase.
+FASE C — Botón "Silenciar":
+Añade un icono de volumen/mute que permite desactivar la síntesis de voz.
+Guarda la preferencia en localStorage como "tts_enabled".
+Si ELEVEN_API_KEY no está configurada, usa la Web Speech API como fallback (SpeechSynthesis).
+FASE 4 — COMERCIALIZACIÓN
+PROMPT F4-A — Integración HubSpot CRM
+TonExecutive.ai necesita enviar todos los leads capturados a HubSpot CRM.
+PUNTOS DE CAPTURA A INTEGRAR:
+1. Modal "Agenda Demo" (ya implementado en F1-C)
+2. Formulario de contacto (renderContactForm en App.tsx)
+3. Modal de email de la calculadora (EfficiencyCalculator.tsx)
+4. Chat del Agente CAIO: cuando el usuario da su email
+Para cada punto, cuando se recoge email + nombre, llama a POST /api/hubspot/lead en server.ts.
+En server.ts, el endpoint:
+1. Usa @hubspot/api-client para crear/actualizar un contacto
+2. Campos a enviar: firstname, lastname, email, company (si existe), phone (si existe)
+3. Propiedad custom "origen_lead": desde dónde vino (calculadora / demo_modal / contacto / agente_caio)
+4. Propiedad custom "reto_ia": el texto del campo "mayor reto con IA" (si se capturó)
+5. Asigna el lead al owner por defecto (configurado en .env como HS_OWNER_ID)
+Variables .env: HUBSPOT_API_KEY, HS_OWNER_ID, HS_PIPELINE_ID.
+Si el contacto ya existe (mismo email), actualiza sus propiedades, no crees duplicado.
+Si falla HubSpot, guarda igualmente en Supabase y logea el error (no romper UX).
+Añade al .env.example las variables con comentarios.
+PROMPT F4-B — Automatización de captación de demos
+Implementa un flujo automatizado de nurturing para leads que solicitan demo.
+En server.ts, añade una función sendDemoSequence(email, nombre) que:
+EMAIL 1 — Inmediato (al solicitar demo):
+Asunto: "Ton te confirma en menos de 24h — TonExecutive.ai"
+Cuerpo:
+"Hola [nombre],
+Tu solicitud de demo ha llegado perfectamente.
+Ton revisará tu caso y te enviará en menos de 24h un enlace para agendar vuestra sesión de 30 min.
+Mientras tanto, si tienes curiosidad sobre cómo funciona el modelo fCAIO, puedes chatear con el agente digital:
+👉 https://tonexecutive.ai/agente-caio
+Hasta pronto,
+Ton Guardiet
+Fractional Chief AI Officer"
+EMAIL 2 — A las 48h (si no ha agendado):
+Asunto: "¿Sigues interesado en el diagnóstico de IA?"
+Cuerpo:
+"Hola [nombre],
+Vi que solicitaste una demo hace dos días. ¿Tuviste oportunidad de revisar tu agenda?
+Aquí tienes el enlace directo para agendar cuando te venga bien:
+👉 https://calendly.com/tonguardiet
+Si finalmente no es el momento, sin problema — quedo a tu disposición cuando lo necesites.
+Ton"
+EMAIL 3 — A los 7 días (último intento):
+Asunto: "Un último recurso para ti — TonExecutive.ai"
+Cuerpo:
+"Hola [nombre],
+Sé que el día a día puede ser una locura. Este es mi último mensaje para no ser pesado 😄
+Si en algún momento quieres explorar cómo la IA puede impactar en [empresa], estaré aquí.
+P.D. Puedes descargar gratis nuestro informe de diagnóstico aquí: https://tonexecutive.ai/informe-prueba"
+IMPLEMENTACIÓN:
+- Usa node-cron o setTimeout encadenados para los delays
+- Guarda en Supabase la secuencia enviada (tabla "email_sequences": lead_email, step, sent_at)
+- Antes de enviar EMAIL 2 y 3, verifica en Supabase que el lead no haya agendado ya (campo "demo_agendada": boolean)
+- Si demo_agendada = true, detén la secuencia
+Usa el servicio de email ya configurado en server.ts.
+PROMPT F4-C — Sales Deck (presentación de ventas)
+Crea el archivo public/sales_deck_fcaio.md con el contenido completo del Sales Deck de TonExecutive.ai.
+Este documento se usará para crear una presentación en PowerPoint/Canva/Google Slides.
+Estructura (10 diapositivas):
+SLIDE 1 — PORTADA:
+"Tu Chief AI Officer. Sin los costes de uno a tiempo completo."
+TonExecutive.ai | Fractional CAIO Services
+[Logo] [Ciudad, Año]
+SLIDE 2 — EL PROBLEMA:
+Título: "Las empresas quieren IA. Pero sin estrategia, queman dinero."
+3 puntos de dolor:
+- "Proyectos de IA que no llegan a producción: 87% según Gartner"
+- "Contratar un CAIO senior: 120.000€+/año. Fuera del alcance de la mayoría"
+- "Consultoras grandes: caras, lentas, sin accountability"
+SLIDE 3 — LA SOLUCIÓN:
+Título: "El Fractional Chief AI Officer: dirección estratégica, precio justo"
+- 1 día/semana dedicado a tu empresa
+- Interlocución directa con CEO y directivos
+- Resultados desde el día 1, no desde el mes 6
+Visual: timeline 1 día/semana vs 5 días/semana
+SLIDE 4 — METODOLOGÍA:
+Título: "90 días para los primeros resultados"
+Timeline:
+- Mes 1: Diagnóstico + mapeo de oportunidades
+- Mes 2-3: Quick wins en producción (3 casos de uso reales)
+- Mes 4-6: Escalar + KPIs en verde
+- Mes 7-12: Industrializar + autonomía del equipo
+SLIDE 5 — QUIÉN SOY:
+"Ton Guardiet — Fractional CAIO"
+- PhD Cum Laude + MBA ESADE
+- +20 años en dirección de producto y estrategia B2B
+- +10.700 contactos directivos en LinkedIn
+- +40 recomendaciones C-Level verificadas
+- Ex-CPO Quipu | Ex-Unibo | Múltiples mandatos fCAIO
+SLIDE 6 — CASOS DE ÉXITO:
+3 casos reales (anonimizados) con estructura:
+[Sector] | [Reto] | [Solución] | [Resultado en €/tiempo]
+Ejemplo: "Empresa logística 200 pax | Backoffice manual | Agentes IA | -40% coste operativo"
+SLIDE 7 — PROPUESTA ECONÓMICA:
+Título: "Inversión vs Retorno"
+Tabla:
+| Modelo | Duración | Inversión/mes | ROI típico |
+|--------|----------|---------------|------------|
+| Quick Start | 6 meses | 4.000-8.000€ | 3-5x |
+| Transformación | 12 meses | 3.500-7.000€ | 5-10x |
+"Compara: CAIO interno = 120K€+/año. fCAIO = 42-84K€/año."
+SLIDE 8 — HERRAMIENTAS Y STACK:
+"Lo que traemos al equipo desde el día 1"
+- Acceso a GPT-4o, Claude, Gemini Pro
+- Stack técnico: n8n, LangChain, Supabase, RAG, APIs
+- Red de especialistas (ML engineers, data scientists) activable cuando sea necesario
+- Conocimiento EU AI Act y compliance IA 2026
+SLIDE 9 — TESTIMONIOS:
+3 quotes reales de LinkedIn (busca en el perfil de Ton las recomendaciones más potentes y adapta)
+Formato: "Quote" — Nombre, Cargo, Empresa
+SLIDE 10 — PRÓXIMO PASO:
+Título: "30 minutos pueden cambiarlo todo"
+CTA: "Agenda tu diagnóstico gratuito"
+Calendly: https://calendly.com/tonguardiet
+Email: ton@tonexecutive.ai
+LinkedIn: linkedin.com/in/tonguardiet
+Una vez creado el archivo, genera también una versión "one-pager" (1 sola página) en public/onepager_fcaio.md con los puntos más impactantes del deck para enviar por email.
+ORDEN DE EJECUCIÓN FASE 3-4:
+
+Fase 3: F3-A → F3-B → F3-C → F3-D (D es opcional, a valorar) Fase 4: F4-A → F4-B → F4-C
+
+⚠️ F4-C (Sales Deck) no genera código, genera contenido. Úsalo para crear la presentación en Canva/Slides. ⚠️ F3-D (Avatar ElevenLabs) requiere cuenta de pago en ElevenLabs. Valora antes de implementar.

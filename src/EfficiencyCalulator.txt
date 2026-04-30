@@ -43,19 +43,19 @@ Con un enfoque ejecutivo y casos de uso priorizados, se pueden capturar mejoras 
   - Pérdida de talento por baja productividad
 
 ## 3. ROI Estimado con IA
-| Área | Capacidad económica activable/año | Esfuerzo implantación |
-|------|-----------------------------------|-----------------------|
-| Atención al cliente inteligente | €${Math.round(annualSavings * 0.25).toLocaleString('es-ES')} | Bajo |
-| Reporting y operaciones asistidas | €${Math.round(annualSavings * 0.3).toLocaleString('es-ES')} | Bajo |
-| Go-to-market y lead scoring IA | €${Math.round(annualSavings * 0.2).toLocaleString('es-ES')} | Medio |
-| Nuevas soluciones predictivas | €${Math.round(annualSavings * 0.25).toLocaleString('es-ES')} | Alto |
+| Área | Ahorro estimado/año | Esfuerzo implantación |
+|------|---------------------|-----------------------|
+| Atención al cliente automatizada | €${Math.round(annualSavings * 0.25).toLocaleString('es-ES')} | Bajo |
+| Reporting y backoffice | €${Math.round(annualSavings * 0.3).toLocaleString('es-ES')} | Bajo |
+| Lead scoring IA | €${Math.round(annualSavings * 0.2).toLocaleString('es-ES')} | Medio |
+| Análisis predictivo | €${Math.round(annualSavings * 0.25).toLocaleString('es-ES')} | Alto |
 
-**Total capacidad activable: €${annualSavings.toLocaleString('es-ES')}/año**
+**Total ahorro potencial: €${annualSavings.toLocaleString('es-ES')}/año**
 
 ## 4. Hoja de Ruta Propuesta (12 meses)
 - Mes 1: Diagnóstico profundo y mapeo de oportunidades
-- Mes 2-3: Quick wins (primeros casos de uso en producción con foco en crecimiento)
-- Mes 4-6: Escalar los casos exitosos y abrir nuevas líneas de valor
+- Mes 2-3: Quick wins (primeros 3 casos de uso en producción)
+- Mes 4-6: Escalar los casos exitosos, KPIs en verde
 - Mes 7-12: Industrialización y autonomía del equipo interno
 
 ## 5. Próximo paso

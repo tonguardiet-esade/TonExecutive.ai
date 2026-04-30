@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__notebooklm-mcp__notebook_list",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(node_modules/.bin/tsx server.ts)",
+      "Bash(netstat -ano)",
+      "Bash(awk '{print $5}')",
+      "Bash(taskkill *)",
+      "Bash(npm install *)",
+      "Bash(node_modules/.bin/tsc --noEmit)"
+    ]
+  }
+}

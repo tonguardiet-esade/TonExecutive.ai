@@ -1,7 +1,13 @@
 import express from "express";
+import multer from "multer";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import fetch from "node-fetch";
+
+const whisperUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 25 * 1024 * 1024 },
+});
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
@@ -23,14 +29,14 @@ async function startServer() {
         // Encontrar la última pregunta del usuario para dar una respuesta coherente
         const lastUserMessage = [...messages].reverse().find(m => m.role === 'user')?.content.toLowerCase() || "";
         
-        let reply = "Como tu fCAIO y mentor de IA, entiendo perfectamente ese reto. Lo podemos convertir en un plan claro con impacto real en negocio. ¿Quieres que empecemos por un quick win medible en 90 días?";
+        let reply = "Como avatar digital de Ton, te ayudo a bajar esto a decisiones concretas de negocio. Si quieres que revisemos esto para tu empresa concretamente, podemos hacer un diagnóstico rápido y priorizar quick wins en 90 días.";
         
         if (lastUserMessage.includes("roi") || lastUserMessage.includes("dinero") || lastUserMessage.includes("coste")) {
-          reply = "El ROI es la conversación correcta. En muchos equipos, una primera ola de IA bien diseñada libera entre un 15% y 30% del tiempo operativo en el primer trimestre. ¿Qué proceso te duele más hoy: ventas, operaciones o soporte?";
+          reply = "El ROI es la conversación correcta. Una primera ola de IA bien diseñada suele liberar entre un 15% y 30% del tiempo operativo en el primer trimestre. ¿Qué proceso te duele más hoy: ventas, operaciones o soporte?";
         } else if (lastUserMessage.includes("equipo") || lastUserMessage.includes("personal") || lastUserMessage.includes("miedo")) {
           reply = "El factor humano suele ser el cuello de botella. No va de sustituir personas, va de elevar su capacidad. Te ayudo a diseñar adopción por capas para evitar rechazo interno. ¿Cómo está hoy tu equipo en madurez digital del 1 al 10?";
         } else if (lastUserMessage.includes("hola") || lastUserMessage.includes("buenos días")) {
-          reply = "¡Hola! Soy el Agente fCAIO de Ton Guardiet. Piensa en mí como tu mentor de IA: cercano, directo y enfocado en resultados reales. ¿Por dónde empezamos?";
+          reply = "¡Hola! Soy el avatar digital de Ton Guardiet. Mentor de IA, directo y práctico. Te ayudo con tendencias, CAIO, automatización y decisiones con impacto real. ¿Por dónde empezamos?";
         }
 
         // Simular un pequeño retardo para que se sienta real
@@ -39,26 +45,96 @@ async function startServer() {
       }
 
       const systemInstruction = `
-Eres el Agente IA de TonExecutive, el avatar digital de Ton Guardiet.
-Actúas como un Fractional Chief AI Officer (fCAIO) senior con mentalidad de mentor cercano: humano, claro, útil y con espíritu de servicio.
-Tu objetivo es realizar diagnóstico estratégico y acompañar la toma de decisiones de directivos y cargos públicos.
+Eres el avatar digital de Ton Guardiet, Fractional Chief AI Officer (fCAIO). Eres un gemelo digital entrenado con su metodología, conocimiento y experiencia real.
 
-CONOCIMIENTO EXPERTO:
-1. Sector Corporativo: Estrategia fCAIO, ROI, Roadmaps a 90/180/360 días, cambio cultural, gobierno de IA y adopción por equipos.
-2. Sector Público (TAG): Experto en LCSP (Ley de Contratos del Sector Público), PCAP, PPT, doctrina del TACRC.
-3. Tendencias y Mercado IA: evolución de modelos, agentes, regulación, productividad, perfiles demandados y habilidades clave del mercado laboral IA.
-4. Servicios:
-   - AI Talk para Administraciones Públicas (500€).
-   - Creación de 1 Documento Piloto (3.000€, procesable como contrato menor Art. 118 LCSP).
-   - Pack 10 Documentos / Automatización total (14.500€).
-5. Propuesta de Valor: Eliminar el miedo a la nulidad, coherencia PCAP/PPT, reducir semanas de trabajo a minutos.
+QUIÉN ERES
+- PhD Cum Laude + MBA por ESADE.
+- +20 años de experiencia en dirección de producto, growth y estrategia B2B.
+- +10.729 contactos en LinkedIn y +40 recomendaciones C-Level.
+- Experiencia en Quipu (CPO), Unibo y consultoría de alto nivel.
 
-REGLAS DE COMUNICACIÓN:
-- Sé conversacional y cercano, con personalidad tipo mentor (no bot corporativo), sin perder rigor.
-- Sé ejecutivo, conciso y orientado a resultados (ROI en empresas, Seguridad Jurídica en Administraciones).
-- Ve paso a paso. No abrumes con información. Formula una pregunta útil al final de la mayoría de respuestas.
-- Si te preguntan por tendencias o mercado laboral IA, responde con criterios prácticos para decisiones de negocio y talento.
-- El mensaje de bienvenida oficial debe ser: "Hola, soy tu Agente fCAIO: el gemelo digital de Ton. Puedo ayudarte con estrategia de IA, tendencias, mercado laboral AI y decisiones de negocio con impacto real. Cuéntame tu contexto y lo aterrizamos juntos, sin humo."
+QUÉ ES UN CAIO (Chief AI Officer)
+El CAIO es un rol ejecutivo de alto nivel que lidera la estrategia de inteligencia artificial de una organización. Se encarga de:
+- Alinear la IA con los objetivos de negocio.
+- Identificar oportunidades de automatización.
+- Impulsar la adopción de tecnologías emergentes.
+- Mitigar riesgos éticos y regulatorios.
+El CAIO dedica aproximadamente 50% a negocio y 50% a tecnología. Es un puente estratégico.
+
+MODELO FRACTIONAL CAIO
+Formato: 1 día/semana (8h). Duración: 6-12 meses.
+Interlocución directa con CEO, Dirección y Comité.
+Calendario tipo:
+- Mes 1: Diagnóstico, reuniones con líderes, mapeo de oportunidades.
+- Mes 2: Hoja de ruta de IA y quick wins.
+- Mes 3-4: Kick-off de pilotos de IA, monitoreo y KPIs.
+- Mes 5-6: Escalado controlado, paso a producción, ROI preliminar.
+- Mes 7-9: Industrialización, gobierno de IA, playbooks reutilizables.
+- Mes 10-12: Transferencia, formación de líderes internos, autonomía.
+
+PROPUESTA DE VALOR
+"Implantamos la IA en tu negocio con impacto real en 6-12 meses, sin necesidad de contratar un perfil senior a tiempo completo."
+Lo que realmente compra el cliente:
+- Dirección estratégica.
+- Velocidad de ejecución.
+- Evitar errores caros.
+- Aterrizar IA en negocio (no en PowerPoints).
+
+PRICING ORIENTATIVO
+- 6 meses: 4.000-8.000€/mes (24K-48K€ total). Enfoque: quick wins + primeros casos.
+- 12 meses: 3.500-7.000€/mes (42K-84K€ total). Enfoque: transformación real + internalización.
+- Upsells: implementaciones técnicas, formación ejecutiva (2K-5K€), licencias/herramientas.
+
+CASOS DE USO TÍPICOS
+- Automatización de atención al cliente (chatbots inteligentes).
+- Optimización de procesos internos (backoffice, reporting).
+- IA en ventas (lead scoring, personalización).
+- Generación de contenido automatizado.
+- Análisis predictivo (demanda, churn, pricing).
+
+TU PERSONALIDAD
+- Cercano, como un mentor. No eres un bot corporativo.
+- Lenguaje directo y práctico, sin buzzwords vacíos.
+- Siempre añades valor con datos, ejemplos o perspectiva estratégica.
+- Humor puntual permitido. Guiño cómplice: "Sé más que el Ton real" cuando encaje.
+
+TU OBJETIVO EN CADA CONVERSACIÓN
+1) Responder genuinamente sobre IA, tendencias, CAIO, automatización y estrategia.
+2) Hacer preguntas de descubrimiento para detectar dolor del cliente:
+   - "¿Cómo estáis abordando ahora mismo el tema de IA?"
+   - "¿Dónde crees que estáis perdiendo más tiempo o dinero?"
+   - "¿Tenéis una estrategia clara de IA o vais caso a caso?"
+3) Cuando detectes interés real, transicionar de forma natural a:
+   - "Si quieres, podemos hacer un diagnóstico rápido de tu empresa..."
+   - "Este es exactamente el tipo de reto que resolvemos en 90 días. ¿Lo miramos juntos?"
+   - Invitar a agendar reunión o hacer diagnóstico gratuito.
+
+SPEECH COMERCIAL (base cuando te pregunten qué ofrecéis)
+"Todas las empresas con las que hablamos están en el mismo punto: saben que la IA es clave, pero no tienen claro cómo aterrizarla en negocio. Nosotros entramos con un enfoque muy concreto: actuamos como un Chief AI Officer externo, un día a la semana, y nos enfocamos en identificar dónde la IA puede generar impacto real en vuestro negocio y ejecutarlo. En los primeros 60-90 días ya estamos lanzando casos de uso concretos."
+
+RED FLAGS (filtrado honesto)
+- "Queremos explorar IA" sin dolor real.
+- "No tenemos datos."
+- "Esto lo lleva solo IT" sin negocio implicado.
+- "No hay presupuesto."
+
+CONOCIMIENTO TÉCNICO QUE DOMINAS
+- EU AI Act y compliance IA 2026.
+- Modelos agénticos: LangGraph, AutoGEN, CrewAI.
+- ROI de iniciativas IA: benchmarks McKinsey y Gartner.
+- Diferencias entre LLMs: GPT-4o, Claude 3.5, Gemini, Mistral.
+- Metodología fCAIO: auditoría → quick wins → escalar.
+- Casos de uso reales por sector: fintech, logística, retail, industrial.
+- n8n, Make.com, Supabase, LangChain, Hugging Face y RAG.
+
+REGLAS DE RESPUESTA
+- Sé claro, accionable y evita párrafos eternos.
+- Prioriza recomendaciones prácticas y medibles.
+- Evita inventar datos: si no sabes algo, dilo y reconduce con criterio.
+- Cierra normalmente con una pregunta útil de diagnóstico o siguiente paso.
+- Si surge interés comercial, incluye llamada a la acción a diagnóstico o reunión sin sonar agresivo.
+- Mensaje de bienvenida oficial:
+  "Hola, soy tu Agente fCAIO: el gemelo digital de Ton. Puedo ayudarte con estrategia de IA, tendencias, mercado laboral AI y decisiones de negocio con impacto real. Cuéntame tu contexto y lo aterrizamos juntos, sin humo."
 `;
       const formattedMessages = messages.map((m: any) => ({
         role: m.role === "user" ? "user" : "model",
@@ -147,6 +223,62 @@ Genera un informe markdown detallado identificando:
     }
   });
 
+  app.post(
+    "/api/whisper",
+    whisperUpload.single("file"),
+    async (req, res) => {
+      try {
+        const apiKey = process.env.OPENAI_API_KEY;
+        if (!apiKey) {
+          return res
+            .status(503)
+            .json({ error: "OPENAI_API_KEY no configurada en el servidor" });
+        }
+
+        const file = req.file;
+        if (!file?.buffer?.length) {
+          return res.status(400).json({ error: "Falta el archivo de audio" });
+        }
+
+        const formData = new FormData();
+        const mime = file.mimetype || "audio/webm";
+        const blob = new Blob([file.buffer], { type: mime });
+        formData.append("file", blob, file.originalname || "audio.webm");
+        formData.append("model", "whisper-1");
+        formData.append("language", "es");
+
+        const whisperRes = await fetch(
+          "https://api.openai.com/v1/audio/transcriptions",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${apiKey}`,
+            },
+            body: formData,
+          }
+        );
+
+        const data = (await whisperRes.json()) as {
+          text?: string;
+          error?: { message?: string };
+        };
+
+        if (!whisperRes.ok) {
+          return res.status(whisperRes.status).json({
+            error:
+              data.error?.message || "Error al transcribir con OpenAI Whisper",
+          });
+        }
+
+        return res.json({ text: data.text ?? "" });
+      } catch (error: any) {
+        console.error("Error in /api/whisper:", error);
+        return res.status(500).json({
+          error: error.message || "Error al procesar la transcripción",
+        });
+      }
+    }
+  );
 
   // WhatsApp Assistant API
   app.post("/api/wa-chat", async (req, res) => {
@@ -207,6 +339,46 @@ REGLAS DE COMPORTAMIENTO:
     } catch (error: any) {
       console.error("Error in /api/wa-chat:", error);
       res.status(500).json({ error: error.message || "Error en el asistente" });
+    }
+  });
+
+  app.post("/api/notify-lead", async (req, res) => {
+    try {
+      const { nombre, email, reto } = req.body || {};
+      const waToken = process.env.WA_TOKEN;
+      const waNotifyNumber = process.env.WA_NOTIFY_NUMBER;
+      const waPhoneNumberId = process.env.WA_PHONE_NUMBER_ID;
+
+      if (!waToken || !waNotifyNumber || !waPhoneNumberId) {
+        console.warn("WhatsApp lead notification skipped: missing WA_TOKEN, WA_NOTIFY_NUMBER or WA_PHONE_NUMBER_ID");
+        return res.json({ success: false, skipped: true });
+      }
+
+      const message = `🔔 NUEVA DEMO SOLICITADA\n👤 ${nombre || '-'}\n📧 ${email || '-'}\n💬 ${reto || '-'}`;
+      const waResponse = await fetch(`https://graph.facebook.com/v20.0/${waPhoneNumberId}/messages`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${waToken}`,
+        },
+        body: JSON.stringify({
+          messaging_product: "whatsapp",
+          to: waNotifyNumber,
+          type: "text",
+          text: { body: message },
+        }),
+      });
+
+      if (!waResponse.ok) {
+        const body = await waResponse.text();
+        console.warn("WhatsApp lead notification failed:", body);
+        return res.json({ success: false, skipped: true });
+      }
+
+      return res.json({ success: true });
+    } catch (error) {
+      console.warn("notify-lead failed silently:", error);
+      return res.json({ success: false, skipped: true });
     }
   });
 

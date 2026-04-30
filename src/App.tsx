@@ -1,5 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import WhatsAppChat from './components/WhatsAppChat';
+import { Helmet } from 'react-helmet-async';
+/* SQL sugerido (si la tabla no existe):
+create table if not exists public.leads (
+  id bigserial primary key,
+  nombre text not null,
+  email text not null,
+  reto text not null,
+  fecha timestamptz not null default now(),
+  origen text not null default 'demo_modal'
+);
+*/
+import WhatsAppChat, { notifyNewLead } from './components/WhatsAppChat';
 import AgentCAIO from './pages/AgentCAIO';
 import { 
   ArrowRight, 
@@ -37,6 +48,7 @@ import {
   Youtube,
   Instagram,
   X,
+  PlayCircle,
   Target,
   Sparkles,
   GraduationCap,
@@ -64,6 +76,8 @@ import {
   Calculator,
   Filter,
   ListChecks,
+  BarChart3,
+  Tag,
   CheckSquare,
   FileSearch,
   Send,
@@ -72,7 +86,8 @@ import {
   AlertTriangle,
   Cpu,
   BookOpen,
-  Fingerprint
+  Fingerprint,
+  TrendingUp
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useInView } from 'motion/react';
@@ -82,6 +97,11 @@ import { TecnicoContratacion } from './pages/TecnicoContratacion';
 import { PricingServices } from './pages/PricingServices';
 import EfficiencyCalculator from './components/EfficiencyCalculator';
 import { supabase } from './lib/supabase';
+import OrbCanvas from './components/OrbCanvas';
+import MagneticButton from './components/MagneticButton';
+import BentoCard from './components/BentoCard';
+import GeometricVideoMask from './components/GeometricVideoMask';
+import AnimatedGradientText from './components/AnimatedGradientText';
 
 function useCountUp(target: number, duration: number) {
   const [value, setValue] = useState(0);
@@ -118,6 +138,7 @@ function AppContent() {
     if (path === '/metodologia') return 'metodologia';
     if (path === '/preus-i-serveis') return 'preus-i-serveis';
     if (path === '/contacto') return 'contacto';
+    if (path === '/informe') return 'informe';
     if (path === '/legal') return 'legal';
     if (path === '/privacy') return 'privacy';
     if (path === '/cookies') return 'cookies';
@@ -127,7 +148,8 @@ function AppContent() {
   const [expandedMod, setExpandedMod] = useState<number | null>(null);
   const [selectedStory, setSelectedStory] = useState<any>(null);
   const [activeStoryTag, setActiveStoryTag] = useState<string>('Todos');
-  const [activeTrendCategory, setActiveTrendCategory] = useState<string>('Fractional Chief AI Officer');
+  const [activeTrendCategory, setActiveTrendCategory] = useState<string>('Todas');
+  const [scrolled, setScrolled] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -136,9 +158,15 @@ function AppContent() {
     }
   }, [currentPage]);
 
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   // Update document title
   useEffect(() => {
-    document.title = 'TonExecutive.ai';
+    document.title = 'TonExecutive.ai | Fractional Chief AI Officer para empresas B2B';
   }, []);
 
   // Update URL when page changes
@@ -160,6 +188,7 @@ function AppContent() {
       if (path === '/soluciones/tecnico-contratacion') setCurrentPage('tecnico-contratacion');
       else if (path === '/metodologia') setCurrentPage('metodologia');
       else if (path === '/contacto') setCurrentPage('contacto');
+      else if (path === '/informe') setCurrentPage('informe');
       else if (path === '/agent') setCurrentPage('agent');
       else if (path === '/legal') setCurrentPage('legal');
       else if (path === '/privacy') setCurrentPage('privacy');
@@ -196,11 +225,21 @@ function AppContent() {
 
   const [showDemoModal, setShowDemoModal] = useState(false);
   const [demoFullName, setDemoFullName] = useState('');
-  const [demoOrganization, setDemoOrganization] = useState('');
-  const [demoPhoneNumber, setDemoPhoneNumber] = useState('');
   const [demoEmail, setDemoEmail] = useState('');
+  const [demoChallenge, setDemoChallenge] = useState('');
   const [demoStatus, setDemoStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [demoErrorMessage, setDemoErrorMessage] = useState('');
+  const [showDemoConfetti, setShowDemoConfetti] = useState(false);
+  const [demoSubmittedName, setDemoSubmittedName] = useState('');
+  const [diagnosisStep, setDiagnosisStep] = useState(1);
+  const [diagEmployees, setDiagEmployees] = useState('');
+  const [diagAiState, setDiagAiState] = useState('');
+  const [diagBlocker, setDiagBlocker] = useState('');
+  const [diagOwner, setDiagOwner] = useState('');
+  const [diagEmail, setDiagEmail] = useState('');
+  const [diagIdentity, setDiagIdentity] = useState('');
+  const [diagConsent, setDiagConsent] = useState(false);
+  const [diagStatus, setDiagStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const t = translations[lang as keyof typeof translations] || translations['ES'];
 
@@ -241,6 +280,35 @@ function AppContent() {
       }
     }
   }, []);
+
+  const scrollToSection = (id: string) => {
+    const attempt = () => {
+      const node = document.getElementById(id);
+      if (node) {
+        node.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    };
+    if (currentPage !== 'home' && currentPage !== 'sobre-mi') {
+      setTimeout(attempt, 120);
+    } else {
+      attempt();
+    }
+  };
+
+  const goToDiagnosis = () => {
+    if (currentPage !== 'home') setCurrentPage('home');
+    setTimeout(() => scrollToSection('diagnostico'), 140);
+  };
+
+  const goToReportFocus = () => {
+    setCurrentPage('informe');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const goToContent = () => {
+    if (currentPage !== 'home') setCurrentPage('home');
+    setTimeout(() => scrollToSection('contenido-semanal'), 140);
+  };
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -340,41 +408,46 @@ function AppContent() {
     setDemoStatus('loading');
     setDemoErrorMessage('');
     try {
-      const formData = {
-        fullName: demoFullName,
-        organization: demoOrganization,
-        phoneNumber: demoPhoneNumber,
-        email: demoEmail
-      };
-
-      // Llamada corregida usando supabase.functions.invoke con la cabecera secreta correcta
-      // Forzamos la clave correcta porque la variable de entorno parece estar contaminada con la Anon Key
-      const secretKey = 'xT9_nP4kL2-vR8mY1_qW6zJ5-bC7hF3';
-      
-      const invokePromise = supabase.functions.invoke('enviar-demo', {
-        body: formData,
-        headers: {
-          'x-custom-auth': secretKey
-        }
-      });
-
-      const timeoutPromise = new Promise<any>((_, reject) => {
-        setTimeout(() => reject(new Error('TIMEOUT_ERROR')), 15000);
-      });
-
-      const { data, error: invokeError } = await Promise.race([invokePromise, timeoutPromise]);
-
-      if (invokeError) {
-        const error: any = new Error(invokeError?.message?.toString() || "Error desconocido");
-        error.status = invokeError?.status;
-        throw error;
+      try {
+        await supabase.from('leads').insert({
+          nombre: demoFullName,
+          email: demoEmail,
+          reto: demoChallenge,
+          fecha: new Date().toISOString(),
+          origen: 'demo_modal',
+        });
+      } catch (leadError) {
+        console.warn('No se pudo guardar el lead en Supabase:', leadError);
       }
 
+      const secretKey = import.meta.env.VITE_FUNCTION_SECRET_KEY;
+      const emailBody = `Hola ${demoFullName}, hemos recibido tu solicitud. Ton revisará tu caso y te enviará un enlace de Calendly personalizado en menos de 24h.<br/><br/>Calendly: <a href="https://calendly.com/tonguardiet">https://calendly.com/tonguardiet</a>`;
+      const emailPayload = {
+        fullName: demoFullName,
+        email: demoEmail,
+        reto: demoChallenge,
+        subject: '¡Demo reservada! Ton te confirma en 24h',
+        html: emailBody,
+        origen: 'demo_modal',
+      };
+
+      const { error: invokeError } = await supabase.functions.invoke('enviar-demo', {
+        body: emailPayload,
+        headers: secretKey ? { 'x-custom-auth': secretKey } : undefined,
+      });
+      if (invokeError) {
+        console.warn('No se pudo enviar el email de confirmación:', invokeError.message);
+      }
+
+      await notifyNewLead(demoFullName, demoEmail, demoChallenge);
+
+      setDemoSubmittedName(demoFullName);
       setDemoStatus('success');
+      setShowDemoConfetti(true);
+      setTimeout(() => setShowDemoConfetti(false), 1600);
       setDemoFullName('');
-      setDemoOrganization('');
-      setDemoPhoneNumber('');
       setDemoEmail('');
+      setDemoChallenge('');
       
       setTimeout(() => {
         setDemoStatus('idle');
@@ -404,7 +477,14 @@ function AppContent() {
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    const t = window.setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }, 40);
+    return () => window.clearTimeout(t);
   }, [currentPage]);
 
   const Logo = () => (
@@ -423,52 +503,117 @@ function AppContent() {
 
   const renderHome = () => (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="pb-24">
-      {/* HERO SECTION (Double Funnel) */}
-      <section className="relative overflow-hidden">
-        {/* 1. Capa de Video (Base) */}
-        <div className="relative z-0 w-full h-[calc(100vh-5rem)] overflow-hidden bg-black pointer-events-none">
-          <video
-            ref={videoRef}
-            key="ton-home-video-v3"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            onEnded={(e) => {
-              e.currentTarget.currentTime = 0;
-              e.currentTarget.play();
-            }}
-            className="w-full h-full object-fill object-center opacity-95"
-          >
-            <source src="/Video-Portada-Ton.mp4" type="video/mp4" />
-          </video>
-          {/* Overlay muy sutil para mantener calidad */}
-          <div className="absolute inset-0 bg-white/5 dark:bg-zinc-950/20"></div>
-        </div>
+      {/* ── HERO SECTION — REVOLUCIÓN ── */}
+      <section className="relative overflow-hidden min-h-[100dvh] flex items-center bg-zinc-950">
+        {/* Grid dot texture */}
+        <div className="absolute inset-0 bg-grid-brand opacity-30 pointer-events-none" />
+        {/* Bottom fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-zinc-950 to-transparent pointer-events-none z-10" />
 
-        {/* 2. Capa de Contenido (Superior) - Vaciada a petición del usuario */}
-        <div className="relative z-10 w-full"></div>
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-10 py-28 lg:py-32">
+          <div className="grid lg:grid-cols-[1fr_460px] gap-12 lg:gap-8 items-center">
+
+            {/* LEFT: Text */}
+            <div className="flex flex-col gap-7">
+              {/* Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: -12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="inline-flex items-center gap-2 bg-white/5 backdrop-blur-sm border border-emerald-500/25 rounded-full px-4 py-1.5 text-xs font-bold tracking-widest uppercase text-emerald-400 w-fit"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Your fCAIO
+              </motion.div>
+
+              {/* MASSIVE heading */}
+              <AnimatedGradientText as="h1" className="text-[clamp(3.2rem,9vw,7rem)]" delay={0.1}>
+                Your<br />fCAIO.
+              </AnimatedGradientText>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.25 }}
+                className="text-lg md:text-xl text-zinc-400 font-light leading-relaxed max-w-lg"
+              >
+                Sin los costes de uno. Implanto la IA en tu negocio con impacto real en{' '}
+                <span className="text-emerald-400 font-semibold">90 días</span>.
+                1 día/semana. Resultados desde el día 1.
+              </motion.p>
+
+              {/* Authority block */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 0.35 }}
+                className="grid sm:grid-cols-3 gap-2 max-w-2xl"
+              >
+                {[
+                  '+10.700 contactos directivos en LinkedIn',
+                  'PhD Cum Laude',
+                  'MBA ESADE',
+                ].map((cred) => (
+                  <span key={cred} className="text-xs text-zinc-200 font-semibold bg-white/5 border border-white/10 rounded-xl px-3 py-2">
+                    {cred}
+                  </span>
+                ))}
+              </motion.div>
+
+              {/* CTAs — Magnetic */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.42 }}
+                className="flex flex-col sm:flex-row items-start gap-4 pt-1"
+              >
+                <MagneticButton
+                  onClick={goToReportFocus}
+                  className="bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-black text-sm shadow-2xl shadow-emerald-500/30"
+                >
+                  Informe gratuito
+                  <ArrowRight className="w-4 h-4" />
+                </MagneticButton>
+                <MagneticButton
+                  onClick={() => setShowDemoModal(true)}
+                  className="bg-white/6 hover:bg-white/12 text-white border border-white/15 font-semibold text-sm"
+                >
+                  Agenda demo
+                </MagneticButton>
+              </motion.div>
+            </div>
+
+            {/* RIGHT: Video in geometric mask */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.88, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 1.1, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+              className="hidden lg:flex items-center justify-center w-full h-[580px] animate-float"
+            >
+              <GeometricVideoMask videoSrc="/videoTonExecutiveAI/250328 Video sentado.mp4" />
+            </motion.div>
+          </div>
+        </div>
       </section>
 
       <AnimatedHeroStats />
 
       {/* SOCIAL PROOF / TRUST BAR */}
-      <section className="py-8 bg-white dark:bg-zinc-900 border-y border-zinc-200 dark:border-zinc-800">
+      <section className="py-8 bg-zinc-950 border-y border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-xs font-bold tracking-widest text-zinc-500 dark:text-zinc-400 uppercase mb-6">
+          <p className="text-center text-xs font-bold tracking-widest text-zinc-500 uppercase mb-6">
             {t.home.complianceTitle}
           </p>
           <div className="flex flex-wrap justify-center gap-8 md:gap-16">
-            <div className="flex items-center gap-2 text-zinc-700 dark:text-zinc-300 font-medium">
+            <div className="flex items-center gap-2 text-zinc-300 font-medium">
               <ShieldCheck className="w-5 h-5 text-emerald-500" />
               <span>{t.home.compliance1}</span>
             </div>
-            <div className="flex items-center gap-2 text-zinc-700 dark:text-zinc-300 font-medium">
+            <div className="flex items-center gap-2 text-zinc-300 font-medium">
               <ShieldCheck className="w-5 h-5 text-emerald-500" />
               <span>{t.home.compliance2}</span>
             </div>
-            <div className="flex items-center gap-2 text-zinc-700 dark:text-zinc-300 font-medium">
+            <div className="flex items-center gap-2 text-zinc-300 font-medium">
               <ShieldCheck className="w-5 h-5 text-emerald-500" />
               <span>{t.home.compliance3}</span>
             </div>
@@ -479,11 +624,11 @@ function AppContent() {
       <section className="py-10 bg-zinc-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-6 items-center rounded-[2rem] border border-zinc-800 bg-zinc-900/60 p-4 md:p-6 overflow-hidden">
-            <div className="rounded-[1.5rem] overflow-hidden border border-zinc-700 h-56 md:h-64">
+            <div className="rounded-[1.5rem] overflow-hidden border border-zinc-700 h-56 md:h-64 bg-zinc-950 flex items-center justify-center">
               <img
                 src="/250629 Oxfam_TonGuardiet_Marzo25_01.jpg"
                 alt="Ton Guardiet acompañando decisiones estratégicas"
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-cover object-[center_35%]"
               />
             </div>
             <div className="px-2 md:px-4">
@@ -714,167 +859,98 @@ function AppContent() {
         </div>
       </section>
 
-      {/* AUTORIDAD Y SEGURIDAD: IA EXPLICABLE */}
-      <section className="py-16 bg-[#0B1120] relative overflow-hidden border-t border-zinc-800">
-        {/* Background Accents */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 -left-20 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px]"></div>
-          <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px]"></div>
-        </div>
-
+      {/* ── SERVICIOS BENTO — IA EXPLICABLE ── */}
+      <section className="py-20 bg-zinc-950 relative overflow-hidden border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
+          {/* Section header */}
+          <div className="mb-14">
+            <AnimatedGradientText as="h2" className="text-4xl md:text-6xl" delay={0}>
+              {t.home.authoritySecurity.title}
+            </AnimatedGradientText>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="text-base text-zinc-400 mt-4 max-w-xl"
             >
-              <h2 className="text-3xl md:text-4xl font-black text-white mb-4 tracking-tight">
-                {t.home.authoritySecurity.title}
-              </h2>
-              <p className="text-base text-zinc-400">
-                {t.home.authoritySecurity.subtitle}
-              </p>
-            </motion.div>
+              {t.home.authoritySecurity.subtitle}
+            </motion.p>
           </div>
 
-          <div className="grid lg:grid-cols-12 gap-8 items-start">
-            {/* Left side: Value Blocks (3 columns) */}
-            <div className="lg:col-span-12 grid md:grid-cols-3 gap-6 mb-10">
-              {[
-                { 
-                  key: 'justification', 
-                  icon: <BookOpen className="w-6 h-6 text-emerald-400" />,
-                  color: 'emerald',
-                  glow: 'bg-emerald-500/20'
-                },
-                { 
-                  key: 'antiHallucination', 
-                  icon: <ShieldCheck className="w-6 h-6 text-cyan-400" />,
-                  color: 'cyan',
-                  glow: 'bg-cyan-500/20'
-                },
-                { 
-                  key: 'traceability', 
-                  icon: <Fingerprint className="w-6 h-6 text-emerald-400" />,
-                  color: 'emerald',
-                  glow: 'bg-emerald-500/20'
-                }
-              ].map((node, idx) => (
+          {/* BENTO GRID — services */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[minmax(200px,auto)]">
+
+            {/* Card 0 — Justification (tall, spans 2 rows on lg) */}
+            <BentoCard className="lg:row-span-2 p-8 flex flex-col justify-between min-h-[260px]" delay={0}>
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-auto">
+                <BookOpen className="w-6 h-6 text-emerald-400" />
+              </div>
+              <div className="mt-8">
+                <p className="text-xs text-emerald-400 font-bold uppercase tracking-widest mb-3">01</p>
+                <h3 className="text-xl font-black text-white tracking-tight mb-3">
+                  {t.home.authoritySecurity.blocks['justification' as keyof typeof t.home.authoritySecurity.blocks].title}
+                </h3>
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  {t.home.authoritySecurity.blocks['justification' as keyof typeof t.home.authoritySecurity.blocks].desc}
+                </p>
+              </div>
+            </BentoCard>
+
+            {/* Card 1 — Anti-Hallucination */}
+            <BentoCard className="p-8 flex flex-col justify-between" delay={0.08} glowColor="rgba(6,182,212,0.2)">
+              <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
+                <ShieldCheck className="w-6 h-6 text-cyan-400" />
+              </div>
+              <div className="mt-6">
+                <p className="text-xs text-cyan-400 font-bold uppercase tracking-widest mb-3">02</p>
+                <h3 className="text-xl font-black text-white tracking-tight mb-3">
+                  {t.home.authoritySecurity.blocks['antiHallucination' as keyof typeof t.home.authoritySecurity.blocks].title}
+                </h3>
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  {t.home.authoritySecurity.blocks['antiHallucination' as keyof typeof t.home.authoritySecurity.blocks].desc}
+                </p>
+              </div>
+            </BentoCard>
+
+            {/* Card 2 — Traceability */}
+            <BentoCard className="p-8 flex flex-col justify-between" delay={0.14}>
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                <Fingerprint className="w-6 h-6 text-emerald-400" />
+              </div>
+              <div className="mt-6">
+                <p className="text-xs text-emerald-400 font-bold uppercase tracking-widest mb-3">03</p>
+                <h3 className="text-xl font-black text-white tracking-tight mb-3">
+                  {t.home.authoritySecurity.blocks['traceability' as keyof typeof t.home.authoritySecurity.blocks].title}
+                </h3>
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  {t.home.authoritySecurity.blocks['traceability' as keyof typeof t.home.authoritySecurity.blocks].desc}
+                </p>
+              </div>
+            </BentoCard>
+
+            {/* Card 3 — Quote / paragraph, spans 2 cols */}
+            <BentoCard className="md:col-span-1 lg:col-span-2 p-8 flex flex-col justify-between bento-glow" delay={0.2} glowColor="rgba(16,185,129,0.15)">
+              <div className="flex items-center gap-3 mb-6">
                 <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1, type: "spring", damping: 20 }}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  className={`group relative p-6 rounded-3xl bg-zinc-900/60 backdrop-blur-3xl border border-zinc-700 hover:border-${node.color}-500/50 transition-all duration-500 shadow-2xl flex flex-col justify-between min-h-[200px] overflow-hidden`}
+                  animate={{ scale: [1, 1.08, 1] }}
+                  transition={{ duration: 2.5, repeat: Infinity }}
+                  className="bg-emerald-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg shadow-emerald-500/30"
                 >
-                  {/* Background Gradient Glow */}
-                  <div className={`absolute inset-0 bg-gradient-to-br from-${node.color}-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
-                  
-                  {/* Icon Glow Effect */}
-                  <div className={`absolute -top-6 -left-6 w-24 h-24 ${node.glow} rounded-full blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-700`}></div>
-                  
-                  <div className="relative z-10">
-                    <div className={`w-12 h-12 rounded-2xl bg-${node.color}-500/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-${node.color}-500/20 transition-all duration-500 border border-${node.color}-500/20 shadow-inner`}>
-                      {node.icon}
-                    </div>
-                    <h3 className="text-lg font-bold text-white mb-3 tracking-tight leading-tight">
-                      {t.home.authoritySecurity.blocks[node.key as keyof typeof t.home.authoritySecurity.blocks].title}
-                    </h3>
-                    <p className="text-zinc-400 leading-relaxed text-xs group-hover:text-zinc-200 transition-colors">
-                      {t.home.authoritySecurity.blocks[node.key as keyof typeof t.home.authoritySecurity.blocks].desc}
-                    </p>
-                  </div>
+                  <CheckCircle2 className="w-3 h-3" />
+                  {t.home.authoritySecurity.verificationTag}
                 </motion.div>
-              ))}
-            </div>
-
-            {/* Bottom/Right side: Interactive Estrategia Paragraph */}
-            <div className="lg:col-span-8 lg:col-start-3">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                className="relative"
-              >
-                {/* Decorative Elements */}
-                <div className="absolute -top-8 -right-8 w-48 h-48 bg-emerald-500/10 rounded-full blur-[80px] animate-pulse"></div>
-                <div className="absolute -bottom-8 -left-8 w-48 h-48 bg-cyan-500/10 rounded-full blur-[80px] animate-pulse delay-700"></div>
-
-                <div className="bg-zinc-900/80 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-zinc-700 relative z-10 overflow-hidden group">
-                  {/* Scanning Line Effect */}
-                  <motion.div 
-                    animate={{ top: ['0%', '100%', '0%'] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                    className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent z-20 pointer-events-none"
-                  />
-
-                  {/* Document Header Decor */}
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
-                      <div className="w-2.5 h-2.5 rounded-full bg-amber-500/50"></div>
-                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/50"></div>
-                    </div>
-                    <div className="h-1.5 w-24 bg-zinc-800 rounded-full"></div>
-                  </div>
-
-                  {/* The Paragraph */}
-                  <div className="space-y-4">
-                    <div className="h-2.5 w-3/4 bg-zinc-800 rounded-full"></div>
-                    <div className="h-2.5 w-full bg-zinc-800 rounded-full"></div>
-                    
-                    <div className="relative py-4 px-6 bg-emerald-500/5 border-l-4 border-emerald-500 rounded-r-xl transition-all duration-500 group-hover:bg-emerald-500/10 cursor-default">
-                      <p className="text-zinc-300 text-sm leading-relaxed font-medium italic">
-                        {t.home.authoritySecurity.paragraph}
-                      </p>
-                      
-                      {/* Verification Tag */}
-                      <motion.div 
-                        initial={{ opacity: 0, x: 20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        className="absolute -right-4 -top-6 z-30"
-                      >
-                        <motion.div 
-                          animate={{ scale: [1, 1.05, 1] }}
-                          transition={{ duration: 2, repeat: Infinity }}
-                          className="bg-emerald-500 text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-2xl shadow-emerald-500/40 flex items-center gap-1.5 border border-emerald-400 whitespace-nowrap"
-                        >
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          {t.home.authoritySecurity.verificationTag}
-                        </motion.div>
-                      </motion.div>
-
-                      {/* AI Citation Tooltip Simulation */}
-                      <div className="absolute -bottom-8 left-1/2 -tranzinc-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-40">
-                        <div className="bg-zinc-800 text-emerald-400 text-[10px] px-3 py-1.5 rounded-lg border border-emerald-500/30 font-mono shadow-xl whitespace-nowrap">
-                          {t.home.authoritySecurity.tooltip}
-                          <div className="absolute -top-1 left-1/2 -tranzinc-x-1/2 w-2 h-2 bg-zinc-800 border-t border-l border-emerald-500/30 transform rotate-45"></div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="h-2.5 w-5/6 bg-zinc-800 rounded-full"></div>
-                    <div className="h-2.5 w-2/3 bg-zinc-800 rounded-full"></div>
-                    <div className="h-2.5 w-full bg-zinc-800 rounded-full"></div>
-                  </div>
-
-                  {/* Bottom Decor */}
-                  <div className="mt-8 pt-6 border-t border-zinc-800 flex justify-between items-center">
-                    <div className="h-6 w-24 bg-zinc-800/50 rounded-lg border border-zinc-700"></div>
-                    <div className="flex -space-x-1.5">
-                      {[1,2,3].map(i => (
-                        <div key={i} className="w-6 h-6 rounded-full bg-zinc-700 border-2 border-zinc-900 flex items-center justify-center text-[8px] font-bold text-zinc-400">
-                          {i}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
+                {/* Scanning line */}
+                <div className="flex-1 h-px bg-gradient-to-r from-emerald-500/40 to-transparent" />
+              </div>
+              <blockquote className="border-l-2 border-emerald-500 pl-5 text-zinc-300 text-sm leading-relaxed font-medium italic mb-6">
+                {t.home.authoritySecurity.paragraph}
+              </blockquote>
+              <div className="flex items-center gap-2 text-xs font-mono text-emerald-400/70">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                {t.home.authoritySecurity.tooltip}
+              </div>
+            </BentoCard>
           </div>
         </div>
       </section>
@@ -1099,7 +1175,337 @@ function AppContent() {
         </div>
       </section>
 
+      {(t as any).home?.weeklyContent && (
+        <section id="contenido-semanal" className="py-24 bg-zinc-100/60 dark:bg-zinc-900/40 border-y border-zinc-200 dark:border-zinc-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center max-w-3xl mx-auto mb-12"
+            >
+              <h2 className="text-3xl md:text-4xl font-black text-zinc-900 dark:text-white tracking-tight">
+                {(t as any).home.weeklyContent.title}
+              </h2>
+              <p className="mt-4 text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed">
+                {(t as any).home.weeklyContent.subtitle}
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch mb-10">
+              <motion.article
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.04 }}
+                className="lg:col-span-2 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xl overflow-hidden"
+              >
+                <div className="p-6 md:p-8">
+                  <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300 text-xs font-black tracking-widest uppercase">
+                    {(t as any).home.weeklyContent.videoBadge}
+                  </span>
+                  <h3 className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white mt-4 mb-3 leading-tight">
+                    {(t as any).home.weeklyContent.videoTitle}
+                  </h3>
+                  <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-5">
+                    {(t as any).home.weeklyContent.videoDesc}
+                  </p>
+                  <div className="w-full h-56 md:h-72 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-950 relative overflow-hidden mb-5">
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-zinc-700/30 via-zinc-900 to-black" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <PlayCircle className="w-16 h-16 text-white/85" />
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center justify-between gap-4">
+                    <span className="text-sm font-bold text-zinc-500 dark:text-zinc-400">
+                      {(t as any).home.weeklyContent.videoDuration}
+                    </span>
+                    <a
+                      href="https://www.linkedin.com/in/tonguardiet/recent-activity/all/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#0A66C2] text-white text-sm font-bold hover:opacity-90 transition-opacity"
+                    >
+                      {(t as any).home.weeklyContent.videoCta} <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+              </motion.article>
+
+              <motion.article
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.08 }}
+                className="lg:col-span-1 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xl p-6 md:p-7 flex flex-col"
+              >
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-black tracking-widest uppercase w-fit">
+                  {(t as any).home.weeklyContent.postBadge}
+                </span>
+                <h3 className="text-xl md:text-2xl font-black text-zinc-900 dark:text-white mt-4 mb-3 leading-tight">
+                  {(t as any).home.weeklyContent.postTitle}
+                </h3>
+                <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed mb-5">
+                  {(t as any).home.weeklyContent.postDesc}
+                </p>
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {((t as any).home.weeklyContent.postTags || []).map((tag: string) => (
+                    <span
+                      key={tag}
+                      className="text-[11px] font-bold px-2.5 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <a
+                  href="https://www.linkedin.com/in/tonguardiet/recent-activity/all/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto inline-flex items-center gap-2 text-sm font-bold text-[#0A66C2] dark:text-blue-400 hover:gap-3 transition-all"
+                >
+                  {(t as any).home.weeklyContent.postCta} <ArrowRight className="w-4 h-4" />
+                </a>
+              </motion.article>
+            </div>
+
+            <div className="text-center">
+              <a
+                href="https://www.linkedin.com/in/tonguardiet/recent-activity/all/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm md:text-base font-bold text-zinc-700 dark:text-zinc-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+              >
+                {(t as any).home.weeklyContent.sectionCta} <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {(t as any).home?.latestNoCommitmentItems && (
+        <section className="py-10 bg-zinc-950/60 border-y border-zinc-800/60">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h3 className="text-2xl font-black text-white mb-2">{(t as any).home.latestNoCommitmentTitle}</h3>
+            <p className="text-zinc-400 text-sm mb-6">{(t as any).home.latestNoCommitmentDesc}</p>
+            <div className="grid md:grid-cols-2 gap-4">
+              {((t as any).home.latestNoCommitmentItems || []).map((item: any, idx: number) => (
+                <a
+                  key={idx}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-5 hover:border-emerald-500/40 transition-all group"
+                >
+                  <p className="text-white font-bold mb-2">{item.title}</p>
+                  <span className="text-emerald-400 text-sm font-semibold inline-flex items-center gap-2">
+                    {item.cta} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {(t as any).home?.funnelSteps && (
+        <section className="py-8 bg-zinc-950">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p className="text-center text-xs font-black tracking-widest uppercase text-emerald-400 mb-4">
+              {(t as any).home.funnelTitle}
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+              {((t as any).home.funnelSteps || []).map((step: string, i: number) => (
+                <div key={step} className="rounded-xl border border-zinc-800 bg-zinc-900/70 px-3 py-3 text-center">
+                  <p className="text-[11px] font-black text-emerald-400 mb-1">Fase {i + 1}</p>
+                  <p className="text-xs text-zinc-200 font-semibold">{step}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       <EfficiencyCalculator t={t} />
+
+      <section id="diagnostico" className="py-24 bg-[#0B1120] border-t border-zinc-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-10 items-start">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-white"
+            >
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-black tracking-widest uppercase">
+                {(t as any).home?.diagnostic?.badge || '🎁 GRATUITO · Sin compromiso'}
+              </span>
+              <h2 className="mt-5 text-3xl md:text-5xl font-black tracking-tight">
+                {(t as any).home?.diagnostic?.title || '¿Dónde está tu empresa en la curva de adopción de IA?'}
+              </h2>
+              <p className="mt-5 text-zinc-300 leading-relaxed text-lg">
+                {(t as any).home?.diagnostic?.subtitle || 'En 5 preguntas y 2 minutos, Ton analiza tu situación y te envía un informe personalizado de madurez agéntica y ROI potencial.'}
+              </p>
+              <div className="mt-8 space-y-3 text-sm text-zinc-300">
+                {((t as any).home?.diagnostic?.includes || [
+                  '✓ Evaluación de madurez IA (0-100)',
+                  '✓ Top 3 quick wins para tu sector',
+                  '✓ Estimación de ROI potencial en 90 días',
+                  '✓ Revisión personal de Ton (si aplica)',
+                ]).map((line: string) => (
+                  <p key={line}>{line}</p>
+                ))}
+              </div>
+              <p className="mt-7 text-emerald-300 font-semibold">
+                {(t as any).home?.diagnostic?.proof || 'Ya lo han recibido +50 directivos de empresas B2B'}
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="rounded-3xl border border-zinc-800 bg-zinc-900/70 p-6 md:p-8"
+            >
+              {diagStatus === 'success' ? (
+                <div className="text-center py-10">
+                  <h3 className="text-2xl font-black text-emerald-400 mb-3">¡Diagnóstico enviado!</h3>
+                  <p className="text-zinc-300">Ton revisará tu caso en menos de 48h.</p>
+                </div>
+              ) : (
+                <>
+                  <div className="mb-6">
+                    <div className="flex justify-between text-xs text-zinc-400 mb-2">
+                      <span>{diagnosisStep}/5</span>
+                      <span>{Math.round((diagnosisStep / 5) * 100)}%</span>
+                    </div>
+                    <div className="h-2 rounded-full bg-zinc-800 overflow-hidden">
+                      <motion.div
+                        initial={false}
+                        animate={{ width: `${(diagnosisStep / 5) * 100}%` }}
+                        className="h-full bg-emerald-500"
+                      />
+                    </div>
+                  </div>
+
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={diagnosisStep}
+                      initial={{ opacity: 0, x: 24 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -24 }}
+                      className="space-y-4"
+                    >
+                      {diagnosisStep === 1 && (
+                        <>
+                          <p className="text-white font-bold">¿Cuántos empleados tiene tu empresa?</p>
+                          {['1-10', '11-50', '51-250', '+250'].map((o) => (
+                            <button key={o} onClick={() => setDiagEmployees(o)} className={`w-full text-left px-4 py-3 rounded-xl border transition ${diagEmployees === o ? 'bg-emerald-500/20 border-emerald-400 text-emerald-200' : 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:border-emerald-500/40'}`}>{o}</button>
+                          ))}
+                        </>
+                      )}
+                      {diagnosisStep === 2 && (
+                        <>
+                          <p className="text-white font-bold">¿Cuál es tu situación actual con la IA?</p>
+                          {['No la usamos', 'ChatGPT puntual', 'Estrategia en marcha', 'Agentes desplegados'].map((o) => (
+                            <button key={o} onClick={() => setDiagAiState(o)} className={`w-full text-left px-4 py-3 rounded-xl border transition ${diagAiState === o ? 'bg-emerald-500/20 border-emerald-400 text-emerald-200' : 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:border-emerald-500/40'}`}>{o}</button>
+                          ))}
+                        </>
+                      )}
+                      {diagnosisStep === 3 && (
+                        <>
+                          <p className="text-white font-bold">¿Cuál es tu mayor bloqueo?</p>
+                          {['No sé por dónde empezar', 'Pilotos sin ROI', 'Falta talento', 'Resistencia del equipo'].map((o) => (
+                            <button key={o} onClick={() => setDiagBlocker(o)} className={`w-full text-left px-4 py-3 rounded-xl border transition ${diagBlocker === o ? 'bg-emerald-500/20 border-emerald-400 text-emerald-200' : 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:border-emerald-500/40'}`}>{o}</button>
+                          ))}
+                        </>
+                      )}
+                      {diagnosisStep === 4 && (
+                        <>
+                          <p className="text-white font-bold">¿Tienes responsable de IA?</p>
+                          {['No', 'Alguien parcialmente', 'CTO lo supervisa', 'Rol dedicado'].map((o) => (
+                            <button key={o} onClick={() => setDiagOwner(o)} className={`w-full text-left px-4 py-3 rounded-xl border transition ${diagOwner === o ? 'bg-emerald-500/20 border-emerald-400 text-emerald-200' : 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:border-emerald-500/40'}`}>{o}</button>
+                          ))}
+                        </>
+                      )}
+                      {diagnosisStep === 5 && (
+                        <>
+                          <p className="text-white font-bold">Tus datos para enviar el informe</p>
+                          <input value={diagEmail} onChange={(e) => setDiagEmail(e.target.value)} type="email" required placeholder="Email corporativo" className="w-full px-4 py-3 rounded-xl bg-zinc-950 border border-zinc-700 text-white outline-none focus:border-emerald-500" />
+                          <input value={diagIdentity} onChange={(e) => setDiagIdentity(e.target.value)} type="text" required placeholder="Nombre y empresa" className="w-full px-4 py-3 rounded-xl bg-zinc-950 border border-zinc-700 text-white outline-none focus:border-emerald-500" />
+                          <label className="flex items-start gap-3 text-sm text-zinc-300">
+                            <input type="checkbox" checked={diagConsent} onChange={(e) => setDiagConsent(e.target.checked)} className="mt-1" />
+                            <span>Acepto recibir el informe por email y la política de privacidad</span>
+                          </label>
+                        </>
+                      )}
+                    </motion.div>
+                  </AnimatePresence>
+
+                  {diagStatus === 'error' && (
+                    <p className="text-rose-300 text-sm mt-4">No se pudo enviar ahora mismo. Vuelve a intentarlo en unos minutos.</p>
+                  )}
+
+                  <div className="flex items-center justify-between mt-6">
+                    <button
+                      type="button"
+                      onClick={() => setDiagnosisStep((s) => Math.max(1, s - 1))}
+                      disabled={diagnosisStep === 1 || diagStatus === 'loading'}
+                      className="px-4 py-2 rounded-lg text-zinc-300 disabled:opacity-40"
+                    >
+                      Anterior
+                    </button>
+
+                    {diagnosisStep < 5 ? (
+                      <button
+                        type="button"
+                        onClick={() => setDiagnosisStep((s) => Math.min(5, s + 1))}
+                        disabled={
+                          (diagnosisStep === 1 && !diagEmployees) ||
+                          (diagnosisStep === 2 && !diagAiState) ||
+                          (diagnosisStep === 3 && !diagBlocker) ||
+                          (diagnosisStep === 4 && !diagOwner)
+                        }
+                        className="px-5 py-2.5 rounded-xl bg-emerald-500 text-white font-bold disabled:opacity-40"
+                      >
+                        Siguiente
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          if (!diagEmail || !diagIdentity || !diagConsent) return;
+                          setDiagStatus('loading');
+                          try {
+                            await supabase.from('diagnosticos').insert({
+                              empleados: diagEmployees,
+                              situacion_ia: diagAiState,
+                              bloqueo: diagBlocker,
+                              responsable_ia: diagOwner,
+                              email: diagEmail,
+                              identidad: diagIdentity,
+                              consentimiento: diagConsent,
+                              created_at: new Date().toISOString(),
+                            });
+                            setDiagStatus('success');
+                          } catch (e) {
+                            console.error(e);
+                            setDiagStatus('error');
+                          }
+                        }}
+                        disabled={!diagEmail || !diagIdentity || !diagConsent || diagStatus === 'loading'}
+                        className="px-5 py-2.5 rounded-xl bg-emerald-500 text-white font-bold disabled:opacity-40"
+                      >
+                        {diagStatus === 'loading' ? 'Enviando...' : 'Recibir mi diagnóstico gratuito →'}
+                      </button>
+                    )}
+                  </div>
+                </>
+              )}
+            </motion.div>
+          </div>
+        </div>
+      </section>
     </motion.div>
   );
 
@@ -1107,29 +1513,76 @@ function AppContent() {
     const statsRef = useRef<HTMLDivElement | null>(null);
     const isInView = useInView(statsRef, { once: true, margin: '-80px' });
 
-    const linkedInCount = useCountUp(isInView ? 10729 : 0, 2000);
-    const recommendations = useCountUp(isInView ? 40 : 0, 2000);
-    const days = useCountUp(isInView ? 90 : 0, 2000);
+    const linkedInCount = useCountUp(isInView ? 10729 : 0, 2200);
+    const recommendations = useCountUp(isInView ? 40 : 0, 1800);
+    const days = useCountUp(isInView ? 90 : 0, 1600);
     const arr = useCountUp(isInView ? 400 : 0, 2000);
 
     return (
-      <section className="py-8 bg-[#0B1120] border-y border-emerald-500/20">
+      <section className="py-16 bg-zinc-950">
         <div ref={statsRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 rounded-3xl border border-emerald-500/20 bg-zinc-900/40 overflow-hidden">
-            {[
-              { value: `${linkedInCount.toLocaleString('es-ES')}+`, label: 'Contactos LinkedIn' },
-              { value: `+${recommendations}`, label: 'Recomendaciones C-Level' },
-              { value: `< ${days} dias`, label: 'Para resultados tangibles' },
-              { value: `${arr}%`, label: 'ARR maximo logrado' }
-            ].map((stat, idx) => (
-              <div
-                key={stat.label}
-                className={`px-6 py-8 text-center ${idx < 3 ? 'lg:border-r lg:border-emerald-500/20' : ''} ${idx % 2 === 0 ? 'border-r border-emerald-500/10 lg:border-r-0' : ''} ${idx < 2 ? 'border-b border-emerald-500/10 lg:border-b-0' : ''}`}
-              >
-                <p className="text-4xl md:text-5xl font-black text-emerald-400 tracking-tight">{stat.value}</p>
-                <p className="text-xs md:text-sm text-zinc-400 font-medium mt-3">{stat.label}</p>
+          <div className="text-center mb-8">
+            <p className="text-xs font-black tracking-widest uppercase text-emerald-400 mb-2">
+              Resultados que avalan a Ton
+            </p>
+            <h3 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+              Autoridad y tracción real en números
+            </h3>
+          </div>
+          {/* Bento grid — desktop: 4 cols, 2 rows; mobile: 2 cols */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[160px] lg:auto-rows-[180px]">
+
+            {/* Card 0 — LinkedIn: wide 2col */}
+            <BentoCard className="col-span-2 lg:col-span-2 p-7 flex flex-col justify-between bento-glow" delay={0}>
+              <Linkedin className="w-7 h-7 text-emerald-400/50" />
+              <div>
+                <p className="text-5xl lg:text-6xl font-black text-white tracking-tighter">
+                  {linkedInCount.toLocaleString('es-ES')}+
+                </p>
+                <p className="text-xs text-zinc-400 font-semibold uppercase tracking-widest mt-1">
+                  Contactos directivos LinkedIn
+                </p>
               </div>
-            ))}
+            </BentoCard>
+
+            {/* Card 1 — Recomendaciones */}
+            <BentoCard className="col-span-1 p-7 flex flex-col justify-between" delay={0.08}>
+              <Star className="w-6 h-6 text-emerald-400/50" />
+              <div>
+                <p className="text-4xl lg:text-5xl font-black text-white tracking-tighter">+{recommendations}</p>
+                <p className="text-xs text-zinc-400 font-semibold uppercase tracking-widest mt-1">Recomend. C-Level</p>
+              </div>
+            </BentoCard>
+
+            {/* Card 2 — Days */}
+            <BentoCard className="col-span-1 p-7 flex flex-col justify-between" delay={0.14} glowColor="rgba(52,211,153,0.2)">
+              <Clock className="w-6 h-6 text-emerald-400/50" />
+              <div>
+                <p className="text-4xl lg:text-5xl font-black text-white tracking-tighter">&lt;{days}d</p>
+                <p className="text-xs text-zinc-400 font-semibold uppercase tracking-widest mt-1">Para resultados</p>
+              </div>
+            </BentoCard>
+
+            {/* Card 3 — ARR: full width */}
+            <BentoCard className="col-span-2 lg:col-span-4 p-7 flex items-center justify-between bento-glow" delay={0.2} glowColor="rgba(16,185,129,0.18)">
+              <div>
+                <p className="text-xs text-zinc-400 font-semibold uppercase tracking-widest mb-2">ARR máximo logrado</p>
+                <p className="text-5xl lg:text-7xl font-black text-white tracking-tighter">{arr}%</p>
+              </div>
+              <div className="hidden md:flex items-end gap-2 h-16">
+                {[40, 55, 45, 70, 60, 85, 75, 100].map((h, i) => (
+                  <motion.div
+                    key={i}
+                    className="w-4 rounded-t-sm bg-gradient-to-t from-emerald-600 to-emerald-400"
+                    initial={{ height: 0 }}
+                    whileInView={{ height: `${h}%` }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.3 + i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+                    style={{ alignSelf: 'flex-end' }}
+                  />
+                ))}
+              </div>
+            </BentoCard>
           </div>
         </div>
       </section>
@@ -1198,9 +1651,9 @@ function AppContent() {
 
     const stats = [
       { label: 'Experiencia', value: '+20 Años', icon: <Briefcase className="w-5 h-5" />, color: 'bg-blue-600' },
-      { label: 'Impacto', value: '+400% ARR', sub: 'Crecimiento', icon: <Rocket className="w-5 h-5" />, color: 'bg-emerald-600' },
-      { label: 'Autoridad', value: '+40', sub: 'Recomendaciones', icon: <Star className="w-5 h-5 fill-current" />, color: 'bg-amber-500' },
-      { label: 'Red', value: '10.729', sub: 'Contactos', icon: <Linkedin className="w-5 h-5" />, color: 'bg-[#0A66C2]' }
+      { label: 'Autoridad', value: '+40', sub: 'Recomendaciones C-Level', icon: <Star className="w-5 h-5 fill-current" />, color: 'bg-amber-500' },
+      { label: 'Red', value: '+10.700', sub: 'Contactos directivos', icon: <Linkedin className="w-5 h-5" />, color: 'bg-[#0A66C2]' },
+      { label: 'Casos', value: '8+', sub: 'Sectores con casos reales', icon: <Rocket className="w-5 h-5" />, color: 'bg-emerald-600' }
     ];
 
     return (
@@ -1281,9 +1734,12 @@ function AppContent() {
                   </div>
                 </div>
 
-                <h1 className="text-4xl md:text-7xl font-black text-zinc-950 dark:text-white mb-8 tracking-tighter leading-[0.9]">
-                  LIDERANDO LA <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1D4ED8] to-emerald-600">TRANSFORMACIÓN</span> DE LA IA AGÉNTICA.
+                <h1 className="text-4xl md:text-7xl font-black text-zinc-950 dark:text-white mb-5 tracking-tighter leading-[0.9]">
+                  {ab.title || 'El fCAIO que necesita tu empresa'}
                 </h1>
+                <h2 className="text-base md:text-xl font-semibold text-zinc-600 dark:text-zinc-300 mb-8 tracking-wide">
+                  {ab.subtitle || 'PhD Cum Laude · MBA ESADE · +20 años en dirección de producto y estrategia de IA'}
+                </h2>
                 
                 <p className="text-xl text-zinc-500 dark:text-zinc-400 font-light leading-relaxed mb-10 max-w-2xl">
                   {ab.intro}
@@ -1315,7 +1771,7 @@ function AppContent() {
             >
               <div className="absolute inset-0 bg-emerald-400/15 dark:bg-emerald-500/10 blur-3xl scale-110 pointer-events-none"></div>
               <img 
-                src="/Foto Ton alta.jpg"
+                src="/250629 Oxfam_TonGuardiet_Marzo25_01.jpg"
                 alt="Ton Guardiet, mentor en estrategia de IA"
                 className="relative w-full h-full object-cover object-[center_20%] transition-all duration-700 scale-100 group-hover:scale-[1.03]"
               />
@@ -1458,6 +1914,74 @@ function AppContent() {
             </div>
           </div>
 
+          <div id="contenido" className="mb-32">
+            <div className="text-center mb-12">
+              <h3 className="text-4xl font-black text-zinc-950 dark:text-white tracking-tight mb-4">
+                {(ab.contentStrategy?.title || 'Mi presencia en el ecosistema IA')}
+              </h3>
+              <p className="text-zinc-500 dark:text-zinc-400">
+                {(ab.contentStrategy?.subtitle || 'Contenido semanal con intención, no por cumplir.')}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              {(ab.contentStrategy?.cards || []).map((card: any, idx: number) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.06 }}
+                  className="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-7 shadow-sm"
+                >
+                  <div className="flex items-center gap-2 text-zinc-900 dark:text-white text-lg font-black mb-3">
+                    {idx === 0 ? <PlayCircle className="w-5 h-5 text-rose-500" /> : idx === 1 ? <FileText className="w-5 h-5 text-blue-500" /> : <BrainCircuit className="w-5 h-5 text-emerald-500" />}
+                    <span>{card.title}</span>
+                  </div>
+                  <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed mb-5">{card.desc}</p>
+                  {card.href ? (
+                    <a href={card.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-emerald-600 dark:text-emerald-400 hover:gap-3 transition-all">
+                      {card.cta} <ArrowRight className="w-4 h-4" />
+                    </a>
+                  ) : (
+                    <button onClick={() => setCurrentPage('agente')} className="inline-flex items-center gap-2 text-sm font-bold text-emerald-600 dark:text-emerald-400 hover:gap-3 transition-all">
+                      {card.cta} <ArrowRight className="w-4 h-4" />
+                    </button>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-emerald-500/5 dark:bg-emerald-900/10 p-8 md:p-10">
+              <p className="text-lg font-bold text-zinc-600 dark:text-zinc-300 uppercase tracking-wider mb-6">
+                {(ab.contentStrategy?.communitiesTitle || 'Comunidades donde publico')}
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {(ab.contentStrategy?.communities || []).map((community: any, idx: number) => (
+                  <div key={community?.name || idx} className="rounded-2xl border border-zinc-200/80 dark:border-zinc-700 bg-white/80 dark:bg-zinc-900/80 p-4">
+                    <div className="flex items-start gap-3 mb-2">
+                      <div className="w-9 h-9 rounded-xl bg-[#0A66C2]/10 flex items-center justify-center shrink-0">
+                        <Linkedin className="w-5 h-5 text-[#0A66C2]" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-black text-zinc-800 dark:text-zinc-100">{community?.name || community}</p>
+                        {community?.summary && (
+                          <p className="text-xs text-zinc-500 dark:text-zinc-400">{community.summary}</p>
+                        )}
+                      </div>
+                    </div>
+                    {community?.members && (
+                      <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-300">{community.members}</p>
+                    )}
+                    {community?.activity && (
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">{community.activity}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
           {/* Social Proof / LinkedIn Recommendations Badge */}
           <div className="bg-gradient-to-br from-zinc-900 to-black p-10 md:p-20 rounded-[4rem] text-center shadow-3xl relative overflow-hidden mb-32 border border-zinc-800">
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
@@ -1472,10 +1996,10 @@ function AppContent() {
                   <motion.div 
                     key={idx}
                     whileHover={{ y: -10 }}
-                    className="bg-zinc-800/30 border border-zinc-700/50 p-8 rounded-[2rem] relative group"
+                    className="bg-zinc-800/60 border border-zinc-700 p-8 rounded-[2rem] relative group"
                   >
                     <Quote className="absolute top-6 right-6 w-8 h-8 text-emerald-500/20 group-hover:text-emerald-500/40 transition-colors" />
-                    <p className="text-zinc-300 italic mb-8 relative z-10 leading-relaxed">
+                    <p className="text-zinc-300 italic mb-6 relative z-10 leading-relaxed text-sm md:text-base">
                       "{rec.text}"
                     </p>
                     <div className="flex items-center gap-4">
@@ -1491,95 +2015,90 @@ function AppContent() {
                         </div>
                       </div>
                     </div>
+                    {ab.recommendations.verifiedLabel && (
+                      <p className="mt-4 text-xs text-emerald-500 dark:text-emerald-400 font-medium">
+                        {ab.recommendations.verifiedLabel}
+                      </p>
+                    )}
                   </motion.div>
                 ))}
               </div>
+              {ab.recommendations.ctaLabel && ab.recommendations.ctaUrl && (
+                <a
+                  href={ab.recommendations.ctaUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-10 inline-flex items-center gap-2 text-sm font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
+                >
+                  {ab.recommendations.ctaLabel} →
+                </a>
+              )}
             </div>
           </div>
 
-          {/* Inspiring Entities */}
-          {ab.inspiringEntities && (
-            <motion.div 
+          {/* Inspiring Entities — 8 referencias estratégicas (solo list) */}
+          {ab.inspiringEntities && (ab.inspiringEntities.list as any[] | undefined)?.length ? (
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="mt-32 pb-40 overflow-hidden"
             >
-              <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-5xl font-black text-zinc-950 dark:text-white mb-4 tracking-tighter uppercase">
-                  Entidades que Inspiran el Ecosistema
+              <div className="text-center mb-12 md:mb-16 max-w-3xl mx-auto px-4">
+                <h2 className="text-3xl md:text-5xl font-black text-zinc-950 dark:text-white mb-4 tracking-tight uppercase">
+                  {ab.inspiringEntities.title}
                 </h2>
-                <div className="w-24 h-1.5 bg-emerald-500 mx-auto rounded-full mb-8"></div>
+                <p className="text-zinc-500 dark:text-zinc-400 text-sm md:text-base leading-relaxed">
+                  {ab.inspiringEntities.subtitle}
+                </p>
+                <div className="w-24 h-1.5 bg-emerald-500 mx-auto mt-8 rounded-full" />
               </div>
 
-              <div className="max-w-6xl mx-auto space-y-10">
-                <div>
-                  <div className="flex items-center gap-3 mb-5">
-                    <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-black uppercase tracking-widest">
-                      {ab.inspiringEntities.topTitle || "Top Strategic"}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    {(ab.inspiringEntities.topList || ab.inspiringEntities.list || []).map((entity: any, idx: number) => (
-                      <motion.div
-                        key={`top-${idx}`}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: idx * 0.04 }}
-                        className="p-8 rounded-[2rem] bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 shadow-lg hover:shadow-2xl hover:border-emerald-500/40 transition-all cursor-default group relative overflow-hidden flex flex-col items-center justify-center text-center aspect-square"
-                      >
-                        <img
-                          src={`/entidades/${entity.logo}`}
-                          alt={entity.name}
-                          className="w-20 h-20 object-contain grayscale group-hover:grayscale-0 transition-all duration-500 mb-2"
-                        />
-                        <div className="absolute inset-0 bg-emerald-600/95 p-6 flex flex-col items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
-                          <p className="text-white font-black text-xs uppercase tracking-widest mb-2 border-b border-white/20 pb-2 w-full">{entity.name}</p>
-                          <p className="text-white/90 text-[10px] leading-tight font-medium">
-                            {entity.desc}
-                          </p>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-
-                {!!ab.inspiringEntities.secondaryList?.length && (
-                  <div>
-                    <div className="flex items-center gap-3 mb-5">
-                      <span className="px-4 py-1.5 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 text-xs font-black uppercase tracking-widest">
-                        {ab.inspiringEntities.secondaryTitle || "Secondary Ecosystem"}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
-                      {ab.inspiringEntities.secondaryList.map((entity: any, idx: number) => (
-                        <motion.div
-                          key={`secondary-${idx}`}
-                          initial={{ opacity: 0, scale: 0.92 }}
-                          whileInView={{ opacity: 1, scale: 1 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: idx * 0.03 }}
-                          className="p-6 rounded-[1.5rem] bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 shadow-md hover:shadow-xl hover:border-emerald-500/30 transition-all cursor-default group relative overflow-hidden flex flex-col items-center justify-center text-center aspect-square"
-                        >
+              <div className="max-w-6xl mx-auto px-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+                  {(ab.inspiringEntities.list as any[]).map((entity: { name: string; logo: string | null; desc: string }, idx: number) => (
+                    <motion.div
+                      key={`entity-${entity.name}-${idx}`}
+                      initial={{ opacity: 0, y: 12 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: Math.min(idx * 0.05, 0.35) }}
+                      className="flex flex-col h-full rounded-2xl border border-zinc-200/90 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/50 backdrop-blur-sm p-6 text-center transition-all duration-300 hover:border-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/5"
+                    >
+                      {entity.logo ? (
+                        <div className="mb-4 h-[4.5rem] flex items-center justify-center">
                           <img
                             src={`/entidades/${entity.logo}`}
                             alt={entity.name}
-                            className="w-14 h-14 object-contain grayscale group-hover:grayscale-0 transition-all duration-500 mb-2"
+                            className="max-h-14 w-auto max-w-[85%] object-contain dark:opacity-95"
                           />
-                          <p className="text-[11px] font-bold text-zinc-700 dark:text-zinc-300 leading-tight">{entity.name}</p>
-                          <div className="absolute inset-0 bg-zinc-900/95 p-4 flex flex-col items-center justify-center text-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                            <p className="text-emerald-300 font-black text-[10px] uppercase tracking-widest mb-2 border-b border-emerald-300/20 pb-2 w-full">{entity.name}</p>
-                            <p className="text-zinc-200 text-[10px] leading-tight font-medium">{entity.desc}</p>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                        </div>
+                      ) : (
+                        <div
+                          className="mb-4 min-h-[4.5rem] w-full flex items-center justify-center gap-2.5 rounded-xl border border-zinc-700 bg-zinc-800 px-3 py-3.5"
+                          role="img"
+                          aria-label={entity.name}
+                        >
+                          <Globe className="h-5 w-5 shrink-0 text-emerald-400" aria-hidden />
+                          <span className="text-left text-sm font-bold text-white leading-snug">
+                            {entity.name}
+                          </span>
+                        </div>
+                      )}
+                      {!!entity.logo && (
+                        <h3 className="text-sm font-bold text-zinc-900 dark:text-white tracking-tight mb-2 line-clamp-2">
+                          {entity.name}
+                        </h3>
+                      )}
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed line-clamp-1 mt-auto">
+                        {entity.desc}
+                      </p>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
             </motion.div>
-          )}
+          ) : null}
 
         </div>
       </div>
@@ -1588,332 +2107,93 @@ function AppContent() {
 
 
   const renderMetodologia = () => {
-    const icons = [
-      <Compass className="w-8 h-8" />, 
-      <Folder className="w-8 h-8" />, 
-      <Megaphone className="w-8 h-8" />, 
-      <Gavel className="w-8 h-8" />, 
-      <Box className="w-8 h-8" />, 
-      <ThumbsUp className="w-8 h-8" />, 
-      <Rocket className="w-8 h-8" />, 
-      <ClipboardCheck className="w-8 h-8" />
-    ];
+    const ml = (t as any).methodologyLanding || (translations as any).ES.methodologyLanding;
+    const phaseIcons = [Compass, Target, Rocket, TrendingUp, Settings, GraduationCap];
 
     return (
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="py-20 bg-zinc-50 dark:bg-zinc-950/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-4xl md:text-5xl font-extrabold text-[#1D4ED8] dark:text-emerald-400 mb-6">
-              {(t as any).methodology.title}
+              {ml.title}
             </h2>
             <p className="text-lg text-zinc-600 dark:text-zinc-400">
-              {(t as any).methodology.subtitle}
+              {ml.subtitle}
             </p>
           </div>
 
-          <div className="mb-20 grid lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-5 rounded-[2.5rem] overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-lg bg-zinc-100 dark:bg-zinc-900">
-              <img
-                src="/2110 Foto Ton 6.jpg"
-                alt="Ton Guardiet presentando metodología ejecutiva"
-                className="w-full h-full min-h-[320px] object-cover object-[center_25%]"
-              />
+          <div className="mb-14 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 p-6 md:p-8">
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs font-black tracking-widest uppercase mb-4">
+              Plan de ejecución
             </div>
-            <div className="lg:col-span-7 p-8 rounded-[2rem] bg-white dark:bg-zinc-900/70 border border-zinc-200 dark:border-zinc-800 shadow-sm">
-              <p className="text-xs font-black tracking-widest uppercase text-[#1D4ED8] dark:text-emerald-400 mb-3">Método con Dirección</p>
-              <p className="text-zinc-600 dark:text-zinc-300 leading-relaxed">
-                Cada módulo está diseñado para convertir estrategia en decisiones accionables, alineando liderazgo, equipos y tecnología con foco en retorno.
-              </p>
-            </div>
+            <h3 className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white mb-2">{ml.phasesTitle}</h3>
+            <p className="text-zinc-600 dark:text-zinc-400">{ml.phasesSubtitle}</p>
           </div>
 
-          {/* New Section: Ideal Customer Profiles */}
-          {(t as any).methodology.idealCustomers && (
-            <div className="mb-32">
-              <div className="text-center mb-12">
-                <h3 className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white mb-4">
-                  {(t as any).methodology.idealCustomers.title}
-                </h3>
-                <p className="text-zinc-500 dark:text-zinc-400">
-                  {(t as any).methodology.idealCustomers.subtitle}
-                </p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {(t as any).methodology.idealCustomers.profiles.map((profile: any, idx: number) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: idx * 0.1 }}
-                    className="bg-white dark:bg-zinc-900/50 p-8 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-xl transition-all duration-300 group"
-                  >
-                    <div className="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center mb-6 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
-                      {idx === 0 ? <Rocket className="w-7 h-7" /> : idx === 1 ? <Building2 className="w-7 h-7" /> : <ShieldCheck className="w-7 h-7" />}
-                    </div>
-                    <h4 className="text-xl font-bold text-zinc-900 dark:text-white mb-4">{profile.type}</h4>
-                    <div className="space-y-4">
-                      <div>
-                        <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block mb-1">Objetivo</span>
-                        <p className="text-sm text-zinc-600 dark:text-zinc-400">{profile.goal}</p>
-                      </div>
-                      <div>
-                        <span className="text-xs font-bold uppercase tracking-wider text-rose-500 block mb-1">Problema</span>
-                        <p className="text-sm text-zinc-600 dark:text-zinc-400">{profile.problem}</p>
-                      </div>
-                      <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800">
-                        <p className="text-sm font-medium text-zinc-900 dark:text-zinc-200 italic">" {profile.value} "</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Grid de Módulos */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-32">
-            {(t as any).methodology.mods.map((mod, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                whileHover={{ y: -12, scale: 1.02 }}
-                onClick={() => mod.details && setExpandedMod(i)}
-                className="group relative bg-white dark:bg-zinc-900/40 backdrop-blur-xl p-10 rounded-[3rem] border border-zinc-200 dark:border-zinc-800 shadow-xl hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-500 cursor-pointer flex flex-col items-center text-center overflow-hidden"
-              >
-                {/* Background Accent */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -mr-16 -mt-16 group-hover:bg-emerald-500/10 transition-colors"></div>
-                
-                <div className="relative w-20 h-20 rounded-3xl bg-emerald-500 flex items-center justify-center mb-8 shadow-2xl shadow-emerald-500/30 group-hover:rotate-6 transition-transform duration-500">
-                  <div className="text-white">
-                    {icons[i]}
-                  </div>
-                </div>
-                <h3 className="relative text-xl font-bold text-zinc-900 dark:text-white mb-4 uppercase tracking-wider">
-                  {mod.name}
-                </h3>
-                <p className="relative text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed line-clamp-3 group-hover:text-zinc-900 dark:group-hover:text-zinc-200 transition-colors">
-                  {mod.desc}
-                </p>
-
-                {/* Botón Acceso al Módulo */}
-                <div className="mt-8 w-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform tranzinc-y-4 group-hover:tranzinc-y-0">
-                  <a 
-                    href={(mod as any).link || '#'} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="w-full py-3 px-4 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2 group/btn shadow-lg shadow-emerald-500/20"
-                  >
-                    <span>{(t as any).methodology.accessBtn || 'Acceder al módulo'}</span>
-                    <ArrowRight className="w-4 h-4 group-hover/btn:tranzinc-x-1 transition-transform" />
-                  </a>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* New Section: Brand Comparison Table */}
-          {(t as any).methodology.comparison && (
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.98 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="mb-32 max-w-5xl mx-auto"
-            >
-              <div className="text-center mb-12">
-                <h3 className="text-3xl font-bold text-zinc-900 dark:text-white mb-4">
-                  {(t as any).methodology.comparison.title}
-                </h3>
-                <p className="text-zinc-500 dark:text-zinc-400">
-                  {(t as any).methodology.comparison.subtitle}
-                </p>
-              </div>
-
-              <div className="overflow-hidden rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/30 backdrop-blur-xl shadow-2xl">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="bg-zinc-50 dark:bg-zinc-900/80 border-b border-zinc-200 dark:border-zinc-800">
-                        {(t as any).methodology.comparison.headers.map((header: string, i: number) => (
-                          <th key={i} className={`px-8 py-6 text-sm font-bold uppercase tracking-wider ${i === 2 ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/5' : 'text-zinc-500 dark:text-zinc-400'}`}>
-                            {header}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
-                      {(t as any).methodology.comparison.rows.map((row: any, i: number) => (
-                        <tr key={i} className="group hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors">
-                          <td className="px-8 py-6 text-sm font-bold text-zinc-900 dark:text-white">{row.trait}</td>
-                          <td className="px-8 py-6 text-sm text-zinc-500 dark:text-zinc-400">{row.traditional}</td>
-                          <td className="px-8 py-6 text-sm font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-500/5">
-                            <div className="flex items-center gap-3">
-                              <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/50" />
-                              {row.ton}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              
-              <div className="mt-8 text-center">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-widest">
-                  <Sparkles className="w-3 h-3" />
-                  Garantía de Resultados fCAIO
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Sección de Beneficios Inferior */}
-          <AnimatePresence>
-            {expandedMod !== null && (t as any).methodology.mods[expandedMod] && (
-              <div 
-                className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" 
-                onClick={() => setExpandedMod(null)}
-              >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            {ml.phases.map((phase: any, i: number) => {
+              const Icon = phaseIcons[i] || Compass;
+              return (
                 <motion.div
-                  initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                  animate={{ scale: 1, opacity: 1, y: 0 }}
-                  exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                  transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                  className="bg-white dark:bg-zinc-900 w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-[2.5rem] shadow-2xl relative border border-zinc-100 dark:border-zinc-800"
-                  onClick={(e) => e.stopPropagation()}
+                  key={phase.month}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.06 }}
+                  className="bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-[2rem] p-6 shadow-sm"
                 >
-                  {/* Header del Modal */}
-                  <div className="sticky top-0 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md z-10 px-8 md:px-12 py-6 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
-                    <div className="flex items-center gap-6">
-                      <div className="w-14 h-14 rounded-2xl bg-[#10B981] flex items-center justify-center text-white shadow-lg shadow-green-500/20">
-                        {icons[expandedMod]}
-                      </div>
-                      <h3 className="text-3xl md:text-4xl font-bold text-[#1D4ED8] dark:text-emerald-400">
-                        {(t as any).methodology.mods[expandedMod].name}
-                      </h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">{phase.month}</span>
+                    <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                      <Icon className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                     </div>
-                    <button 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        setExpandedMod(null);
-                      }}
-                      className="p-3 rounded-full bg-zinc-100 dark:bg-zinc-800 text-[#1D4ED8] hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-all duration-200 z-50"
-                      aria-label="Close modal"
-                    >
-                      <X className="w-7 h-7" />
-                    </button>
                   </div>
-
-                  <div className="p-8 md:p-12 space-y-10">
-                    {/* Propósito */}
-                    <section>
-                      <div className="flex items-center gap-3 text-[#10B981] font-bold mb-4">
-                        <Target className="w-6 h-6" />
-                        <span className="text-xl">{(t as any).methodology.purposeLabel}</span>
-                      </div>
-                      <p className="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed">
-                        {(t as any).methodology.mods[expandedMod].details?.purpose}
-                      </p>
-                    </section>
-
-                    {/* Estadios / Etapas */}
-                    <section>
-                      <div className="flex items-center gap-3 text-[#1D4ED8] dark:text-emerald-400 font-bold mb-6">
-                        <List className="w-6 h-6" />
-                        <span className="text-xl">
-                          {(t as any).methodology.mods[expandedMod].details?.stagesLabel || (t as any).methodology.stagesLabelDefault}
-                        </span>
-                      </div>
-                      <div className="grid gap-4">
-                        {(t as any).methodology.mods[expandedMod].details?.stages.map((stage: string, idx: number) => {
-                          const [title, ...descParts] = stage.split(' - ');
-                          const description = descParts.join(' - ');
-                          return (
-                            <div key={idx} className="flex gap-4 p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-800 hover:border-emerald-200 dark:hover:border-emerald-900/50 transition-colors">
-                              <span className="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 font-bold shrink-0 text-sm">
-                                {idx + 1}
-                              </span>
-                              <div className="text-zinc-700 dark:text-zinc-300">
-                                <span className="font-bold text-zinc-900 dark:text-white block mb-1">{title}</span>
-                                <span className="text-sm leading-relaxed opacity-80">{description}</span>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </section>
-
-                    {/* Potencia de la IA */}
-                    <section>
-                      <div className="flex items-center gap-3 text-purple-600 dark:text-purple-400 font-bold mb-6">
-                        <Sparkles className="w-6 h-6" />
-                        <span className="text-xl">{(t as any).methodology.aiPowerLabel}</span>
-                      </div>
-                      <div className="grid md:grid-cols-2 gap-4">
-                        {(t as any).methodology.mods[expandedMod].details?.aiPower.map((ai: string, idx: number) => (
-                          <div key={idx} className="bg-purple-50/50 dark:bg-purple-900/10 p-5 rounded-2xl border border-purple-100 dark:border-purple-900/30 text-zinc-600 dark:text-zinc-400 flex items-start gap-4">
-                            <Zap className="w-5 h-5 text-purple-500 shrink-0 mt-1" />
-                            <span className="text-sm leading-relaxed">{ai}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </section>
-
-                    {/* Seguridad */}
-                    <section className="bg-emerald-50 dark:bg-emerald-900/20 p-8 rounded-[2.5rem] border border-emerald-100 dark:border-emerald-800/50">
-                      <div className="flex items-center gap-3 text-emerald-700 dark:text-emerald-300 font-bold mb-3">
-                        <ShieldCheck className="w-6 h-6" />
-                        <span className="text-xl">{(t as any).methodology.securityLabel}</span>
-                      </div>
-                      <p className="text-emerald-600/90 dark:text-emerald-300/80 text-lg leading-relaxed">
-                        {(t as any).methodology.mods[expandedMod].details?.security}
-                      </p>
-                    </section>
-                  </div>
+                  <h4 className="text-xl font-bold text-zinc-900 dark:text-white mb-3">{phase.title}</h4>
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">{phase.deliverables}</p>
                 </motion.div>
-              </div>
-            )}
-          </AnimatePresence>
+              );
+            })}
+          </div>
 
-          {/* Sección de Beneficios Inferior */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white dark:bg-zinc-900 p-8 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-start gap-6">
-              <div className="w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center shrink-0">
-                <Clock className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-              </div>
-              <div>
-                <h4 className="text-lg font-bold text-zinc-900 dark:text-white mb-2">{(t as any).methodology.benefit1Title}</h4>
-                <p className="text-sm text-zinc-600 dark:text-zinc-400">{(t as any).methodology.benefit1Desc}</p>
-              </div>
-            </div>
-
-            <div className="bg-white dark:bg-zinc-900 p-8 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-start gap-6">
-              <div className="w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center shrink-0">
-                <Shield className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-              </div>
-              <div>
-                <h4 className="text-lg font-bold text-zinc-900 dark:text-white mb-2">{(t as any).methodology.benefit2Title}</h4>
-                <p className="text-sm text-zinc-600 dark:text-zinc-400">{(t as any).methodology.benefit2Desc}</p>
-              </div>
-            </div>
-
-            <div className="bg-white dark:bg-zinc-900 p-8 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-start gap-6">
-              <div className="w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center shrink-0">
-                <CheckCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-              </div>
-              <div>
-                <h4 className="text-lg font-bold text-zinc-900 dark:text-white mb-2">{(t as any).methodology.benefit3Title}</h4>
-                <p className="text-sm text-zinc-600 dark:text-zinc-400">{(t as any).methodology.benefit3Desc}</p>
-              </div>
+          <div className="mb-14 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/60 p-6 md:p-8">
+            <h3 className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white mb-2">{ml.pricingTitle}</h3>
+            <p className="text-zinc-600 dark:text-zinc-400 mb-6">{ml.pricingSubtitle}</p>
+            <div className="grid md:grid-cols-2 gap-6">
+              {ml.pricingOptions.map((option: any) => (
+                <div key={option.name} className="rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 bg-zinc-50 dark:bg-zinc-900/70">
+                  <p className="text-xs font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400 mb-2">{option.name}</p>
+                  <h4 className="text-2xl font-black text-zinc-900 dark:text-white mb-2">{option.monthly}</h4>
+                  <p className="text-zinc-600 dark:text-zinc-400 font-semibold">{option.total}</p>
+                </div>
+              ))}
             </div>
           </div>
-          {renderSecuritySection()}
+
+          <div className="grid lg:grid-cols-2 gap-6 mb-14">
+            <div className="bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-[2rem] p-6 md:p-8">
+              <h3 className="text-2xl font-black text-zinc-900 dark:text-white mb-4">{ml.useCasesTitle}</h3>
+              <ul className="space-y-3">
+                {ml.useCases.map((useCase: string) => (
+                  <li key={useCase} className="flex items-start gap-3 text-zinc-700 dark:text-zinc-300">
+                    <CheckCircle className="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" />
+                    <span>{useCase}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-[2rem] p-6 md:p-8">
+              <h3 className="text-2xl font-black text-zinc-900 dark:text-white mb-4">{ml.successConditionsTitle}</h3>
+              <ul className="space-y-3">
+                {ml.successConditions.map((condition: string) => (
+                  <li key={condition} className="flex items-start gap-3 text-zinc-700 dark:text-zinc-300">
+                    <ShieldCheck className="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" />
+                    <span>{condition}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </motion.div>
     );
@@ -1932,20 +2212,23 @@ function AppContent() {
     };
 
     return (
-      <div className="py-20 bg-zinc-50 dark:bg-zinc-950 min-h-screen">
+      <div className="py-10 md:py-14 bg-zinc-950 min-h-screen">
         {!rf ? (
           <div className="text-center text-zinc-500">Loading translations...</div>
         ) : (
-          <div className="max-w-4xl mx-auto px-6">
+          <div className="max-w-4xl mx-auto px-4 md:px-6">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white dark:bg-zinc-900 rounded-[3rem] p-8 md:p-16 shadow-2xl border border-zinc-200 dark:border-zinc-800 relative overflow-hidden"
+              className="bg-white dark:bg-zinc-900 rounded-[2rem] md:rounded-[3rem] p-6 md:p-12 shadow-2xl border border-zinc-800/60 relative overflow-hidden"
             >
               {/* Contenido del formulario... */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full -mr-32 -mt-32 blur-3xl"></div>
               
-              <div className="relative z-10 text-center mb-12">
+              <div className="relative z-10 text-center mb-8">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-emerald-100 text-emerald-700 border border-emerald-200 mb-4">
+                  Modo foco (5-10 min)
+                </span>
                 <h1 className="text-4xl md:text-5xl font-black text-zinc-950 dark:text-white mb-6 tracking-tighter">
                   {rf.title}
                 </h1>
@@ -2046,7 +2329,7 @@ function AppContent() {
           <motion.div initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} className="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-2xl overflow-hidden">
             <div className="relative">
               <img
-                src="/Foto Ton alta.jpg"
+                src="/2110 Foto Ton 6.jpg"
                 alt="Ton Guardiet"
                 className="w-full h-[360px] md:h-[460px] object-cover object-[center_20%]"
               />
@@ -2075,10 +2358,10 @@ function AppContent() {
 
           <motion.div initial={{ opacity: 0, x: 15 }} animate={{ opacity: 1, x: 0 }} className="bg-white dark:bg-zinc-900 p-8 md:p-10 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-2xl">
             <h2 className="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-white mb-2 tracking-tight">
-              ¿En qué te puedo ayudar?
+              Agenda una conversación directa
             </h2>
-            <p className="text-zinc-500 dark:text-zinc-400 mb-8">
-              Cuéntame tu contexto y te responderé personalmente con siguientes pasos claros.
+            <p className="text-zinc-500 dark:text-zinc-400 mb-6">
+              Déjame nombre, email y reto principal. Te respondo con próximos pasos claros.
             </p>
 
             <form className="space-y-7" onSubmit={handleContactSubmit}>
@@ -2092,72 +2375,23 @@ function AppContent() {
                 </motion.div>
               )}
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <input
-                  type="text"
-                  required
-                  value={contactName}
-                  onChange={(e) => setContactName(e.target.value)}
-                  className="w-full px-6 py-4 rounded-2xl bg-[#F3F4F6] dark:bg-zinc-800 border-none text-zinc-900 dark:text-white focus:ring-2 focus:ring-[#1D4ED8] outline-none transition-all placeholder:text-zinc-400"
-                  placeholder="Nombre"
-                />
-                <input
-                  type="text"
-                  value={contactLastName}
-                  onChange={(e) => setContactLastName(e.target.value)}
-                  className="w-full px-6 py-4 rounded-2xl bg-[#F3F4F6] dark:bg-zinc-800 border-none text-zinc-900 dark:text-white focus:ring-2 focus:ring-[#1D4ED8] outline-none transition-all placeholder:text-zinc-400"
-                  placeholder="Apellidos"
-                />
-              </div>
+              <input
+                type="text"
+                required
+                value={contactName}
+                onChange={(e) => setContactName(e.target.value)}
+                className="w-full px-6 py-4 rounded-2xl bg-[#F3F4F6] dark:bg-zinc-800 border-none text-zinc-900 dark:text-white focus:ring-2 focus:ring-[#1D4ED8] outline-none transition-all placeholder:text-zinc-400"
+                placeholder="Nombre"
+              />
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <input
-                  type="email"
-                  required
-                  value={contactEmail}
-                  onChange={(e) => setContactEmail(e.target.value)}
-                  className="w-full px-6 py-4 rounded-2xl bg-[#F3F4F6] dark:bg-zinc-800 border-none text-zinc-900 dark:text-white focus:ring-2 focus:ring-[#1D4ED8] outline-none transition-all placeholder:text-zinc-400"
-                  placeholder={t.contact.email}
-                />
-                <input
-                  type="tel"
-                  required
-                  value={contactPhone}
-                  onChange={(e) => setContactPhone(e.target.value)}
-                  className="w-full px-6 py-4 rounded-2xl bg-[#F3F4F6] dark:bg-zinc-800 border-none text-zinc-900 dark:text-white focus:ring-2 focus:ring-[#1D4ED8] outline-none transition-all placeholder:text-zinc-400"
-                  placeholder={t.contact.phone}
-                />
-              </div>
-
-              <div className="space-y-3">
-                <p className="text-xs font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-widest px-1">Tema de consulta</p>
-                <div className="flex flex-wrap gap-2">
-                  {[
-                    { label: 'Quiero ser cliente fractional', suggested: 'Hola Ton, quiero explorar cómo trabajar contigo como Fractional Chief AI Officer para mi empresa.' },
-                    { label: 'Necesito una auditoría IA', suggested: 'Hola Ton, necesito una auditoría IA para detectar oportunidades de mejora y riesgos en mis procesos.' },
-                    { label: 'Formación para mi equipo', suggested: 'Hola Ton, me interesa una formación en IA para mi equipo directivo y operativo.' },
-                    { label: 'Solo quiero conocerte', suggested: 'Hola Ton, me gustaría tener una primera conversación para conocernos y evaluar colaboración.' }
-                  ].map((topic) => (
-                    <motion.button
-                      whileHover={{ y: -1 }}
-                      whileTap={{ scale: 0.98 }}
-                      type="button"
-                      key={topic.label}
-                      onClick={() => {
-                        setContactTopic(topic.label);
-                        setContactComment(topic.suggested);
-                      }}
-                      className={`px-4 py-2 rounded-full text-xs font-bold border transition-all ${
-                        contactTopic === topic.label
-                          ? 'bg-emerald-500 text-white border-emerald-400 shadow-md shadow-emerald-500/25'
-                          : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:border-emerald-500/40 hover:text-emerald-600 dark:hover:text-emerald-400'
-                      }`}
-                    >
-                      {topic.label}
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
+              <input
+                type="email"
+                required
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
+                className="w-full px-6 py-4 rounded-2xl bg-[#F3F4F6] dark:bg-zinc-800 border-none text-zinc-900 dark:text-white focus:ring-2 focus:ring-[#1D4ED8] outline-none transition-all placeholder:text-zinc-400"
+                placeholder={t.contact.email}
+              />
 
               <textarea
                 required
@@ -2241,8 +2475,14 @@ function AppContent() {
             Interactúa con nuestro Chief AI Officer virtual para resolver cualquier duda al instante.
           </p>
         </div>
-        <AgentCAIO />
+        <AgentCAIO
+          onBookMeeting={() => setShowDemoModal(true)}
+          onFreeDiagnosis={goToDiagnosis}
+          showCompetitorTab={false}
+          disableInitialAutoScroll={true}
+        />
       </div>
+
     </motion.div>
   );
 
@@ -2498,7 +2738,7 @@ function AppContent() {
   const renderDemoModal = () => (
     <AnimatePresence>
       {showDemoModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6">
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -2510,7 +2750,7 @@ function AppContent() {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative bg-[#F3F4F6] w-full max-w-6xl rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col md:flex-row"
+            className="relative w-full max-w-xl md:max-w-2xl rounded-[2rem] md:rounded-[2.5rem] border border-white/40 bg-gradient-to-br from-white via-zinc-50 to-emerald-50/40 shadow-[0_25px_80px_rgba(0,0,0,0.35)]"
           >
             {/* Close Button */}
             <button 
@@ -2525,25 +2765,26 @@ function AppContent() {
               <X className="w-6 h-6" />
             </button>
 
-            {/* Left Column: Image */}
-            <div className="md:w-[40%] relative min-h-[300px] md:min-h-full">
-              <img 
-                src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=1000" 
-                alt="Representative" 
-                className="absolute inset-0 w-full h-full object-cover"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/40 to-transparent md:hidden" />
-            </div>
-
-            {/* Right Column: Form */}
-            <div className="md:w-[60%] p-8 md:p-16 bg-white">
-              <div className="max-w-xl">
-                <h2 className="text-3xl md:text-4xl font-bold text-[#1D4ED8] mb-4">
-                  {t.demo.title}
+            {/* Form */}
+            <div className="p-6 md:p-10 relative">
+              {showDemoConfetti && (
+                <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                  <span className="absolute left-[10%] top-[20%] h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
+                  <span className="absolute left-[30%] top-[10%] h-2.5 w-2.5 rounded-full bg-cyan-400 animate-ping [animation-delay:120ms]" />
+                  <span className="absolute left-[55%] top-[16%] h-2 w-2 rounded-full bg-blue-400 animate-ping [animation-delay:220ms]" />
+                  <span className="absolute left-[75%] top-[12%] h-2.5 w-2.5 rounded-full bg-emerald-500 animate-ping [animation-delay:320ms]" />
+                  <span className="absolute left-[88%] top-[24%] h-2 w-2 rounded-full bg-lime-400 animate-ping [animation-delay:420ms]" />
+                </div>
+              )}
+              <div className="max-w-xl mx-auto">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 text-xs font-bold uppercase tracking-widest mb-4">
+                  Sesion estratégica
+                </div>
+                <h2 className="text-3xl md:text-4xl font-black text-[#1D4ED8] mb-3">
+                  Agenda Demo
                 </h2>
-                <p className="text-zinc-500 mb-10 leading-relaxed">
-                  {t.demo.subtitle}
+                <p className="text-zinc-600 mb-7 leading-relaxed">
+                  Cuéntame tu contexto y preparamos una sesión enfocada a tu reto real de IA.
                 </p>
 
                 {demoStatus === 'error' && (
@@ -2565,73 +2806,55 @@ function AppContent() {
                     <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                       <CheckCheck className="w-8 h-8 text-white" />
                     </div>
-                    <p className="text-green-800 font-bold text-xl mb-2">{t.demo.success}</p>
+                    <p className="text-green-800 font-bold text-xl mb-2">¡Perfecto, {demoSubmittedName || 'gracias'}! Ton te contactará en menos de 24h.</p>
                   </motion.div>
                 ) : (
-                  <form onSubmit={handleDemoSubmit} className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-6">
+                  <form onSubmit={handleDemoSubmit} className="space-y-5">
+                    <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <label className="text-sm font-semibold text-zinc-700 ml-1">
-                          {t.demo.name}
-                        </label>
-                        <input 
-                          required
-                          type="text"
-                          value={demoFullName}
-                          onChange={(e) => setDemoFullName(e.target.value)}
-                          className="w-full px-6 py-4 rounded-2xl bg-zinc-50 border-transparent focus:bg-white focus:border-[#1D4ED8] focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none text-zinc-900"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-semibold text-zinc-700 ml-1">
-                          {t.demo.web}
-                        </label>
-                        <input 
-                          required
-                          type="text"
-                          value={demoOrganization}
-                          onChange={(e) => setDemoOrganization(e.target.value)}
-                          className="w-full px-6 py-4 rounded-2xl bg-zinc-50 border-transparent focus:bg-white focus:border-[#1D4ED8] focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none text-zinc-900"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
                       <label className="text-sm font-semibold text-zinc-700 ml-1">
-                        {t.demo.phone}
+                        Nombre
                       </label>
-                      <input 
+                      <input
                         required
-                        type="tel"
-                        placeholder="+34 600 000 000"
-                        value={demoPhoneNumber}
-                        onChange={(e) => setDemoPhoneNumber(e.target.value)}
-                        className="w-full px-6 py-4 rounded-2xl bg-zinc-50 border-transparent focus:bg-white focus:border-[#1D4ED8] focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none text-zinc-900"
+                        type="text"
+                        value={demoFullName}
+                        onChange={(e) => setDemoFullName(e.target.value)}
+                        className="w-full px-5 py-3.5 rounded-2xl bg-white/70 border border-zinc-200 focus:bg-white focus:border-[#1D4ED8] focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none text-zinc-900"
                       />
-                    </div>
-
-                    <div className="space-y-2">
+                      </div>
+                      <div className="space-y-2">
                       <label className="text-sm font-semibold text-zinc-700 ml-1">
-                        {t.demo.email}
+                        Email
                       </label>
-                      <input 
+                      <input
                         required
                         type="email"
                         value={demoEmail}
                         onChange={(e) => setDemoEmail(e.target.value)}
-                        className="w-full px-6 py-4 rounded-2xl bg-zinc-50 border-transparent focus:bg-white focus:border-[#1D4ED8] focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none text-zinc-900"
+                        className="w-full px-5 py-3.5 rounded-2xl bg-white/70 border border-zinc-200 focus:bg-white focus:border-[#1D4ED8] focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none text-zinc-900"
+                      />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-zinc-700 ml-1">
+                        ¿Cuál es tu mayor reto con IA ahora mismo?
+                      </label>
+                      <textarea
+                        required
+                        rows={4}
+                        value={demoChallenge}
+                        onChange={(e) => setDemoChallenge(e.target.value)}
+                        className="w-full px-5 py-3.5 rounded-2xl bg-white/70 border border-zinc-200 focus:bg-white focus:border-[#1D4ED8] focus:ring-4 focus:ring-emerald-500/10 transition-all outline-none text-zinc-900 resize-none"
                       />
                     </div>
 
-                    <div className="pt-4">
-                      <div className="h-1 w-full bg-zinc-100 rounded-full mb-8 overflow-hidden">
-                        <div className="h-full w-full bg-[#10B981]" />
-                      </div>
-                      
+                    <div className="pt-2">
                       <button 
                         disabled={demoStatus === 'loading'}
                         type="submit"
-                        className="w-full bg-[#10B981] text-white py-5 rounded-full font-bold text-xl hover:bg-[#059669] transition-all duration-300 shadow-xl shadow-green-500/20 flex items-center justify-center gap-3 disabled:opacity-70"
+                        className="w-full bg-[#10B981] text-white py-4 rounded-2xl font-bold text-lg md:text-xl hover:bg-[#059669] transition-all duration-300 shadow-xl shadow-green-500/20 flex items-center justify-center gap-3 disabled:opacity-70"
                       >
                         {demoStatus === 'loading' ? (
                           <>
@@ -2639,9 +2862,12 @@ function AppContent() {
                             {t.contact.loading}
                           </>
                         ) : (
-                          t.demo.submit
+                          'Reservar mi demo gratuita →'
                         )}
                       </button>
+                      <p className="text-xs text-zinc-500 text-center mt-2">
+                        Sin compromiso · 30 min · Zoom o presencial
+                      </p>
                     </div>
                   </form>
                 )}
@@ -2667,116 +2893,43 @@ function AppContent() {
       'AI Architecture'
     ];
 
-    const extraStories = [
-      {
-        type: 'caio',
-        company: 'Fintech B2B (Anónimo)',
-        date: 'Abr 2026',
-        image: '/2110 Foto Ton 6.jpg',
-        title: 'Automatización de onboarding con IA',
-        desc: 'Rediseño completo del onboarding comercial y operativo con agentes especializados por etapa.',
-        keyResult: 'Tiempo de activación reducido un 42%.',
-        tag: 'AI Automation'
-      },
-      {
-        type: 'caio',
-        company: 'Industrial Manufacturing (Anónimo)',
-        date: 'Mar 2026',
-        image: '/250629 Oxfam_TonGuardiet_Marzo25_02.jpg',
-        title: 'Roadmap IA para equipo directivo',
-        desc: 'Definición de prioridades, gobierno y secuencia de ejecución para 12 meses.',
-        keyResult: '5 iniciativas estratégicas lanzadas en el primer trimestre.',
-        tag: 'AI Strategy'
-      },
-      {
-        type: 'fractional',
-        company: 'Retail 200+ empleados (Anónimo)',
-        date: 'Feb 2026',
-        image: '/250629 Oxfam_TonGuardiet_Marzo25_01.jpg',
-        title: 'Agente conversacional interno para RRHH',
-        desc: 'Despliegue de asistente interno para políticas, onboarding y resolución de dudas de equipo.',
-        keyResult: 'Reducción del 55% en tickets internos de RRHH.',
-        tag: 'Agentic AI'
-      },
-      {
-        type: 'caio',
-        company: 'Private Equity (Anónimo)',
-        date: 'Ene 2026',
-        image: '/2110 Foto Ton 1.2.jpg',
-        title: 'Due diligence tecnológica en M&A',
-        desc: 'Evaluación de madurez IA, riesgos de stack y sinergias operativas pre-adquisición.',
-        keyResult: 'Riesgos críticos identificados antes de cierre en 3 operaciones.',
-        tag: 'AI Audit'
-      },
-      {
-        type: 'fractional',
-        company: 'Aseguradora (Anónimo)',
-        date: 'Dic 2025',
-        image: '/Foto Ton alta.jpg',
-        title: 'Formación C-Level en IA generativa',
-        desc: 'Programa intensivo para comité de dirección con casos aplicados al negocio real.',
-        keyResult: 'Comité alineado y plan AI-first aprobado en 6 semanas.',
-        tag: 'AI Training'
-      },
-      {
-        type: 'caio',
-        company: 'Logística (Anónimo)',
-        date: 'Nov 2025',
-        image: '/250629 Oxfam_TonGuardiet_Marzo25_03.jpg',
-        title: 'Reducción 35% costes operativos con LLMs',
-        desc: 'Automatización de procesos de backoffice, documentación y control operativo.',
-        keyResult: 'Ahorro operativo consolidado del 35%.',
-        tag: 'ROI Impact'
-      },
-      {
-        type: 'caio',
-        company: 'Legal Tech (Anónimo)',
-        date: 'Oct 2025',
-        image: '/2110 Foto Ton 3.jpg',
-        title: 'Implementación RAG corporativo',
-        desc: 'Arquitectura RAG sobre base documental interna con control de trazabilidad y fuentes.',
-        keyResult: 'Precisión documental +31% en consultas complejas.',
-        tag: 'AI Architecture'
-      },
-      {
-        type: 'fractional',
-        company: 'Tech B2B (Anónimo)',
-        date: 'Sep 2025',
-        image: '/2110 Foto Ton 10.jpg',
-        title: 'Estrategia AI-first para scale-up SaaS',
-        desc: 'Reposicionamiento del producto y operaciones para crecer con agentes en procesos core.',
-        keyResult: 'Pipeline comercial +28% en 2 trimestres.',
-        tag: 'AI Strategy'
-      }
-    ];
+    const looksAnonymous = (c: string) => /\b(Anónimo|anònim|anonymous)\b/i.test(c || '');
 
-    const baseStories = (news.successStories.stories || []).map((story: any) => ({
+    const allStories = (news.successStories.stories || []).map((story: any) => ({
       ...story,
-      company: story.company?.includes('(Anónimo)') ? story.company : `${story.company} (Anónimo)`,
+      company: looksAnonymous(story.company) ? story.company : `${story.company} (Anónimo)`,
       tag: story.tag || (story.type === 'caio' ? 'AI Strategy' : 'Agentic AI'),
-      keyResult: story.keyResult || 'Impacto operativo validado en menos de 90 días.'
+      keyResult: story.keyResult || '—',
     }));
-
-    const allStories = [...baseStories, ...extraStories];
     const filteredStories = activeStoryTag === 'Todos'
       ? allStories
       : allStories.filter((story: any) => story.tag === activeStoryTag);
     const trendCategories = news.trends?.categories || [];
     const selectedTrendCategory =
-      trendCategories.find((category: any) => category.name === activeTrendCategory) || trendCategories[0];
-    const visibleTrendItems = selectedTrendCategory?.items || news.trends?.items || [];
-    const trendDisplayItems = visibleTrendItems.length >= 4
-      ? visibleTrendItems.slice(0, 4)
-      : [
-          ...visibleTrendItems,
-          {
-            title: `${selectedTrendCategory?.name || 'IA'}: playbook ejecutivo 2026`,
-            summary: 'Resumen práctico con acciones de implementación para llevar esta tendencia a resultados reales en comité y operación.',
-            date: '2026',
-            source: 'TonExecutive.ai',
-            link: 'https://www.linkedin.com/in/tonguardiet/'
-          }
-        ];
+      activeTrendCategory === 'Todas'
+        ? null
+        : trendCategories.find((category: any) => category.name === activeTrendCategory) || trendCategories[0];
+    const isExternalUrl = (value?: string) => {
+      if (!value) return false;
+      try {
+        const parsed = new URL(value);
+        return parsed.protocol === 'https:' || parsed.protocol === 'http:';
+      } catch {
+        return false;
+      }
+    };
+    const trendDisplayItems =
+      activeTrendCategory === 'Todas'
+        ? [
+            ...(news.trends?.items || []),
+            ...trendCategories.flatMap((category: any) => category.items || [])
+          ]
+        : [
+            ...(selectedTrendCategory?.items || []),
+            ...(news.trends?.items || []).filter(
+              (i: { categoryName?: string }) => i.categoryName === selectedTrendCategory?.name
+            )
+          ];
 
     return (
       <div className="py-20 bg-zinc-50 dark:bg-zinc-950 min-h-screen">
@@ -2815,10 +2968,10 @@ function AppContent() {
               </div>
             </div>
 
-            <div className="mb-12 rounded-[2rem] overflow-hidden border border-zinc-200 dark:border-zinc-700 shadow-lg bg-white dark:bg-zinc-900">
+            <div className="mb-12 rounded-[2rem] overflow-hidden border border-zinc-200 dark:border-zinc-700 shadow-lg bg-zinc-900">
               <img
-                src="/250629 Oxfam_TonGuardiet_Marzo25_03.jpg"
-                alt="Ton Guardiet en entorno de casos de éxito"
+                src={news.successStories.sectionBanner}
+                alt=""
                 className="w-full h-[320px] md:h-[380px] object-cover object-center"
               />
             </div>
@@ -2844,7 +2997,7 @@ function AppContent() {
                 {filteredStories.map((story: any, idx: number) => (
                   <motion.div
                     layout
-                    key={`${story.title}-${story.company}-${idx}`}
+                    key={story.id || `${story.title}-${story.company}-${idx}`}
                     initial={{ opacity: 0, y: 20, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 12, scale: 0.97 }}
@@ -2873,10 +3026,10 @@ function AppContent() {
                         {story.desc}
                       </p>
                       <p className="text-zinc-900 dark:text-zinc-100 text-sm font-bold mb-6">
-                        Resultado clave: <span className="font-extrabold">{story.keyResult}</span>
+                        {news.successStories.keyResultLabel}: <span className="font-extrabold">{story.keyResult}</span>
                       </p>
                       <button onClick={() => setSelectedStory(story)} className="mt-auto text-emerald-600 dark:text-emerald-400 font-bold text-sm flex items-center gap-2 group-hover:gap-3 transition-all">
-                        Leer más <ArrowRight className="w-4 h-4" />
+                        {news.successStories.readMore} <ArrowRight className="w-4 h-4" />
                       </button>
                     </div>
                   </motion.div>
@@ -2908,12 +3061,22 @@ function AppContent() {
 
             <div className="mb-8 -mx-2 px-2 overflow-x-auto">
               <div className="flex gap-3 min-w-max">
+                <button
+                  onClick={() => setActiveTrendCategory('Todas')}
+                  className={`px-4 py-2 rounded-full text-xs md:text-sm font-bold border transition-all ${
+                    activeTrendCategory === 'Todas'
+                      ? 'bg-emerald-500 text-white border-emerald-400 shadow-lg shadow-emerald-500/25'
+                      : 'bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:border-emerald-500/40 hover:text-emerald-600 dark:hover:text-emerald-400'
+                  }`}
+                >
+                  Todas
+                </button>
                 {trendCategories.map((category: any) => (
                   <button
                     key={category.name}
                     onClick={() => setActiveTrendCategory(category.name)}
                     className={`px-4 py-2 rounded-full text-xs md:text-sm font-bold border transition-all ${
-                      selectedTrendCategory?.name === category.name
+                      activeTrendCategory === category.name
                         ? 'bg-emerald-500 text-white border-emerald-400 shadow-lg shadow-emerald-500/25'
                         : 'bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:border-emerald-500/40 hover:text-emerald-600 dark:hover:text-emerald-400'
                     }`}
@@ -2924,12 +3087,12 @@ function AppContent() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <AnimatePresence mode="popLayout">
                 {trendDisplayItems.map((trend: any, idx: number) => (
                   <motion.div
                     layout
-                    key={`${selectedTrendCategory?.name || 'trends'}-${trend.title}-${idx}`}
+                    key={`${activeTrendCategory || 'trends'}-${trend.title}-${idx}`}
                     initial={{ opacity: 0, y: 20, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 12, scale: 0.98 }}
@@ -2939,7 +3102,7 @@ function AppContent() {
                     <div className="absolute top-0 left-0 w-1.5 h-full bg-blue-500 transform origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-300"></div>
                     <div className="flex items-center gap-3 flex-wrap">
                       <span className="bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 text-xs font-bold px-3 py-1 rounded-full">
-                        {selectedTrendCategory?.name || trend.tag}
+                        {trend.tag || selectedTrendCategory?.name}
                       </span>
                       <span className="text-zinc-400 text-xs font-medium">
                         {trend.date}
@@ -2957,14 +3120,19 @@ function AppContent() {
                       {trend.summary}
                     </p>
                     <div className="mt-auto">
-                      {trend.link ? (
-                        <a href={trend.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[#1D4ED8] dark:text-blue-400 font-bold text-sm hover:gap-3 transition-all">
-                          Leer análisis <ExternalLink className="w-4 h-4" />
+                      {isExternalUrl(trend.link) ? (
+                        <a
+                          href={trend.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 text-[#1D4ED8] dark:text-blue-400 font-bold text-sm hover:gap-3 transition-all"
+                        >
+                          {news.trends.readAnalysis} <ArrowRight className="w-4 h-4" />
                         </a>
                       ) : (
-                        <button onClick={() => setSelectedStory(trend)} className="inline-flex items-center gap-2 text-[#1D4ED8] dark:text-blue-400 font-bold text-sm hover:gap-3 transition-all">
-                          Leer análisis <ArrowRight className="w-4 h-4" />
-                        </button>
+                        <span className="inline-flex items-center gap-2 text-zinc-400 dark:text-zinc-500 font-bold text-sm cursor-not-allowed">
+                          {news.trends.readAnalysis}
+                        </span>
                       )}
                     </div>
                   </motion.div>
@@ -2978,81 +3146,297 @@ function AppContent() {
     );
   };
 
-  const renderStoryModal = () => (
+  const renderStoryModal = () => {
+    const newsPage = (t as any).newsPage;
+    const sMod = newsPage?.successStories;
+    const caseModal = sMod?.caseModal;
+    return (
     <AnimatePresence>
       {selectedStory && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedStory(null)}
-            className="absolute inset-0 bg-zinc-900/80 backdrop-blur-md"
+            className="absolute inset-0 bg-zinc-950/85 backdrop-blur-md"
           />
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative bg-white dark:bg-zinc-900 w-full max-w-6xl h-[90vh] rounded-[2rem] overflow-hidden shadow-2xl flex flex-col shadow-black/50"
+            onClick={(e) => e.stopPropagation()}
+            className={`relative w-full max-w-4xl h-[min(90vh,920px)] rounded-2xl overflow-hidden shadow-2xl flex flex-col border ${
+              selectedStory.details
+                ? 'bg-zinc-950 border-zinc-800'
+                : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800'
+            } shadow-black/40`}
           >
-            <button 
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedStory(null); }}
-              className="absolute top-6 right-6 z-50 p-3 rounded-full bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-[#1D4ED8] dark:text-emerald-400 transition-all shadow-sm active:scale-90"
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setSelectedStory(null);
+              }}
+              className={`absolute top-4 right-4 z-50 p-2.5 rounded-full transition-all active:scale-90 ${
+                selectedStory.details
+                  ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-200'
+                  : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-emerald-400'
+              }`}
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5" />
             </button>
 
-            {/* Left/Top Content: The Story */}
-            <div className="w-full h-full overflow-y-auto p-8 md:p-12 smooth-scroll">
-              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 font-bold tracking-wide text-xs mb-6 uppercase">
-                {selectedStory.tag || (selectedStory.type === 'caio' ? 'CAIO' : 'Fractional')}
-              </span>
-              <h2 className="text-3xl md:text-5xl font-extrabold text-zinc-900 dark:text-white mb-6 leading-tight">
-                {selectedStory.title}
-              </h2>
-              {selectedStory.image && (
-                <div className="w-full h-80 rounded-2xl overflow-hidden mb-8 shadow-inner bg-zinc-100 dark:bg-zinc-800">
-                  <img src={selectedStory.image} alt={selectedStory.title} className="w-full h-full object-cover object-[center_25%]" />
+            {selectedStory.details ? (
+              <div className="w-full h-full overflow-y-auto p-6 md:p-10 text-zinc-200">
+                <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-zinc-500">
+                  <span className="px-2.5 py-1 rounded-full bg-zinc-900 border border-zinc-700 text-emerald-400 font-bold tracking-wide uppercase">
+                    {selectedStory.tag}
+                  </span>
+                  {selectedStory.company && <span className="font-medium text-zinc-400">{selectedStory.company}</span>}
+                  {selectedStory.date && <span className="text-zinc-500">{selectedStory.date}</span>}
                 </div>
-              )}
-              <div className="prose prose-lg dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-300">
-                <p className="text-xl leading-relaxed mb-8">{selectedStory.desc || selectedStory.summary}</p>
-                <div className="bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800 rounded-2xl p-6 mb-8 text-emerald-800 dark:text-emerald-200 text-sm md:text-base leading-relaxed">
-                  <span className="font-bold block mb-2 opacity-80">{(t as any).newsPage.successStories.insightsTitle}:</span>
-                  {(t as any).newsPage.successStories.insightsDesc}
-                </div>
-                {selectedStory.link && (
-                   <a href={selectedStory.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#1D4ED8] hover:bg-blue-800 text-white px-6 py-3 rounded-full font-bold transition-all shadow-md mt-4">
-                     Ver publicación externa <ArrowRight className="w-4 h-4" />
-                   </a>
+                <h2 className="text-2xl md:text-3xl font-black text-white mb-2 leading-tight pr-10">
+                  {selectedStory.title}
+                </h2>
+                {selectedStory.role && (
+                  <p className="text-sm text-emerald-500/90 font-bold mb-4 uppercase tracking-wider">{selectedStory.role}</p>
                 )}
-              </div>
-            </div>
+                {selectedStory.image && (
+                  <div className="w-full aspect-[16/9] max-h-56 md:max-h-64 rounded-xl overflow-hidden mb-6 border border-zinc-800 ring-1 ring-zinc-800/80">
+                    <img src={selectedStory.image} alt="" className="w-full h-full object-cover" />
+                  </div>
+                )}
+                <p className="text-sm md:text-base text-zinc-400 leading-relaxed mb-8 border-b border-zinc-800/80 pb-6">
+                  {selectedStory.desc}
+                </p>
 
+                <div className="space-y-8">
+                  <section>
+                    <div className="flex items-center gap-2 mb-3 text-emerald-500">
+                      <Building2 className="w-5 h-5 shrink-0" />
+                      <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-200">{caseModal?.context}</h3>
+                    </div>
+                    <p className="text-zinc-400 text-sm leading-relaxed">{selectedStory.details.context}</p>
+                  </section>
+
+                  <section>
+                    <div className="flex items-center gap-2 mb-3 text-emerald-500">
+                      <ListChecks className="w-5 h-5 shrink-0" />
+                      <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-200">{caseModal?.whatTonDid}</h3>
+                    </div>
+                    <ul className="space-y-2.5 pl-0">
+                      {selectedStory.details.actions.map((a: string, i: number) => (
+                        <li key={i} className="flex gap-3 text-sm text-zinc-300 leading-snug">
+                          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                          <span>{a}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+
+                  <section>
+                    <div className="flex items-center gap-2 mb-3 text-emerald-500">
+                      <BarChart3 className="w-5 h-5 shrink-0" />
+                      <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-200">{caseModal?.results}</h3>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      {selectedStory.details.results.map(
+                        (r: { value: string; label: string }, i: number) => (
+                          <div
+                            key={i}
+                            className="rounded-xl border border-zinc-800 bg-zinc-900/80 px-4 py-3 text-center"
+                          >
+                            <p className="text-xl md:text-2xl font-black text-emerald-400 leading-none mb-1.5">
+                              {r.value}
+                            </p>
+                            <p className="text-[11px] md:text-xs text-zinc-500 leading-tight font-medium">
+                              {r.label}
+                            </p>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </section>
+
+                  <section className="rounded-xl border border-zinc-800/90 bg-zinc-900/40 p-5">
+                    <div className="flex items-center gap-2 mb-3 text-emerald-500/80">
+                      <Quote className="w-4 h-4" />
+                      <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-500">{caseModal?.testimonial}</h3>
+                    </div>
+                    <p className="text-zinc-200 italic text-sm leading-relaxed mb-3 border-l-2 border-emerald-500/50 pl-4">
+                      {selectedStory.details.testimonial.quote}
+                    </p>
+                    <p className="text-xs text-zinc-500 font-bold tracking-wide pl-1">
+                      {selectedStory.details.testimonial.author}
+                    </p>
+                  </section>
+
+                  <section>
+                    <div className="flex items-center gap-2 mb-3 text-emerald-500">
+                      <Tag className="w-4 h-4" />
+                      <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-200">{caseModal?.stack}</h3>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedStory.details.techTags.map((tt: string) => (
+                        <span
+                          key={tt}
+                          className="text-[11px] font-bold px-2.5 py-1.5 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-300"
+                        >
+                          {tt}
+                        </span>
+                      ))}
+                    </div>
+                  </section>
+                </div>
+              </div>
+            ) : (
+              <div className="w-full h-full overflow-y-auto p-6 md:p-10">
+                <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 font-bold tracking-wide text-xs mb-6 uppercase">
+                  {selectedStory.tag || 'Insight'}
+                </span>
+                <h2 className="text-2xl md:text-3xl font-extrabold text-zinc-900 dark:text-white mb-4">
+                  {selectedStory.title}
+                </h2>
+                {selectedStory.date && (
+                  <p className="text-sm text-zinc-500 mb-6">{selectedStory.date}</p>
+                )}
+                <div className="prose prose-sm md:prose dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-300">
+                  <p className="leading-relaxed text-base md:text-lg">{selectedStory.desc || selectedStory.summary}</p>
+                  <div className="mt-6 bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800 rounded-2xl p-5 text-sm md:text-base text-emerald-800 dark:text-emerald-200 leading-relaxed not-prose">
+                    <span className="font-bold block mb-2 text-emerald-800/90 dark:text-emerald-300/90">
+                      {sMod?.insightsTitle}:
+                    </span>
+                    {sMod?.insightsDesc}
+                  </div>
+                  {selectedStory.link && (
+                    <a
+                      href={selectedStory.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 inline-flex items-center gap-2 bg-[#1D4ED8] hover:bg-blue-800 text-white px-5 py-2.5 rounded-full text-sm font-bold"
+                    >
+                      {newsPage.readExternal} <ArrowRight className="w-4 h-4" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            )}
           </motion.div>
         </div>
       )}
     </AnimatePresence>
   );
+  };
+
+  const pageSeo = (() => {
+    if (currentPage === 'sobre-mi') {
+      return {
+        title: 'Ton Guardiet — Fractional CAIO | TonExecutive.ai',
+        description: 'PhD Cum Laude, MBA ESADE. +20 años liderando producto y estrategia IA en empresas B2B. Conoce la metodología fCAIO.',
+        keywords: 'ton guardiet, fractional chief ai officer, fcaio, estrategia ia b2b, chief ai officer barcelona'
+      };
+    }
+
+    if (currentPage === 'noticias') {
+      return {
+        title: 'Casos de Éxito — fCAIO en acción | TonExecutive.ai',
+        description: 'Casos reales de implementación de IA en empresas: reducción de costes, automatización y escalado. Sin teoría, solo resultados.',
+        keywords: 'casos de exito ia, fractional caio casos, automatizacion empresa, roi ia b2b'
+      };
+    }
+
+    if (currentPage === 'contacto') {
+      return {
+        title: 'Agenda tu Diagnóstico de IA Gratuito | TonExecutive.ai',
+        description: '30 minutos para evaluar el potencial de IA en tu empresa. Sin compromiso. Ton Guardiet, Fractional Chief AI Officer.',
+        keywords: 'diagnostico ia gratuito, agenda demo ia, contratar chief ai officer externo, consultor ia empresa'
+      };
+    }
+
+    return {
+      title: 'Fractional Chief AI Officer | TonExecutive.ai Barcelona',
+      description: 'Ton Guardiet, fCAIO. Implanta IA en tu empresa B2B en 90 días. 1 día/semana. Diagnóstico gratuito.',
+      keywords: 'fractional chief ai officer, CAIO externo, consultor IA empresa, chief ai officer España'
+    };
+  })();
+
+  const personSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Ton Guardiet',
+    jobTitle: 'Fractional Chief AI Officer',
+    url: 'https://tonexecutive.ai/',
+    sameAs: ['https://www.linkedin.com/in/tonguardiet/']
+  };
+
+  const localBusinessSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: 'TonExecutive.ai',
+    url: 'https://tonexecutive.ai/',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Barcelona',
+      addressCountry: 'ES'
+    }
+  };
+
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Fractional CAIO Services',
+    serviceType: 'Fractional Chief AI Officer',
+    provider: {
+      '@type': 'Organization',
+      name: 'TonExecutive.ai',
+      url: 'https://tonexecutive.ai/'
+    },
+    areaServed: 'ES'
+  };
+
+  const isFocusMode = currentPage === 'informe';
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans text-zinc-900 dark:text-zinc-50 transition-colors duration-300 selection:bg-green-200 dark:selection:bg-green-900 flex flex-col">
+      {!isFocusMode && <OrbCanvas />}
+      <Helmet>
+        <title>{pageSeo.title}</title>
+        <meta name="description" content={pageSeo.description} />
+        <meta name="keywords" content={pageSeo.keywords} />
+        <meta name="robots" content="index, follow, max-snippet:-1" />
+        <script type="application/ld+json">{JSON.stringify(personSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(localBusinessSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(serviceSchema)}</script>
+      </Helmet>
       
       {/* NAVBAR */}
-      <nav className="sticky top-0 z-50 w-full bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800 transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <Logo />
+      {!isFocusMode && <nav
+        className={`sticky top-0 z-50 w-full backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800 transition-all duration-300 ${
+          scrolled
+            ? 'bg-white/95 dark:bg-zinc-950/95 shadow-sm'
+            : 'bg-white/80 dark:bg-zinc-950/80'
+        }`}
+      >
+        <div
+          className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between transition-all duration-300 ${
+            scrolled ? 'h-16' : 'h-20'
+          }`}
+        >
+          <div className={`transition-transform duration-300 ${scrolled ? 'scale-[0.94]' : 'scale-100'} origin-left`}>
+            <Logo />
+          </div>
           
-          <div className="hidden md:flex items-center gap-8 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
-            <button onClick={() => setCurrentPage('home')} className={`hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors ${currentPage === 'home' ? 'text-emerald-600 dark:text-emerald-400' : ''}`}>{t.nav.home}</button>
-            <button onClick={() => setCurrentPage('sobre-mi')} className={`hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors ${currentPage === 'sobre-mi' ? 'text-emerald-600 dark:text-emerald-400' : ''}`}>{(t.nav as any).about || 'Sobre Mí'}</button>
-            <button onClick={() => setCurrentPage('metodologia')} className={`hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors ${currentPage === 'metodologia' ? 'text-emerald-600 dark:text-emerald-400' : ''}`}>{t.nav.methodology}</button>
-            <button onClick={() => setCurrentPage('tecnico-contratacion')} className={`hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors ${currentPage === 'tecnico-contratacion' ? 'text-emerald-600 dark:text-emerald-400' : ''}`}>{t.nav.solutions}</button>
-            <button onClick={() => setCurrentPage('noticias')} className={`hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors ${currentPage === 'noticias' ? 'text-emerald-600 dark:text-emerald-400' : ''}`}>{(t.nav as any).news || 'Casos de Éxito'}</button>
-            <button onClick={() => setCurrentPage('contacto')} className={`hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors ${currentPage === 'contacto' ? 'text-emerald-600 dark:text-emerald-400' : ''}`}>{t.nav.contact}</button>
+          <div className="hidden md:flex items-center ml-12 gap-6 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
+            <button onClick={() => setCurrentPage('home')} className={`relative whitespace-nowrap hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors pb-1 ${currentPage === 'home' ? 'text-emerald-600 dark:text-emerald-400' : ''}`}>{t.nav.home}{currentPage === 'home' && (<motion.div layoutId="nav-indicator" className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500 rounded-full" transition={{ type: "spring", stiffness: 500, damping: 30 }} />)}</button>
+            <button onClick={() => setCurrentPage('sobre-mi')} className={`relative whitespace-nowrap hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors pb-1 ${currentPage === 'sobre-mi' ? 'text-emerald-600 dark:text-emerald-400' : ''}`}>{(t.nav as any).about || 'Sobre Mí'}{currentPage === 'sobre-mi' && (<motion.div layoutId="nav-indicator" className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500 rounded-full" transition={{ type: "spring", stiffness: 500, damping: 30 }} />)}</button>
+            <button onClick={() => setCurrentPage('metodologia')} className={`relative whitespace-nowrap hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors pb-1 ${currentPage === 'metodologia' ? 'text-emerald-600 dark:text-emerald-400' : ''}`}>{t.nav.methodology}{currentPage === 'metodologia' && (<motion.div layoutId="nav-indicator" className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500 rounded-full" transition={{ type: "spring", stiffness: 500, damping: 30 }} />)}</button>
+            <button onClick={() => setCurrentPage('noticias')} className={`relative whitespace-nowrap hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors pb-1 ${currentPage === 'noticias' ? 'text-emerald-600 dark:text-emerald-400' : ''}`}>{(t.nav as any).news || 'Casos de Éxito'}{currentPage === 'noticias' && (<motion.div layoutId="nav-indicator" className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500 rounded-full" transition={{ type: "spring", stiffness: 500, damping: 30 }} />)}</button>
+            <button onClick={() => setCurrentPage('contacto')} className={`relative whitespace-nowrap hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors pb-1 ${currentPage === 'contacto' ? 'text-emerald-600 dark:text-emerald-400' : ''}`}>{t.nav.contact}{currentPage === 'contacto' && (<motion.div layoutId="nav-indicator" className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-500 rounded-full" transition={{ type: "spring", stiffness: 500, damping: 30 }} />)}</button>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center ml-8 gap-4">
             {/* Language Selector */}
             <div className="relative">
               <button 
@@ -3087,14 +3471,14 @@ function AppContent() {
             </button>
 
             <button 
-              onClick={() => { setCurrentPage('informe'); window.scrollTo(0,0); }} 
+              onClick={goToReportFocus}
               className="bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-5 py-2.5 rounded-full font-semibold text-sm transition-all shadow-lg hover:shadow-xl active:scale-95"
             >
               {t.nav.login || 'Acceder'}
             </button>
           </div>
         </div>
-      </nav>
+      </nav>}
 
       {/* MAIN CONTENT AREA */}
       <main className="flex-grow flex flex-col">
@@ -3120,11 +3504,16 @@ function AppContent() {
             onBookDemo={() => setShowDemoModal(true)} 
           />
         )}
-        {currentPage === 'agente' && <AgentCAIO />}
+        {currentPage === 'agente' && (
+          <AgentCAIO
+            onBookMeeting={() => setShowDemoModal(true)}
+            onFreeDiagnosis={goToDiagnosis}
+          />
+        )}
       </main>
 
       {/* FOOTER */}
-      <footer className="bg-zinc-950 py-12 border-t border-zinc-800 mt-auto">
+      {!isFocusMode && <footer className="bg-zinc-950 py-12 border-t border-zinc-800 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-1.5 grayscale opacity-80">
             <div className="relative flex items-center justify-center">
@@ -3183,9 +3572,9 @@ function AppContent() {
             </button>
           </div>
         </div>
-      </footer>
-      {renderDemoModal()}
-      {renderStoryModal()}
+      </footer>}
+      {!isFocusMode && renderDemoModal()}
+      {!isFocusMode && renderStoryModal()}
       
       {/* Quote Overlay */}
       <AnimatePresence>
@@ -3213,7 +3602,7 @@ function AppContent() {
           </div>
         )}
       </AnimatePresence>
-      <WhatsAppChat />
+      {!isFocusMode && <WhatsAppChat />}
     </div>
   );
 }

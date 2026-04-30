@@ -1,0 +1,237 @@
+Guía de Arranque — Claude Code + NotebookLM para TonExecutive.ai
+PARTE 1 — Resumen de los 4 Vídeos (lo que necesitas saber antes de empezar)
+📹 VÍDEO 1: "CLAUDE CODE 2026: Curso Completo en Español"
+Canal: Benjamín Cordero
+
+Qué es Claude Code:
+
+NO es el chat de Claude.ai. Es una herramienta de terminal (CLI) que corre en tu ordenador.
+Se instala con: npm install -g @anthropic-ai/claude-code
+Se abre con el comando: claude en la terminal, dentro de la carpeta del proyecto
+Lo más importante que debes retener:
+
+CLAUDE.md — El archivo más importante. Es donde defines el contexto del proyecto para que Claude lo lea al inicio de cada sesión. Sin él, pierdes contexto y gastas tokens.
+Flujo de trabajo correcto: Explorar → Planificar → Codificar (nunca saltarse el paso de planificación)
+Modo /plan — Antes de ejecutar, pídele que planifique. Te ahorra errores caros.
+Permisos — Claude Code puede leer y editar archivos, ejecutar comandos en terminal, y navegar por el sistema. Al inicio te pide confirmación para cada acción nueva.
+Lo que NO hacer:
+
+No abrir Claude Code sin tener el CLAUDE.md preparado
+No darle un prompt gigante de golpe. Ve paso a paso.
+No dejar sesiones abiertas largas sin guardar el contexto en NotebookLM
+📹 VÍDEO 2: "Claude Code + NotebookLM = MEMORIA INFINITA" ⭐ EL MÁS IMPORTANTE
+Concepto: Conecté Claude con NotebookLM (Contexto Infinito Sin Gastar Tokens)
+
+El problema que resuelve: Claude Code "olvida" todo al cerrar la sesión. Cada vez que abres una sesión nueva, tienes que volver a explicar el proyecto → gastas tokens → tardas más.
+
+La solución (cómo funciona):
+
+NotebookLM (de Google) actúa como la "memoria externa" de Claude
+Subes documentos al Notebook (PDF, Markdown, URLs, vídeos de YouTube)
+Configuras el MCP de NotebookLM para que Claude Code pueda consultarlo directamente
+Al inicio de cada sesión, Claude consulta el Notebook en lugar de pedirte que re-expliques todo
+Flujo con memoria infinita:
+
+Sesión anterior termina → Claude guarda resumen en NotebookLM
+↓
+Nueva sesión empieza → Claude consulta NotebookLM
+↓
+Claude sabe exactamente en qué punto estabas, sin reexplicar nada
+↓
+Ahorras tokens + tiempo
+Lo que necesitas instalar:
+
+Paquete MCP: notebooklm-mcp-cli (del repositorio jacob-bd en GitHub)
+Autenticación con tu cuenta de Google (usa 
+burguardreams@gmail.com
+)
+Un Notebook en NotebookLM dedicado a TonExecutive.ai
+Tip clave: Al final de cada sesión de trabajo, escribe en Claude Code: "Guarda un resumen de lo que hemos hecho hoy en NotebookLM"
+
+📹 VÍDEO 3: "Creé un equipo de Marketing con Agentes de IA en Claude Code"
+Link: https://www.youtube.com/live/ocm6T19g6iM
+
+Qué aprenderás: Claude Code puede orquestar múltiples "agentes" especializados que trabajan en paralelo o en secuencia.
+
+Estructura de un equipo de marketing con IA:
+
+Agente	Rol	Qué hace
+Estratega	Orquestador	Coordina a todos los demás
+Copywriter	Contenido	Escribe posts, emails, scripts
+SEO Analyst	Optimización	Keywords, meta tags, estructura
+Social Media	RRSS	Adapta contenido por plataforma
+Analytics	Datos	Mide resultados e identifica mejoras
+Aplicación directa a TonExecutive.ai:
+
+Agente de contenido: genera posts de LinkedIn semanales para Ton
+Agente de benchmark: analiza webs de competidores automáticamente
+Agente de leads: procesa y cualifica los leads que entran
+Cómo se crean los agentes: En el archivo CLAUDE.md defines los "Skills" — básicamente, instrucciones específicas para cada rol. Claude los activa con comandos como /skill copywriter.
+
+📹 VÍDEO 4: "Páginas Web ANIMADAS de $10,000 con Claude Design"
+Qué es Claude Design: Una forma de usar Claude para generar interfaces web con animaciones premium de nivel agencia.
+
+Lo más relevante para TonExecutive.ai:
+
+Glassmorphism animado — efectos de cristal con blur y transparencias
+Micro-animaciones — elementos que reaccionan al scroll o al hover
+Gradients dinámicos — fondos que cambian sutilmente (como los de Linear o Vercel)
+Prompt clave para diseño: "Diseña como si fuera una web de €10.000 de agencia premium. Dark mode. Glassmorphism. Animaciones sutiles. Tipografía Inter."
+Cómo aplicarlo:
+
+Abre Claude Code en la carpeta de TonExecutive.ai
+Muéstrale el src/App.tsx actual
+Pídele que mejore sección a sección con este estilo premium
+Usa el vídeo como referencia visual para describir lo que quieres
+PARTE 2 — Prompt inicial para Claude Code (copiar tal cual)
+Este es el primer prompt que le pasas a Claude Code cuando abras una sesión nueva. Es el que "onboarda" a Claude en el proyecto.
+
+Eres mi asistente de desarrollo y estrategia para el proyecto TonExecutive.ai. Antes de hacer nada, lee y comprende todo el contexto que te doy aquí.
+## EL PROYECTO
+TonExecutive.ai es la web personal/profesional de Ton Guardiet, Fractional Chief AI Officer (fCAIO).
+Está construida con React + TypeScript + Tailwind CSS + Framer Motion + Supabase.
+La web está en producción. Los cambios deben ser cuidadosos y siempre con confirmación antes de modificar archivos críticos.
+## STACK TÉCNICO
+- Frontend: React 18 + TypeScript + Vite
+- Estilos: Tailwind CSS (dark mode, glassmorphism, emerald palette)
+- Animaciones: Framer Motion
+- Backend: Express (server.ts) + Supabase (Edge Functions)
+- i18n: src/translations.ts (ES, EN, CA)
+- Archivos principales:
+  - src/App.tsx (~3600 líneas, contiene toda la UI principal)
+  - src/translations.ts (todos los textos de la web)
+  - src/components/EfficiencyCalculator.tsx (calculadora de ROI)
+  - src/pages/AgentCAIO.tsx (chat con el avatar IA)
+  - src/components/WhatsAppChat.tsx (widget WhatsApp)
+  - server.ts (backend Express con endpoints API)
+## NEGOCIO
+- Ton Guardiet: PhD Cum Laude + MBA ESADE, +20 años en producto y estrategia B2B
+- Servicio: fCAIO (1 día/semana, 6-12 meses, empresas B2B)
+- Pricing: 3.500-8.000€/mes
+- Target: CEOs y directivos de empresas medianas que quieren implantar IA
+- Propuesta: "Tu Chief AI Officer sin los costes de uno a tiempo completo"
+## REGLAS DE TRABAJO
+1. SIEMPRE planifica antes de codificar. Dime qué vas a hacer y espera mi OK.
+2. NUNCA modifiques src/App.tsx sin mostrarme el diff exacto primero.
+3. Los cambios van sección a sección, nunca el archivo entero de golpe.
+4. Si algo puede romper la web en producción, avísame explícitamente.
+5. Usa el mismo estilo visual existente: dark mode, emerald-500 como color primario, zinc-950 como fondo, glassmorphism en las cards.
+6. Al final de cada sesión de trabajo, escribe un resumen de lo que hemos hecho para guardarlo en NotebookLM.
+## TAREAS PENDIENTES (en orden de prioridad)
+1. Rediseño calculadora de ROI (sliders: empleados, coste salarial, % eficiencia con fuentes INE/McKinsey)
+2. Sección "Sobre Mí": cambiar foto por Oxfam + comunidades más grandes
+3. Casos de Éxito: "Qué hizo Ton" → "Qué hizo un fCAIO" + links externos reales + tag "Todas"
+4. Fotos de casos de éxito: reemplazar fotos de Ton por imágenes temáticas Unsplash
+5. System prompt del Agente CAIO: actualizar con info completa de negocio
+6. SEO técnico + GEO para LLMs
+7. Integración HubSpot CRM
+8. Automatización de secuencia de emails post-demo
+9. Integración Whisper (voz a texto en el chat)
+10. Integración Google Calendar (agendar demo desde la web)
+## PRIMERA ACCIÓN
+Empieza leyendo estos archivos para familiarizarte con el código actual:
+1. src/components/EfficiencyCalculator.tsx (necesitamos rediseñarlo)
+2. src/translations.ts (líneas 1-100 para ver la estructura)
+Dime qué has entendido del código antes de proponer cambios.
+PARTE 3 — Qué subir a NotebookLM (guía completa)
+NotebookLM es tu "cerebro externo". Cuanto mejor lo alimentes, menos tokens gastarás y mejor trabajará Claude Code.
+
+NOTEBOOK RECOMENDADO: "TonExecutive.ai — Contexto del Proyecto"
+📄 DOCUMENTOS QUE DEBES SUBIR
+GRUPO 1 — Contexto de negocio (subir ya)
+
+Documento	Cómo obtenerlo
+prompts_fases_1_2.md	Ya existe en tu carpeta .gemini/antigravity
+prompts_fases_3_4.md	Ya existe en tu carpeta .gemini/antigravity
+prompts_reunion_280426.md	Ya existe en tu carpeta .gemini/antigravity
+El texto de este documento	Descárgalo como PDF o copia el contenido
+GRUPO 2 — Código del proyecto (subir como texto)
+
+Exporta estos archivos como .txt y súbelos:
+
+src/translations.ts → el contexto de todos los textos
+src/components/EfficiencyCalculator.tsx → la calculadora actual
+server.ts → la configuración del backend
+Para exportar: abre el archivo → selecciona todo → pega en un .txt → sube a NotebookLM
+
+GRUPO 3 — Documentación estratégica (crear y subir)
+
+Crea un documento contexto_negocio.txt con este contenido y súbelo:
+
+TONEXECUTIVE.AI — CONTEXTO DE NEGOCIO
+QUIÉN ES TON GUARDIET:
+- PhD Cum Laude + MBA ESADE
+- +20 años en dirección de producto y estrategia B2B
+- +10.700 contactos LinkedIn, +40 recomendaciones C-Level
+- Ex-CPO Quipu, Ex-Unibo
+- Fundador de TonExecutive.ai
+QUÉ ES UN fCAIO:
+- Fractional Chief AI Officer
+- Formato: 1 día/semana (8h)
+- Duración: 6-12 meses
+- Interlocución: CEO/Dirección/Comité
+PRICING:
+- 6 meses: 4.000-8.000€/mes
+- 12 meses: 3.500-7.000€/mes
+- Upsells: formación ejecutiva (2K-5K€)
+METODOLOGÍA:
+- Mes 1: Diagnóstico
+- Mes 2-3: Quick wins en producción
+- Mes 4-6: Escalar + KPIs
+- Mes 7-12: Industrializar + autonomía
+STACK TÉCNICO WEB:
+- React 18 + TypeScript + Vite
+- Tailwind CSS + Framer Motion
+- Supabase + Express (server.ts)
+- i18n: ES/EN/CA en src/translations.ts
+ARCHIVOS CLAVE:
+- src/App.tsx: toda la UI (~3600 líneas)
+- src/translations.ts: todos los textos
+- src/components/EfficiencyCalculator.tsx: calculadora ROI
+- src/pages/AgentCAIO.tsx: chat con avatar IA
+- server.ts: backend API
+TAREAS PENDIENTES PRIORIZADAS:
+1. Calculadora ROI (empleados + coste INE + eficiencia McKinsey)
+2. Sobre Mí: foto Oxfam + comunidades grandes
+3. Casos de Éxito: "fCAIO" + links externos + tag "Todas"
+4. Fotos temáticas Unsplash en tarjetas casos
+5. System prompt CAIO con info negocio completa
+6. SEO + GEO
+7. HubSpot CRM
+8. Secuencia emails post-demo
+9. Whisper (voz a texto)
+10. Google Calendar (agendar demo)
+GRUPO 4 — URLs para que NotebookLM indexe
+
+Añade estas URLs como "fuentes web" en NotebookLM:
+
+https://tonexecutive.ai (la web actual)
+https://linkedin.com/in/tonguardiet (perfil de Ton)
+CÓMO USAR EL NOTEBOOK EN CADA SESIÓN
+Al empezar una sesión de Claude Code:
+
+Consulta el NotebookLM y dime:
+1. ¿Cuál fue la última tarea completada?
+2. ¿Cuál es la siguiente tarea pendiente?
+3. ¿Hay algo que deba saber antes de empezar?
+Al terminar una sesión de Claude Code:
+
+Guarda en NotebookLM un resumen de esta sesión con:
+- Fecha: [hoy]
+- Tareas completadas: [lista]
+- Archivos modificados: [lista]
+- Próxima tarea: [siguiente item]
+- Notas importantes: [cualquier cosa relevante]
+ORDEN DE CONFIGURACIÓN (paso a paso)
+✅ Ver los 4 vídeos (tienes el resumen arriba)
+✅ Crear el Notebook en notebooklm.google.com con tu cuenta 
+burguardreams@gmail.com
+✅ Subir los documentos (grupos 1, 2, 3 y 4 de arriba)
+✅ Instalar Claude Code → npm install -g @anthropic-ai/claude-code
+✅ Instalar MCP NotebookLM → seguir el prompt que te pasó tu supervisor
+✅ Crear CLAUDE.md en la raíz del proyecto con el contenido del Prompt inicial (Parte 2)
+✅ Primera sesión: pegar el Prompt inicial completo de la Parte 2
+✅ Empezar con Tarea 1: la calculadora de ROI
+⚠️ IMPORTANTE ANTES DE EMPEZAR: Cuando el MCP de NotebookLM te pida autenticación con Google, usa el email: 
+burguardreams@gmail.com
+ El código de verificación que aparece en pantalla solo lo introduces TÚ. No lo compartas con nadie.

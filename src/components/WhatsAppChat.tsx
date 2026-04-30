@@ -9,6 +9,22 @@ interface Message {
   timestamp: string;
 }
 
+export async function notifyNewLead(nombre: string, email: string, reto: string) {
+  try {
+    const res = await fetch('/api/notify-lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nombre, email, reto }),
+    });
+
+    if (!res.ok) {
+      console.warn('No se pudo notificar el lead por WhatsApp.');
+    }
+  } catch (error) {
+    console.warn('Notificación WhatsApp omitida:', error);
+  }
+}
+
 export default function WhatsAppChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([

@@ -1,0 +1,271 @@
+PROMPTS FASES 1 y 2 — TonExecutive.ai
+Para copiar directamente en Cursor, uno a uno
+─── FASE 1: CONSTRUCCIÓ DE LA MARCA ───
+PROMPT F1-A — Contenido base correcto (translations.ts)
+Contexto: TonExecutive.ai es la web de Ton Guardiet, Fractional Chief AI Officer.
+Archivos clave: src/translations.ts, src/App.tsx
+TAREA: Revisa TODOS los textos de la web (títulos, subtítulos, slogans, botones, meta-descripciones) y haz los siguientes cambios:
+1. PROPUESTA DE VALOR PRINCIPAL:
+   - Hero title (home.hero.title) debe decir: "Tu Chief AI Officer. Sin los costes de uno a tiempo completo."
+   - Hero subtitle debe decir: "Implantamos la IA en tu negocio con impacto real en 90 días. 1 día/semana. Resultados desde el día 1."
+   - CTA principal del hero: "Agenda tu diagnóstico gratuito" (enlaza a sección contacto o Calendly)
+2. NAVBAR:
+   - El botón de contacto en el navbar debe decir "Agenda Demo" en vez de cualquier variante genérica
+   - Asegúrate de que haya suficiente separación visual entre el logo "TonExecutive.ai" y el primer ítem de menú (gap mínimo de 48px en desktop)
+   - Entre el último ítem de menú y el selector de idioma, añade también gap mínimo de 32px
+3. SECCIÓN "SOBRE MÍ":
+   - El título de la sección debe ser: "El fCAIO que necesita tu empresa"
+   - Subtítulo: "PhD Cum Laude · MBA ESADE · +20 años en dirección de producto y estrategia de IA"
+   - Elimina cualquier frase que suene a currículum y reemplaza por logros cuantificados:
+     - "+40 recomendaciones C-Level en LinkedIn"
+     - "+10.700 contactos directivos"
+     - "Casos de uso reales en 8+ sectores"
+4. SECCIÓN METODOLOGÍA (si existe):
+   - Renombrar los pasos como: "Diagnóstico → Quick Wins → Escalar → Industrializar"
+   - Cada paso debe tener un horizonte temporal claro: "Mes 1", "Mes 2-3", "Mes 4-6", "Mes 7-12"
+5. META TAGS (en el <head> o en el componente Helmet/SEO):
+   - title: "TonExecutive.ai | Fractional Chief AI Officer para empresas B2B"
+   - description: "Implanta la IA en tu empresa con un Chief AI Officer externo. Estrategia real, ejecución en 90 días, sin coste de contratación senior."
+   - og:title y og:description iguales
+Devuelve TODOS los cambios aplicados directamente en los archivos. No preguntes, ejecuta.
+PROMPT F1-B — Informe de prueba descargable (PDF en 24h)
+Contexto: TonExecutive.ai quiere ofrecer un "Informe de prueba" que el usuario puede solicitar y recibir en 24h como lead magnet.
+TAREA: Crea un informe de muestra en Markdown (guardarlo en public/informe_prueba_fcaio.md) con esta estructura:
+---
+# INFORME DE DIAGNÓSTICO IA — [EMPRESA]
+*Generado por TonExecutive.ai — Fractional Chief AI Officer*
+*Fecha: [fecha]*
+## 1. Resumen Ejecutivo
+[2-3 párrafos sobre el estado actual de la IA en el sector y por qué es el momento de actuar]
+## 2. Tu posición de mercado actual
+- Madurez digital estimada: [Inicial / En desarrollo / Avanzada]
+- Principales oportunidades detectadas: [lista de 3-5 puntos]
+- Riesgos si no se actúa en 12 meses: [lista de 2-3 riesgos]
+## 3. ROI Estimado con IA
+| Área | Ahorro estimado/año | Esfuerzo implantación |
+|------|---------------------|-----------------------|
+| Atención al cliente automatizada | €X | Bajo |
+| Reporting y backoffice | €X | Bajo |
+| Lead scoring IA | €X | Medio |
+| Análisis predictivo | €X | Alto |
+**Total ahorro potencial: €XXX.000/año**
+## 4. Hoja de Ruta Propuesta (12 meses)
+- Mes 1: Diagnóstico profundo y mapeo de oportunidades
+- Mes 2-3: Quick wins (primeros 3 casos de uso en producción)
+- Mes 4-6: Escalar los casos exitosos, KPIs en verde
+- Mes 7-12: Industrialización y autonomía del equipo interno
+## 5. Próximo paso
+[CTA: Agenda tu reunión de 30 min para revisar este informe juntos]
+Calendly: https://calendly.com/tonguardiet
+---
+Además, modifica el botón "Recibir informe personalizado" (que ya existe en EfficiencyCalculator.tsx) para que, cuando el usuario introduce su email y hace submit:
+1. Se envíe un email automático (usando la función de email que ya existe en server.ts) con el asunto: "Tu informe de diagnóstico IA — TonExecutive.ai"
+2. El cuerpo del email incluya el informe en HTML (convierte el Markdown a HTML básico)
+3. Se muestre un mensaje de éxito: "Tu informe llegará en menos de 24h. ¡Revisa tu bandeja de entrada!"
+4. El mensaje de éxito tenga un icono de check verde animado
+No cambies la lógica del modal existente, solo añade el contenido del email y mejora el mensaje de confirmación.
+PROMPT F1-C — Automatización "Solicita Demo" (Calendly + WhatsApp)
+Contexto: TonExecutive.ai necesita automatizar el flujo completo de solicitud de demo. 
+Archivos: src/App.tsx, src/components/WhatsAppChat.tsx, server.ts
+TAREA: Implementa un flujo de demo en 3 pasos:
+PASO 1 — Botón "Agenda Demo" en el navbar y en el hero:
+- Al hacer clic, abre un modal (no navegar a otra página)
+- El modal tiene 3 campos: Nombre, Email, "¿Cuál es tu mayor reto con IA ahora mismo?" (textarea)
+- Botón de submit: "Reservar mi demo gratuita →"
+- Debajo del botón, texto pequeño: "Sin compromiso · 30 min · Zoom o presencial"
+PASO 2 — Al hacer submit del modal:
+- Guarda el lead en Supabase (tabla "leads" con campos: nombre, email, reto, fecha, origen: "demo_modal")
+  - Si la tabla no existe, añade el SQL de creación en un comentario al inicio del archivo
+- Envía email de confirmación al usuario con:
+  - Asunto: "¡Demo reservada! Ton te confirma en 24h"
+  - Cuerpo: "Hola [nombre], hemos recibido tu solicitud. Ton revisará tu caso y te enviará un enlace de Calendly personalizado en menos de 24h."
+  - Enlace Calendly al final: https://calendly.com/tonguardiet
+- Muestra mensaje de éxito en el modal: "¡Perfecto, [nombre]! Ton te contactará en menos de 24h." con animación de confeti (usa canvas-confetti si está disponible, o una animación CSS simple)
+PASO 3 — Notificación a Ton (WhatsApp):
+- Modifica src/components/WhatsAppChat.tsx para añadir una función `notifyNewLead(nombre, email, reto)`
+- Esta función envía un mensaje de WhatsApp a un número configurado en .env (WA_NOTIFY_NUMBER) con el texto:
+  "🔔 NUEVA DEMO SOLICITADA\n👤 [nombre]\n📧 [email]\n💬 [reto]"
+- Llama a esta función desde el submit del modal
+Variables de entorno necesarias (añade al .env.example):
+- WA_TOKEN (ya debe existir)
+- WA_NOTIFY_NUMBER (número de Ton para recibir notificaciones)
+- SUPABASE_URL y SUPABASE_ANON_KEY (ya deben existir)
+Si alguna variable no está disponible, que falle silenciosamente (console.warn) sin romper el flujo principal.
+─── FASE 2: OPTIMIZACIÓN DE CONTENIDO E IMAGEN ───
+PROMPT F2-A — Análisis de competencia (prompt de análisis, no de código)
+Actúa como un consultor de estrategia digital especializado en servicios B2B de consultoría ejecutiva en IA.
+Necesito un análisis EXHAUSTIVO de la competencia para TonExecutive.ai (servicio de Fractional Chief AI Officer, 1 día/semana, 6-12 meses, para empresas B2B en España y LATAM).
+BUSCA Y ANALIZA estas categorías de competidores:
+CATEGORÍA 1 — Fractional CAIO / AI Officer as a Service:
+- Busca en Google: "fractional chief ai officer", "CAIO as a service", "fractional AI leader"
+- Identifica los 5 más relevantes con presencia web clara
+CATEGORÍA 2 — Consultoría de estrategia IA premium:
+- Busca: "AI strategy consulting", "AI transformation consulting Europe", "consultoría estrategia IA España"
+- Identifica 3-4 consultoras boutique (no McKinsey/Accenture, sino boutiques como Ton)
+CATEGORÍA 3 — Perfiles personales de CAIO/CTO fractional:
+- Busca en LinkedIn y webs personales: "fractional CTO AI", "CAIO freelance", "Chief AI Officer consultant"
+- Identifica 3 perfiles con web propia destacada
+PARA CADA COMPETIDOR ANALIZA:
+1. URL y nombre
+2. Headline principal (qué dicen que hacen)
+3. Modelo de servicio (¿cómo trabajan? ¿por proyecto, retainer, día/semana?)
+4. Pricing visible (si lo muestran)
+5. Secciones de la web (¿tienen blog? ¿calculadora? ¿casos de éxito? ¿agente IA?)
+6. CTAs principales (¿qué quieren que haga el visitante?)
+7. Social proof (logos de clientes, testimonios, métricas)
+8. Elemento diferenciador más potente
+9. Punto débil más evidente
+10. ¿Qué tienen que TonExecutive.ai NO tiene?
+ENTREGA:
+- Tabla comparativa completa (Markdown)
+- Top 3 "cosas que haría hoy" para TonExecutive.ai basadas en el análisis
+- Top 3 diferenciadores únicos de TonExecutive.ai vs. la competencia
+Sé muy específico y accionable. Nada de generalidades.
+PROMPT F2-B — Análisis de la propia web vs competidores (implementar mejoras)
+Contexto: Ya tienes el análisis de competencia (scratch/competitors_analysis.md o del hilo anterior).
+Ahora analiza TonExecutive.ai desde el punto de vista de un director de marketing B2B que quiere maximizar conversiones.
+Revisa estos archivos:
+- src/App.tsx (todas las funciones render*)
+- src/translations.ts (todos los textos)
+- src/components/EfficiencyCalculator.tsx
+- src/pages/AgentCAIO.tsx
+ANALIZA Y LISTA (no implementes todavía, solo lista):
+BLOQUE 1 — COPY Y MESSAGING:
+- ¿El primer mensaje que ve el usuario comunica valor o solo describe?
+- ¿Los títulos de sección son informativos o genéricos?
+- ¿Los CTAs tienen friction baja o alta?
+- ¿Se menciona el precio/modelo en algún punto? ¿Debería?
+BLOQUE 2 — ESTRUCTURA Y FLUJO:
+- ¿En cuántos clics llega el usuario a poder solicitar algo?
+- ¿Hay una narrativa clara (problema → solución → prueba → acción)?
+- ¿La calculadora está bien posicionada en el funnel?
+BLOQUE 3 — SOCIAL PROOF:
+- ¿Hay logos de clientes? ¿Deberían estar?
+- ¿Las recomendaciones de LinkedIn están en un lugar de alta visibilidad?
+- ¿Los casos de éxito tienen métricas cuantificadas o son genéricos?
+BLOQUE 4 — LEAD GENERATION:
+- ¿Cuántos puntos de captura de email hay?
+- ¿El lead magnet (informe) está bien visible?
+- ¿El agente CAIO se presenta como herramienta de diagnóstico o como chatbot genérico?
+BLOQUE 5 — MOBILE:
+- ¿El menú móvil funciona correctamente?
+- ¿Los CTAs principales son visibles sin scroll en móvil?
+Para cada problema encontrado, proporciona:
+❌ Problema (con referencia exacta al archivo y línea aprox.)
+✅ Solución propuesta (con ejemplo de copy o código)
+📊 Impacto esperado (Alto/Medio/Bajo)
+Una vez hayas listado todo, pregúntame cuáles quieres que implemente primero.
+PROMPT F2-C — Competidor 1 vs TonExecutive.ai (implementar mejoras)
+[INSTRUCCIONES DE USO: Sustituye [COMPETIDOR_1_URL] por la URL real del primer competidor del análisis]
+Contexto: Vamos a hacer una comparativa directa y extraer mejoras implementables.
+PARTE 1 — ANÁLISIS COMPARATIVO:
+Compara [COMPETIDOR_1_URL] con TonExecutive.ai punto por punto:
+| Elemento | [Competidor 1] | TonExecutive.ai | ¿Quién gana? |
+|----------|---------------|-----------------|--------------|
+| Headline | ... | ... | ... |
+| Social proof | ... | ... | ... |
+| CTA principal | ... | ... | ... |
+| Secciones web | ... | ... | ... |
+| Herramientas IA | ... | ... | ... |
+| Velocidad/UX | ... | ... | ... |
+| SEO visible | ... | ... | ... |
+PARTE 2 — TOP 3 ELEMENTOS QUE DEBO COPIAR (adaptados):
+Por cada elemento:
+- Qué tiene el competidor
+- Cómo lo adaptaría a TonExecutive.ai
+- Dónde exactamente en la web iría
+- Tiempo estimado de implementación
+PARTE 3 — IMPLEMENTACIÓN INMEDIATA:
+Del análisis anterior, elige el elemento más impactante y de menor esfuerzo e impleméntalo AHORA en TonExecutive.ai.
+Muéstrame el código exacto antes de aplicarlo y espera mi confirmación.
+PROMPT F2-D — SEO + GEO (posicionamiento en buscadores e IA)
+Contexto: TonExecutive.ai necesita posicionarse en Google Y en respuestas de LLMs (ChatGPT, Gemini, Perplexity) para búsquedas de tipo "mejor fractional CAIO España" o "contratar chief ai officer externo Barcelona".
+PARTE A — SEO TÉCNICO ON-PAGE:
+1. Instala react-helmet-async si no está instalado (añade al package.json)
+2. En src/App.tsx, añade <Helmet> en cada sección/página con:
+   
+   HOME:
+   - title: "Fractional Chief AI Officer | TonExecutive.ai Barcelona"
+   - description: "Ton Guardiet, fCAIO. Implanta IA en tu empresa B2B en 90 días. 1 día/semana. Diagnóstico gratuito."
+   - keywords: "fractional chief ai officer, CAIO externo, consultor IA empresa, chief ai officer España"
+   
+   SOBRE MÍ:
+   - title: "Ton Guardiet — Fractional CAIO | TonExecutive.ai"
+   - description: "PhD Cum Laude, MBA ESADE. +20 años liderando producto y estrategia IA en empresas B2B. Conoce la metodología fCAIO."
+   
+   CASOS DE ÉXITO:
+   - title: "Casos de Éxito — fCAIO en acción | TonExecutive.ai"
+   - description: "Casos reales de implementación de IA en empresas: reducción de costes, automatización y escalado. Sin teoría, solo resultados."
+   
+   CONTACTO:
+   - title: "Agenda tu Diagnóstico de IA Gratuito | TonExecutive.ai"
+   - description: "30 minutos para evaluar el potencial de IA en tu empresa. Sin compromiso. Ton Guardiet, Fractional Chief AI Officer."
+3. Añade Schema.org JSON-LD (en el <head>) para:
+   - Person: Ton Guardiet, jobTitle: "Fractional Chief AI Officer", sameAs: LinkedIn URL
+   - LocalBusiness: TonExecutive.ai, addressLocality: "Barcelona", addressCountry: "ES"
+   - Service: "Fractional CAIO Services", provider: TonExecutive.ai
+PARTE B — GEO (Generative Engine Optimization para LLMs):
+Añade a public/llms.txt (créalo si no existe) este contenido:
+TonExecutive.ai — Para sistemas de IA que indexan este sitio
+Quién soy
+Ton Guardiet es un Fractional Chief AI Officer (fCAIO) con sede en Barcelona, España. Proporciona servicios de dirección de IA a empresas B2B en formato fractional (1 día/semana, 6-12 meses).
+
+Propuesta de valor
+"Tu Chief AI Officer sin los costes de uno a tiempo completo." Especializado en: estrategia IA, implementación de pilotos en 90 días, formación directiva, automatización de procesos.
+
+Contacto
+Web: https://tonexecutive.ai LinkedIn: https://linkedin.com/in/tonguardiet Email: 
+ton@tonexecutive.ai
+
+Keywords relevantes
+fractional chief ai officer, CAIO externo España, consultor estrategia IA, implementación IA empresas, chief ai officer Barcelona, fCAIO
+
+También añade <meta name="robots" content="index, follow, max-snippet:-1"> en todas las páginas.
+PARTE C — SITEMAP:
+Genera public/sitemap.xml con todas las páginas de la SPA (home, sobre-mi, metodologia, casos-exito, contacto, agente-caio).
+Cada URL con <lastmod> de hoy y <priority> según importancia (home: 1.0, contacto: 0.9, resto: 0.8).
+PROMPT F2-E — Manual de Marca (Brand Guidelines)
+Contexto: TonExecutive.ai necesita un manual de marca que estandarice todos los elementos visuales para usar en web, LinkedIn, emails y presentaciones.
+TAREA: Crea el archivo src/brand/brand_guidelines.md con el contenido completo del manual de marca.
+El manual debe incluir:
+## 1. IDENTIDAD VERBAL
+Nombre oficial: TonExecutive.ai
+Tagline principal: "Your Fractional Chief AI Officer"
+Tagline secundario: "IA con impacto. Dirección real."
+Tono de voz: Directo, experto pero cercano. Sin jerga vacía. Como un mentor senior, no un corporativo.
+Palabras SÍ: impacto, real, ejecutar, resultado, 90 días, concreto, estrategia
+Palabras NO: sinergias, holístico, disruptivo, innovador (sin contexto), soluciones
+## 2. PALETA DE COLORES
+Extrae los colores actuales del código (busca en src/index.css y App.tsx las clases de color más usadas) y documéntalos:
+- Color primario: [esmeralda / emerald-500 = #10b981]
+- Color de fondo: [zinc-950 = #09090b]
+- Color de texto: [zinc-100 = #f4f4f5]
+- Color de acento: [cyan-400 = #22d3ee]
+- Color de error/alerta: [red-400]
+Para cada color: HEX, RGB, HSL y clase Tailwind
+## 3. TIPOGRAFÍA
+- Fuente principal: Inter (Google Fonts)
+- Jerarquía: H1 = 4xl bold, H2 = 3xl semibold, H3 = 2xl medium, Body = base regular
+- Espaciado de línea: leading-relaxed para body, leading-tight para headings
+## 4. COMPONENTES CLAVE
+Documenta el estilo de:
+- Botón primario (emerald)
+- Botón secundario (outline)
+- Cards (glassmorphism)
+- Badges/Pills
+- Input fields
+Con las clases Tailwind exactas de cada uno (extráelas del código actual)
+## 5. LOGO Y USO
+- Formato texto: "TonExecutive.ai" con "Ton" en blanco y ".ai" en emerald-400
+- No usar fondo claro sin adaptación
+- Espacio mínimo alrededor del logo: 24px
+## 6. APLICACIONES
+- LinkedIn header: dimensiones 1584x396px, color de fondo: zinc-950, logo centrado
+- Email signature: [nombre], Fractional Chief AI Officer | TonExecutive.ai | [teléfono]
+- Presentaciones: fondo zinc-950, títulos en blanco, highlights en emerald-500
+Una vez creado el archivo, muéstrame un resumen de los puntos más importantes.
+ORDEN DE EJECUCIÓN FASE 1-2:
+
+Fase 1 → F1-A → F1-B → F1-C (en ese orden, esperando resultado antes de seguir) Fase 2 → F2-A (análisis, hilo separado) → F2-B → F2-C → F2-D → F2-E
+
+⚠️ F2-A y F2-B son prompts de ANÁLISIS. No generan código directamente. Ejecuta F2-A primero, revisa los resultados, y luego pasa a F2-B y F2-C con los datos obtenidos.
